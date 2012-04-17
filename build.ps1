@@ -16,10 +16,6 @@ $msbuildProperties=@("Configuration=$configuration")
 $msbuild="$env:windir\Microsoft.NET\Framework\v4.0.30319\MSBuild"
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
 
-#if( $targets -ieq "Clean") {
-#	dir -r -i app.config | %{}
-#}
-
 warn "Starting at $([datetime]::Now)" 
 $parameters=@("$(dir *.sln)","/v:$verbosity","/m","/t:$targets","/fl","/flp:LogFile=build.log;Verbosity=$fileVerbosity",$properties,$additionalMsBuildArgs)
 Write-Host "Running $msbuild $parameters"

@@ -1,38 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Target Name="FinalClean" AfterTargets="Clean">
-    <!--<RemoveDir Directories="$(SolutionDir)packages"/>-->
-    <PropertyGroup>
-      <_Instructions>Need to run build.ps1 -t Configure from the root folder before running the tests.</_Instructions>
-      <TestAppConfigUsername>INSERT USERNAME HERE - $(_Instructions)</TestAppConfigUsername>
-      <TestAppConfigPassword>INSERT PASSWORD HERE - $(_Instructions)</TestAppConfigPassword>
-      <TestAppConfigSkipCertValidation>False</TestAppConfigSkipCertValidation>
-      <TestAppConfigBaseUrl>https://srv.softwarepotential.com</TestAppConfigBaseUrl>
-    </PropertyGroup>
-    <CallTarget Targets="_CustomizeAppConfigs" />
+  <Target Name="FinalClean" AfterTargets="Clean" DependsOnTargets="CustomizeAppConfigs">
+    <RemoveDir Directories="$(SolutionDir)packages"/>
   </Target>
 
-  <Target Name="_CustomizeAppConfigs">
+  <PropertyGroup>
+    <_Instructions>Need to run "./configure.ps1" from the root folder before running the tests.</_Instructions>
+    <TestAppConfigUsername Condition=" '' == '$(TestAppConfigUsername)'">INSERT USERNAME HERE - $(_Instructions)</TestAppConfigUsername>
+    <TestAppConfigPassword Condition=" '' == '$(TestAppConfigPassword)'">INSERT PASSWORD HERE - $(_Instructions)</TestAppConfigPassword>
+    <TestAppConfigSkipCertValidation Condition=" '' == '$(TestAppConfigSkipCertValidation)'">False</TestAppConfigSkipCertValidation>
+    <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://srv.softwarepotential.com</TestAppConfigBaseUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <TestAppConfigParam Include="Username">
+      <Value>$(TestAppConfigUsername)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="Password">
+      <Value>$(TestAppConfigPassword)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="SkipCertValidation">
+      <Value>$(TestAppConfigSkipCertValidation)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="BaseUrl">
+      <Value>$(TestAppConfigBaseUrl)</Value>
+    </TestAppConfigParam>
+  </ItemGroup>
+
+  <Target Name="CustomizeAppConfigs">
+
     <ItemGroup>
-      <TestAppConfigParam Include="Username">
-        <Value>$(TestAppConfigUsername)</Value>
-      </TestAppConfigParam>
-      <TestAppConfigParam Include="Password">
-        <Value>$(TestAppConfigPassword)</Value>
-      </TestAppConfigParam>
-      <TestAppConfigParam Include="SkipCertValidation">
-        <Value>$(TestAppConfigSkipCertValidation)</Value>
-      </TestAppConfigParam>
-      <TestAppConfigParam Include="BaseUrl">
-        <Value>$(TestAppConfigBaseUrl)</Value>
-      </TestAppConfigParam>
-      <Replacements Include="**\app.config">
+      <Replacements Include="%(Identity)">
         <Query>configuration/appSettings/add[@key='%(TestAppConfigParam.Identity)']/@value</Query>
-        <Value>%(Value)</Value>
+        <Value>%(TestAppConfigParam.Value)</Value>
       </Replacements>
     </ItemGroup>
-    <XmlPoke XmlInputPath="%(Replacements.FullPath)" Query="%(Replacements.Query)" Value="%(Replacements.Value)"/>
+
+    <!-- TODO: Task batching or something to make this work on **\app.config -->
+    <XmlPoke
+      XmlInputPath="Sp.Api.ProductManagement.Acceptance\app.config"
+      Query="%(Replacements.Query)"
+      Value="%(Replacements.Value)"/>
+
   </Target>
 
 </Project>

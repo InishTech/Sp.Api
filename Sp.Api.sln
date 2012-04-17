@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D177EBF0
 		after.Sp.Api.sln.targets = after.Sp.Api.sln.targets
 		after.csproj.targets = after.csproj.targets
 		build.ps1 = build.ps1
+		configure.ps1 = configure.ps1
 	EndProjectSection
 EndProject
 Global

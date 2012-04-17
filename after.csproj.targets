@@ -2,12 +2,14 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <Target Name="Test" AfterTargets="Build" Condition=" 'true' != '$(SpSkipTests)' AND 'true' != '$(BuildingInsideVisualStudio)'">
+    <ItemGroup Condition=" '' == '$(XunitPath)'">
+      <_XunitPath Include="$(SolutionDir)packages\xunit.runners.*\tools\xunit.console.clr4.exe"/>
+    </ItemGroup>
     <PropertyGroup>
-      <XunitExe Condition=" '' != '$(XunitPath)'">$(XunitPath)\xunit.console.clr4.exe</XunitExe>
+      <XunitPath Condition=" '' == '$(XunitPath)'">@(_XunitPath)</XunitPath>
     </PropertyGroup>
-    <Error Text="Could not locate xunit.console.exe at: $([System.IO.Path]::GetFullPath('$(XunitExe)'). Please specify a $$(XunitPath) Property" Condition="!EXISTS('$(XunitExe)')" />
-    <Message Text="&quot;$(OutDir)\$(AssemblyName)&quot;" />
-    <Exec Command="$(XUnitExe) &quot;$(OutDir)\$(AssemblyName)$(TargetExt)&quot;" />
+    <Error Text="Could not locate $(XunitExe). Please specify a $XunitPath Property" Condition="!EXISTS('$(XunitPath)')" />
+    <Exec Command="&quot;$(XunitPath)&quot; &quot;$(OutDir)\$(AssemblyName)$(TargetExt)&quot;" />
   </Target>
 
 </Project>
