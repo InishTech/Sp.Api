@@ -1,0 +1,222 @@
+Build started 17/04/2012 11:43:08.
+     1>Project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln" on node 1 (clean target(s)).
+     1>Building with tools version "2.0".
+     1>Target "ValidateSolutionConfiguration" in file "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln.metaproj" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln" (entry point):
+       Task "Error" skipped, due to false condition; (('$(CurrentSolutionConfigurationContents)' == '') and ('$(SkipInvalidConfigurations)' != 'true')) was evaluated as (('<SolutionConfiguration>
+         <ProjectConfiguration Project="{187F882B-A94C-46EF-AF79-62EA9E6F1493}" AbsolutePath="R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+       </SolutionConfiguration>' == '') and ('' != 'true')).
+       Task "Warning" skipped, due to false condition; (('$(CurrentSolutionConfigurationContents)' == '') and ('$(SkipInvalidConfigurations)' == 'true')) was evaluated as (('<SolutionConfiguration>
+         <ProjectConfiguration Project="{187F882B-A94C-46EF-AF79-62EA9E6F1493}" AbsolutePath="R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+       </SolutionConfiguration>' == '') and ('' == 'true')).
+       Using "Message" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "Message"
+         Task Parameter:Text=Building solution configuration "Debug|Any CPU".
+         Building solution configuration "Debug|Any CPU".
+       Done executing task "Message".
+     1>Done building target "ValidateSolutionConfiguration" in project "Sp.Api.sln".
+     1>Target "ValidateToolsVersions" in file "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln.metaproj" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln" (entry point):
+       Task "Error" skipped, due to false condition; ('$(MSBuildToolsVersion)' == '2.0' and ('$(ProjectToolsVersion)' != '2.0' and '$(ProjectToolsVersion)' != '')) was evaluated as ('4.0' == '2.0' and ('' != '2.0' and '' != '')).
+     1>Done building target "ValidateToolsVersions" in project "Sp.Api.sln".
+     1>Target "ValidateProjects" in file "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln.metaproj" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln" (entry point):
+     1>Done building target "ValidateProjects" in project "Sp.Api.sln".
+     1>Target "Clean" in file "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln.metaproj" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln" (entry point):
+       Using "MSBuild" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "MSBuild"
+         Task Parameter:
+             Projects=
+                 R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj
+                         AdditionalProperties=Configuration=Debug; Platform=AnyCPU; VisualStudioVersion=11.0
+                         Configuration=Debug
+                         Platform=AnyCPU
+                         SkipNonexistentProjects=False
+                         ToolsVersion=
+         Task Parameter:Targets=Clean
+         Task Parameter:BuildInParallel=True
+         Task Parameter:
+             Properties=
+                 BuildingSolutionFile=true
+                 CurrentSolutionConfigurationContents=<SolutionConfiguration>
+           <ProjectConfiguration Project="{187F882B-A94C-46EF-AF79-62EA9E6F1493}" AbsolutePath="R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+         </SolutionConfiguration>
+                 SolutionDir=R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\
+                 SolutionExt=.sln
+                 SolutionFileName=Sp.Api.sln
+                 SolutionName=Sp.Api
+                 SolutionPath=R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln
+         Task Parameter:SkipNonexistentProjects=False
+         Global Properties:
+           BuildingSolutionFile=true
+           CurrentSolutionConfigurationContents=<SolutionConfiguration>
+           <ProjectConfiguration Project="{187F882B-A94C-46EF-AF79-62EA9E6F1493}" AbsolutePath="R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+         </SolutionConfiguration>
+           SolutionDir=R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\
+           SolutionExt=.sln
+           SolutionFileName=Sp.Api.sln
+           SolutionName=Sp.Api
+           SolutionPath=R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln
+         Additional Properties for project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj":
+           Configuration=Debug
+           Platform=AnyCPU
+           VisualStudioVersion=11.0
+     0>Overriding target "GetFrameworkPaths" in project "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" with target "GetFrameworkPaths" from project "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.NETFramework.targets".
+       Overriding target "SatelliteDllsProjectOutputGroup" in project "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" with target "SatelliteDllsProjectOutputGroup" from project "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.WinFX.targets".
+     1>Project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln" (1) is building "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (2) on node 1 (Clean target(s)).
+     2>Building with tools version "4.0".
+     2>Target "_CheckForInvalidConfigurationAndPlatform" in file "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (entry point):
+       Task "Error" skipped, due to false condition; ( '$(_InvalidConfigurationError)' == 'true' ) was evaluated as ( '' == 'true' ).
+       Task "Warning" skipped, due to false condition; ( '$(_InvalidConfigurationWarning)' == 'true' ) was evaluated as ( '' == 'true' ).
+       Using "Message" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "Message"
+         Task Parameter:Text=Configuration=Debug
+         Task Parameter:Importance=Low
+         Configuration=Debug
+       Done executing task "Message".
+       Task "Message"
+         Task Parameter:Text=Platform=AnyCPU
+         Task Parameter:Importance=Low
+         Platform=AnyCPU
+       Done executing task "Message".
+       Task "Error" skipped, due to false condition; ('$(OutDir)' != '' and !HasTrailingSlash('$(OutDir)')) was evaluated as ('bin\Debug\' != '' and !HasTrailingSlash('bin\Debug\')).
+       Task "Error" skipped, due to false condition; ('$(BaseIntermediateOutputPath)' != '' and !HasTrailingSlash('$(BaseIntermediateOutputPath)')) was evaluated as ('obj\' != '' and !HasTrailingSlash('obj\')).
+       Task "Error" skipped, due to false condition; ('$(IntermediateOutputPath)' != '' and !HasTrailingSlash('$(IntermediateOutputPath)')) was evaluated as ('obj\Debug\' != '' and !HasTrailingSlash('obj\Debug\')).
+     2>Done building target "_CheckForInvalidConfigurationAndPlatform" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+     2>Target "BeforeClean" in file "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (target "Clean" depends on it):
+     2>Done building target "BeforeClean" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+       Target "UnmanagedUnregistration" skipped, due to false condition; ((('$(_AssemblyTimestampBeforeCompile)' != '$(_AssemblyTimestampAfterCompile)' or '$(RegisterForComInterop)' != 'true' or '$(OutputType)' != 'library') or
+                           ('$(_AssemblyTimestampBeforeCompile)' == '')) and
+                          Exists('@(_UnmanagedRegistrationCache)')) was evaluated as ((('' != '' or '' != 'true' or 'Library' != 'library') or
+                           ('' == '')) and
+                          Exists('obj\Sp.Api.ProductManagement.Acceptance.csproj.UnmanagedRegistration.cache')).
+     2>Target "CoreClean" in file "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (target "Clean" depends on it):
+       Using "Delete" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "Delete"
+         Task Parameter:TreatErrorsAsWarnings=True
+       Done executing task "Delete".
+       Using "ReadLinesFromFile" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "ReadLinesFromFile"
+         Task Parameter:File=obj\Debug\Sp.Api.ProductManagement.Acceptance.csproj.FileListAbsolute.txt
+       Done executing task "ReadLinesFromFile".
+       Using "FindUnderPath" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "FindUnderPath"
+         Task Parameter:Path=bin\Debug\
+         Comparison path is "bin\Debug\".
+       Done executing task "FindUnderPath".
+       Task "FindUnderPath"
+         Task Parameter:Path=obj\Debug\
+         Comparison path is "obj\Debug\".
+       Done executing task "FindUnderPath".
+       Task "Delete"
+         Task Parameter:TreatErrorsAsWarnings=True
+       Done executing task "Delete".
+       Using "RemoveDuplicates" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "RemoveDuplicates"
+       Done executing task "RemoveDuplicates".
+       Using "MakeDir" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "MakeDir"
+         Task Parameter:Directories=obj\Debug\
+       Done executing task "MakeDir".
+       Using "WriteLinesToFile" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "WriteLinesToFile"
+         Task Parameter:File=obj\Debug\Sp.Api.ProductManagement.Acceptance.csproj.FileListAbsolute.txt
+         Task Parameter:Overwrite=True
+       Done executing task "WriteLinesToFile".
+     2>Done building target "CoreClean" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+     2>Target "AssignProjectConfiguration" in file "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (target "CleanReferencedProjects" depends on it):
+       Using "AssignProjectConfiguration" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "AssignProjectConfiguration"
+         Task Parameter:CurrentProject=R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj
+         Task Parameter:CurrentProjectConfiguration=Debug
+         Task Parameter:CurrentProjectPlatform=AnyCPU
+         Task Parameter:OutputType=Library
+         Task Parameter:ResolveConfigurationPlatformUsingMappings=False
+         Task Parameter:SolutionConfigurationContents=<SolutionConfiguration>
+           <ProjectConfiguration Project="{187F882B-A94C-46EF-AF79-62EA9E6F1493}" AbsolutePath="R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" BuildProjectInSolution="True">Debug|AnyCPU</ProjectConfiguration>
+         </SolutionConfiguration>
+         Task Parameter:AddSyntheticProjectReferencesForSolutionDependencies=True
+         Task Parameter:OnlyReferenceAndBuildProjectsEnabledInSolutionConfiguration=True
+         Task Parameter:ShouldUnsetParentConfigurationAndPlatform=True
+       Done executing task "AssignProjectConfiguration".
+     2>Done building target "AssignProjectConfiguration" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+     2>Target "_SplitProjectReferencesByFileExistence" in file "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (target "CleanReferencedProjects" depends on it):
+       Task "ResolveNonMSBuildProjectOutput" skipped, due to false condition; ('$(BuildingInsideVisualStudio)'=='true' and '@(ProjectReferenceWithConfiguration)'!='') was evaluated as (''=='true' and ''!='').
+     2>Done building target "_SplitProjectReferencesByFileExistence" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+     2>Target "CleanReferencedProjects" in file "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (target "Clean" depends on it):
+       Task "MSBuild" skipped, due to false condition; ('$(BuildingInsideVisualStudio)' != 'true' and '$(BuildProjectReferences)' == 'true' and '@(_MSBuildProjectReferenceExistent)' != '') was evaluated as ('' != 'true' and 'true' == 'true' and '' != '').
+     2>Done building target "CleanReferencedProjects" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+     2>Target "CleanPublishFolder" in file "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (target "Clean" depends on it):
+       Task "RemoveDir" skipped, due to false condition; ('$(PublishDir)'=='$(OutputPath)app.publish\' and Exists('$(PublishDir)')) was evaluated as ('bin\Debug\app.publish\'=='bin\Debug\app.publish\' and Exists('bin\Debug\app.publish\')).
+     2>Done building target "CleanPublishFolder" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+     2>Target "AfterClean" in file "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (target "Clean" depends on it):
+     2>Done building target "AfterClean" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+       Target "EntityClean" skipped, due to false condition; ('@(EntityDeploy)' != '') was evaluated as ('' != '').
+     2>Target "Slps_Protect_Clean" in file "R:\Program Files (x86)\InishTech SLP Code Protector\Slps.Protector.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (target "Clean" depends on it):
+       Task "Message"
+         Task Parameter:Importance=low
+         Task Parameter:Text=Removing obj\Debug\Slps_Protect_Before;obj\Debug\Slps_Protect_After
+         Removing obj\Debug\Slps_Protect_Before;obj\Debug\Slps_Protect_After
+       Done executing task "Message".
+       Using "RemoveDir" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "RemoveDir"
+         Task Parameter:
+             Directories=
+                 obj\Debug\Slps_Protect_Before
+                 obj\Debug\Slps_Protect_After
+         Directory "obj\Debug\Slps_Protect_Before" doesn't exist. Skipping.
+         Directory "obj\Debug\Slps_Protect_After" doesn't exist. Skipping.
+       Done executing task "RemoveDir".
+     2>Done building target "Slps_Protect_Clean" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+     2>Target "Clean" in file "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (entry point):
+     2>Done building target "Clean" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+     2>Target "CleanXsdCodeGen" in file "R:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.ServiceModel.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (entry point):
+       Task "Delete"
+       Done executing task "Delete".
+     2>Done building target "CleanXsdCodeGen" in project "Sp.Api.ProductManagement.Acceptance.csproj".
+     2>Done Building Project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj" (Clean target(s)).
+     1>Done executing task "MSBuild".
+     1>Done building target "Clean" in project "Sp.Api.sln".
+     1>Target "FinalClean" in file "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\after.Sp.Api.sln.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln" (entry point):
+       Using "CallTarget" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "CallTarget"
+         Task Parameter:Targets=_CustomizeAppConfigs
+     1>Target "_CustomizeAppConfigs" in file "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\after.Sp.Api.sln.targets" from project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln" (target "FinalClean" depends on it):
+       Using "XmlPoke" task from assembly "Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+       Task "XmlPoke"
+         Task Parameter:XmlInputPath=R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\app.config
+         Task Parameter:Query=configuration/appSettings/add[@key='Username']/@value
+     1>R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\after.Sp.Api.sln.targets(35,5): error MSB4044: The "XmlPoke" task was not given a value for the required parameter "Value". [R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln]
+       Done executing task "XmlPoke" -- FAILED.
+     1>Done building target "_CustomizeAppConfigs" in project "Sp.Api.sln" -- FAILED.
+       Done executing task "CallTarget" -- FAILED.
+     1>Done building target "FinalClean" in project "Sp.Api.sln" -- FAILED.
+     1>Done Building Project "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln" (clean target(s)) -- FAILED.
+Deferred Messages
+     0>
+Detailed Build Summary
+======================
+    
+         
+         ============================== Build Hierarchy (IDs represent configurations) =====================================================
+         Id                  : Exclusive Time   Total Time   Path (Targets)
+         -----------------------------------------------------------------------------------------------------------------------------------
+         0                   : 0.040s           0.091s       R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln (clean) 
+         . 1                 : 0.051s           0.051s       R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.ProductManagement.Acceptance\Sp.Api.ProductManagement.Acceptance.csproj (Clean) 
+         
+         ============================== Node Utilization (IDs represent configurations) ====================================================
+         Timestamp:            1        Duration   Cumulative
+         -----------------------------------------------------------------------------------------------------------------------------------
+         634702561885216571:   0        0.031s     0.031s 
+         634702561885522975:   1        0.050s     0.081s #
+         634702561886027059:   0        0.010s     0.091s 
+         -----------------------------------------------------------------------------------------------------------------------------------
+         Utilization:          100.0    Average Utilization: 100.0
+
+Build FAILED.
+
+       "R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln" (clean target) (1) ->
+       (_CustomizeAppConfigs target) -> 
+         R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\after.Sp.Api.sln.targets(35,5): error MSB4044: The "XmlPoke" task was not given a value for the required parameter "Value". [R:\Users\rbartelink.INISHTECH\Documents\Visual Studio 11\Projects\Sp.Api\Sp.Api.sln]
+
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:00.31
