@@ -13,7 +13,7 @@ namespace Sp.Api.ProductManagement.Acceptance
 		public AutoSoftwarePotentialData()
 			: base( new Fixture()
 				.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() )
-				.Customize( new SoftwarePotentialApiConfigurationFromAppSettingsCustomization() ) )
+				.Customize( new SoftwarePotentialApiConfigurationFromAppSettingsCustomization() ))
 		{
 		}
 	}

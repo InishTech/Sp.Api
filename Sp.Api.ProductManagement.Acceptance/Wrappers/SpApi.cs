@@ -48,6 +48,9 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 
 		protected IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
 		{
+			// TODO this should be conditional, i.e. each conversation should only require a single login to take place.
+			// This would be an IAuthenticator. However we're likely to be changing our auth approach this placeholder behavior will do for now
+			ExecuteLogin();
 			return _client.Execute<T>( request );
 		}
 
