@@ -17,7 +17,7 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 		public SpApi( SpApiConfiguration apiConfiguration )
 		{
 			_baseUrl = apiConfiguration.BaseUrl;
-			_cookieContainer = new System.Net.CookieContainer();
+			_cookieContainer = new CookieContainer();
 			_username = apiConfiguration.Username;
 			_password = apiConfiguration.Password;
 			_client = new RestClient();

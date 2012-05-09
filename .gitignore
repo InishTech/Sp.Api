@@ -7,3 +7,4 @@ obj
 *.cache
 packages
 TestResults
+build.log

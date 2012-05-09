@@ -1,5 +1,4 @@
 using RestSharp;
-using System;
 using System.Collections.Generic;
 
 namespace Sp.Api.ProductManagement.Acceptance.Wrappers
@@ -25,7 +24,8 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 
 		public class Product
 		{
-			public string Name { get; set; }
+			public string ReferenceId { get; set; }
+			public string Label { get; set; }
 			public string Description { get; set; }
 		}
 

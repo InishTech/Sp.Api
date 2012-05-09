@@ -9,7 +9,9 @@ namespace Sp.Api.ProductManagement.Acceptance
 		[Theory, AutoSoftwarePotentialData]
 		public static void ProductList( SpProductManagementApi api )
 		{
-			Assert.NotEmpty( api.GetProductList().Products );
+			var apiResult = api.GetProductList();
+			Assert.NotNull( apiResult );
+			Assert.NotEmpty( apiResult.Products );
 		}
 	}
 }
