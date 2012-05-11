@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 {
+	using System;
+
 	public class SpProductManagementApi : SpApi
 	{
 		public SpProductManagementApi( SpApiConfiguration apiConfiguration )
@@ -15,6 +17,13 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 			var request = new RestRequest( "ProductManagement" );
 			var result = Execute<ProductsPage>( request );
 			return result.Data;
+		}
+
+		internal IRestResponse<Product> GetProduct(Guid id)
+		{
+			var request = new RestRequest( "ProductManagement/Product/" + id );
+			var result = Execute<Product>( request );
+			return result;
 		}
 
 		public class ProductsPage
