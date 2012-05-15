@@ -59,6 +59,11 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 			return string.Format( "{0}( Url: {1}; Username: {2})",
 			  typeof( SpApi ).Name, _baseUrl, _username );
 		}
+
+		protected string ClientBaseUri
+		{
+			get { return  _client.BaseUrl; }
+		}
 	}
 
 	static class RestRequestFormSubmissionExtensions

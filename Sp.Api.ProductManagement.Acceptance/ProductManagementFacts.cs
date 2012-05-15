@@ -1,13 +1,13 @@
-﻿using Sp.Api.ProductManagement.Acceptance.Wrappers;
+﻿using System;
+using System.Net;
+using Ploeh.AutoFixture;
+using Sp.Api.ProductManagement.Acceptance.Helpers;
+using Sp.Api.ProductManagement.Acceptance.Wrappers;
 using Xunit;
 using Xunit.Extensions;
 
 namespace Sp.Api.ProductManagement.Acceptance
 {
-	using System;
-	using System.Net;
-	using Ploeh.AutoFixture;
-
 	public static class ProductManagementFacts
 	{
 		[Theory, AutoSoftwarePotentialData]
@@ -21,11 +21,11 @@ namespace Sp.Api.ProductManagement.Acceptance
 		[Theory, AutoSoftwarePotentialData]
 		public static void GetExistingProduct( SpProductManagementApi api )
 		{
-			//TODO - remove hardcoding of wellKnownProductId; load product list and select a random item
-			Guid wellKnownProductId = new Guid( "49cbc9f6-ef16-4c49-af20-496eabbbd92b" );
-			var apiResult = api.GetProduct( wellKnownProductId );
+			Uri existingProductHref = GetRandomProductHref( api );
+
+			var apiResult = api.GetProduct( existingProductHref );
 			Assert.NotNull( apiResult.Data );
-			Assert.Equal( "AidansMed", apiResult.Data.Label );
+			Assert.NotEmpty( apiResult.Data.ReferenceId );
 		}
 
 		[Theory, AutoSoftwarePotentialData]
@@ -36,6 +36,16 @@ namespace Sp.Api.ProductManagement.Acceptance
 			var apiResult = api.GetProduct( anonymousProductId );
 			Assert.NotNull( apiResult );
 			Assert.Equal( HttpStatusCode.NotFound, apiResult.StatusCode );
+		}
+
+		static Uri GetRandomProductHref( SpProductManagementApi api )
+		{
+			var apiResult = api.GetProductList();
+			if ( apiResult.Products == null )
+				throw new InvalidOperationException( "No products found" );
+			var randomProduct = apiResult.Products.ElementAtRandom();
+			Console.WriteLine( randomProduct ); 
+			return new Uri(randomProduct._links.self.href, UriKind.Relative );
 		}
 	}
 }
