@@ -22,11 +22,18 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 			_password = apiConfiguration.Password;
 			_client = new RestClient();
 			_client.BaseUrl = _baseUrl;
-			_client.CookieContainer = _cookieContainer;
 		}
 
-		internal void ExecuteLogin()
+		internal void EnsureLoggedIn()
 		{
+			if ( _client.CookieContainer != null )
+				return;
+
+			_client.CookieContainer = _cookieContainer;
+
+			// TODO this should be conditional, i.e. each conversation should only require a single login to take place.
+			// This would be an IAuthenticator. However we're likely to be changing our auth approach this placeholder behavior will do for now
+			
 			var loginPage = _client.Execute( new RestRequest( "login.aspx", Method.GET ) );
 			var loginPageHtml = new HtmlDocument();
 			loginPageHtml.LoadHtml( loginPage.Content );
@@ -39,19 +46,25 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 			request.AddHiddenFieldValueFrom( "__VIEWSTATE", loginPageHtml );
 			var loginResult = _client.Execute( request );
 			if ( !loginResult.Content.Contains( "createActivationKeysTitle" ) )
-			{
-				Console.WriteLine( "FAILED" );
-				Console.WriteLine( loginResult.Content );
-				Console.WriteLine( loginResult.ResponseUri );
-			}
+				throw new Exception( String.Format( "LOGIN FAILED: {0} with status code {1} says: {2}", loginResult.ResponseUri, loginResult.StatusCode, loginResult.Content ) );
 		}
 
-		protected IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
+		public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
 		{
-			// TODO this should be conditional, i.e. each conversation should only require a single login to take place.
-			// This would be an IAuthenticator. However we're likely to be changing our auth approach this placeholder behavior will do for now
-			ExecuteLogin();
+			EnsureLoggedIn();
+			request.Resource = MakeUriRelativeToRestSharpClientBaseUri( request.Resource ).ToString(  );
 			return _client.Execute<T>( request );
+		}
+
+		// Required if your BaseUri includes a path (e.g., within InishTech test environments, instances are not always at / on a machine)
+		Uri MakeUriRelativeToRestSharpClientBaseUri( string resource )
+		{
+			Uri clientBaseUriEndingWithSlash = ClientBaseUri.EndsWith( "/" )
+				? new Uri( ClientBaseUri )
+				: new Uri( ClientBaseUri + "/" );
+			var requestUriAbsolute = new Uri( clientBaseUriEndingWithSlash, resource );
+			var uriRelativeToClientBaseUri = clientBaseUriEndingWithSlash.MakeRelativeUri( requestUriAbsolute );
+			return uriRelativeToClientBaseUri;
 		}
 
 		public override string ToString()
@@ -60,7 +73,7 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 			  typeof( SpApi ).Name, _baseUrl, _username );
 		}
 
-		protected string ClientBaseUri
+		string ClientBaseUri
 		{
 			get { return  _client.BaseUrl; }
 		}
