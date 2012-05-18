@@ -3,6 +3,7 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 	using RestSharp;
 	using System;
 	using System.Collections.Generic;
+	using System.Net;
 
 	public class SpProductManagementApi : SpApi
 	{
@@ -20,8 +21,16 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 		internal IRestResponse<Product> GetProduct( Uri productHref )
 		{
 			var request = new RestRequest( productHref );
-			var result = Execute<Product>( request );
-			return result;
+			return Execute<Product>( request );
+		}
+
+		public IRestResponse Put( SpProductManagementApi.Product product )
+		{
+			var request = new RestRequest( product._links.self.href, Method.PUT );
+			request.RequestFormat = DataFormat.Json;
+			request.AddBody( product );
+
+			return Execute( request );
 		}
 
 		public class ProductsPage
@@ -32,6 +41,7 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 		public class Product
 		{
 			public SelfLink _links { get; set; }
+			public int _version { get; set; }
 
 			public string ReferenceId { get; set; }
 			public string Label { get; set; }

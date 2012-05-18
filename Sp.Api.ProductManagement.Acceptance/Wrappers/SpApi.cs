@@ -56,6 +56,13 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 			return _client.Execute<T>( request );
 		}
 
+		public IRestResponse Execute( RestRequest request ) 
+		{
+			EnsureLoggedIn();
+			request.Resource = MakeUriRelativeToRestSharpClientBaseUri( request.Resource ).ToString();
+			return _client.Execute( request );
+		}
+
 		// Required if your BaseUri includes a path (e.g., within InishTech test environments, instances are not always at / on a machine)
 		Uri MakeUriRelativeToRestSharpClientBaseUri( string resource )
 		{
