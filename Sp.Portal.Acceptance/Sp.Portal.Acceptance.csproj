@@ -12,6 +12,8 @@
     <AssemblyName>Sp.Portal.Acceptance</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\Sp.Api\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,8 +62,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LandingPageFacts.cs" />
+    <Compile Include="PortalDataAttribute.cs" />
+    <Compile Include="Wrappers\SpPortalConfiguration.cs" />
+    <Compile Include="Wrappers\SpPortalApi.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--Hook in Test Target for use by command line build of .sln file-->
   <Import Project="$(SolutionDir)\after.csproj.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>
