@@ -11,6 +11,7 @@
     <TestAppConfigPassword Condition=" '' == '$(TestAppConfigPassword)'">INSERT PASSWORD HERE - $(_Instructions)</TestAppConfigPassword>
     <TestAppConfigSkipCertValidation Condition=" '' == '$(TestAppConfigSkipCertValidation)'">False</TestAppConfigSkipCertValidation>
     <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://srv.softwarepotential.com</TestAppConfigBaseUrl>
+    <TestAppConfigPortalBaseUrl Condition=" '' == '$(TestAppConfigPortalBaseUrl)'">https://portal.softwarepotential.com</TestAppConfigPortalBaseUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,23 +27,29 @@
     <TestAppConfigParam Include="BaseUrl">
       <Value>$(TestAppConfigBaseUrl)</Value>
     </TestAppConfigParam>
+    <TestAppConfigParam Include="PortalBaseUrl">
+      <Value>$(TestAppConfigPortalBaseUrl)</Value>
+    </TestAppConfigParam>
   </ItemGroup>
 
   <Target Name="CustomizeAppConfigs">
-
     <ItemGroup>
-      <Replacements Include="%(Identity)">
+      <_Replacements Include="%(Identity)">
         <Query>configuration/appSettings/add[@key='%(TestAppConfigParam.Identity)']/@value</Query>
         <Value>%(TestAppConfigParam.Value)</Value>
-      </Replacements>
+      </_Replacements>
+    </ItemGroup>
+    <ItemGroup>
+      <_ConfigFilesToCustomize Include="**\app.config">
+        <ReplacementQuery>%(_Replacements.Query)</ReplacementQuery>
+        <ReplacementValue>%(_Replacements.Value)</ReplacementValue>
+      </_ConfigFilesToCustomize>
     </ItemGroup>
 
-    <!-- TODO: Task batching or something to make this work on **\app.config -->
     <XmlPoke
-      XmlInputPath="Sp.Api.ProductManagement.Acceptance\app.config"
-      Query="%(Replacements.Query)"
-      Value="%(Replacements.Value)"/>
-
+      XmlInputPath="%(_ConfigFilesToCustomize.Identity)"
+      Query="%(_ConfigFilesToCustomize.ReplacementQuery)"
+      Value="%(_ConfigFilesToCustomize.ReplacementValue)"/>
   </Target>
 
 </Project>

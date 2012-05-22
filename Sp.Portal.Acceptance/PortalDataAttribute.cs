@@ -22,7 +22,7 @@ namespace Sp.Portal.Acceptance
 		void ICustomization.Customize( IFixture fixture )
 		{
 			fixture.Register( () => new SpPortalConfiguration(
-				ConfigurationManager.AppSettings[ "BaseUrl" ] ) );
+				ConfigurationManager.AppSettings[ "PortalBaseUrl" ] ) );
 		}
 	}
 
