@@ -1,9 +1,9 @@
-using RestSharp;
-using System.Collections.Generic;
-
 namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 {
+	using RestSharp;
 	using System;
+	using System.Collections.Generic;
+	using System.Net;
 
 	public class SpProductManagementApi : SpApi
 	{
@@ -12,35 +12,25 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 		{
 		}
 
-		internal ProductsPage GetProductList()
+		internal IRestResponse<ProductsPage> GetProductList()
 		{
 			var request = new RestRequest( "ProductManagement/" );
-			var result = Execute<ProductsPage>( request );
-			return result.Data;
-		}
-
-		internal IRestResponse<Product> GetProduct( Guid id )
-		{
-			var request = new RestRequest( "ProductManagement/Product/" + id );
-			var result = Execute<Product>( request );
-			return result;
+			return Execute<ProductsPage>( request );
 		}
 
 		internal IRestResponse<Product> GetProduct( Uri productHref )
 		{
-			var request = new RestRequest( MakeUriRelativeToRestSharpClientBaseUri( productHref ) );
-			var result = Execute<Product>( request );
-			return result;
+			var request = new RestRequest( productHref );
+			return Execute<Product>( request );
 		}
 
-		Uri MakeUriRelativeToRestSharpClientBaseUri( Uri uri )
+		public IRestResponse Put( SpProductManagementApi.Product product )
 		{
-			Uri clientBaseUriEndingWithSlash = ClientBaseUri.EndsWith( "/" )
-				? new Uri( ClientBaseUri )
-				: new Uri( ClientBaseUri + "/" );
-			var requestUriAbsolute = new Uri( clientBaseUriEndingWithSlash, uri );
-			var uriRelativeToClientBaseUri = clientBaseUriEndingWithSlash.MakeRelativeUri( requestUriAbsolute );
-			return uriRelativeToClientBaseUri;
+			var request = new RestRequest( product._links.self.href, Method.PUT );
+			request.RequestFormat = DataFormat.Json;
+			request.AddBody( product );
+
+			return Execute( request );
 		}
 
 		public class ProductsPage
@@ -51,6 +41,7 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 		public class Product
 		{
 			public SelfLink _links { get; set; }
+			public int _version { get; set; }
 
 			public string ReferenceId { get; set; }
 			public string Label { get; set; }
@@ -64,6 +55,11 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 			public class Link
 			{
 				public string href { get; set; }
+
+				public Uri AsRelativeUri()
+				{
+					return new Uri( href, UriKind.Relative );
+				}
 			}
 		}
 	}
