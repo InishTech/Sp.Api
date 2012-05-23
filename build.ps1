@@ -1,4 +1,5 @@
 param(
+  [string] $solution="build.proj",
 	[string] $targets="Build",
 	[string] $additionalMsBuildArgs="",
 	[string] $configuration="Debug", 
@@ -17,6 +18,6 @@ $msbuild="$env:windir\Microsoft.NET\Framework\v4.0.30319\MSBuild"
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
 
 warn "Starting at $([datetime]::Now)" 
-$parameters=@("$(dir *.sln)","/v:$verbosity","/m","/t:$targets","/fl","/flp:LogFile=build.log;Verbosity=$fileVerbosity",$properties,$additionalMsBuildArgs)
+$parameters=@("$solution","/v:$verbosity","/m","/t:$targets","/fl","/flp:LogFile=build.log;Verbosity=$fileVerbosity",$properties,$additionalMsBuildArgs)
 Write-Host "Running $msbuild $parameters"
 . $msbuild @parameters

@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Solution Include="Sp.Api.sln"/>
+    <Solution Include="Sp.Portal.Api.sln"/>
+  </ItemGroup>
+
+  <Target Name="Build">
+    <MSBuild Projects="@(Solution)" Targets="Build"/>
+  </Target>
+  <Target Name="Rebuild">
+    <MSBuild Projects="@(Solution)" Targets="Rebuild"/>
+  </Target>
+  <Target Name="Clean">
+    <MSBuild Projects="@(Solution)" Targets="Clean"/>
+  </Target>
+
+  <Target Name="FinalClean" AfterTargets="Clean" DependsOnTargets="CustomizeAppConfigs">
+    <RemoveDir Directories="$(SolutionDir)packages"/>
+  </Target>
+
+  <PropertyGroup>
+    <_Instructions>Need to run "./configure.ps1" from the root folder before running the tests.</_Instructions>
+    <TestAppConfigUsername Condition=" '' == '$(TestAppConfigUsername)'">INSERT USERNAME HERE - $(_Instructions)</TestAppConfigUsername>
+    <TestAppConfigPassword Condition=" '' == '$(TestAppConfigPassword)'">INSERT PASSWORD HERE - $(_Instructions)</TestAppConfigPassword>
+    <TestAppConfigSkipCertValidation Condition=" '' == '$(TestAppConfigSkipCertValidation)'">False</TestAppConfigSkipCertValidation>
+    <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://srv.softwarepotential.com</TestAppConfigBaseUrl>
+    <TestAppConfigPortalBaseUrl Condition=" '' == '$(TestAppConfigPortalBaseUrl)'">https://portal.softwarepotential.com</TestAppConfigPortalBaseUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <TestAppConfigParam Include="Username">
+      <Value>$(TestAppConfigUsername)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="Password">
+      <Value>$(TestAppConfigPassword)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="SkipCertValidation">
+      <Value>$(TestAppConfigSkipCertValidation)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="BaseUrl">
+      <Value>$(TestAppConfigBaseUrl)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="PortalBaseUrl">
+      <Value>$(TestAppConfigPortalBaseUrl)</Value>
+    </TestAppConfigParam>
+  </ItemGroup>
+
+  <Target Name="CustomizeAppConfigs">
+    <ItemGroup>
+      <_Replacements Include="%(Identity)">
+        <Query>configuration/appSettings/add[@key='%(TestAppConfigParam.Identity)']/@value</Query>
+        <Value>%(TestAppConfigParam.Value)</Value>
+      </_Replacements>
+    </ItemGroup>
+    <ItemGroup>
+      <_ConfigFilesToCustomize Include="**\app.config">
+        <ReplacementQuery>%(_Replacements.Query)</ReplacementQuery>
+        <ReplacementValue>%(_Replacements.Value)</ReplacementValue>
+      </_ConfigFilesToCustomize>
+    </ItemGroup>
+
+    <XmlPoke
+      XmlInputPath="%(_ConfigFilesToCustomize.Identity)"
+      Query="%(_ConfigFilesToCustomize.ReplacementQuery)"
+      Value="%(_ConfigFilesToCustomize.ReplacementValue)"/>
+  </Target>
+
+</Project>

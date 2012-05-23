@@ -14,4 +14,4 @@ $msbuildProperties=$msbuildProperties+"TestAppConfigPortalBaseUrl=$portalBaseUrl
 
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
 
-./build -t CustomizeAppConfigs -add "$properties"
+./build build.proj -t CustomizeAppConfigs -add "$properties"
