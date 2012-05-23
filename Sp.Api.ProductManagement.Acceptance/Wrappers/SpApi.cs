@@ -44,9 +44,17 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 			request.AddParameter( "_ctl0:ContentPlaceHolder1:m_oPasswordTb", _password );
 			request.AddHiddenFieldValueFrom( "__EVENTVALIDATION", loginPageHtml );
 			request.AddHiddenFieldValueFrom( "__VIEWSTATE", loginPageHtml );
+			
+			//Suppress following redirections (HTTP status codes 3xx)
+			_client.FollowRedirects = false;
+			//Submit the login form
 			var loginResult = _client.Execute( request );
-			if ( !loginResult.Content.Contains( "createActivationKeysTitle" ) )
-				throw new Exception( String.Format( "LOGIN FAILED: {0} with status code {1} says: {2}", loginResult.ResponseUri, loginResult.StatusCode, loginResult.Content ) );
+			//Client should receive a redirection to Default.aspx page (HTTP Status 302; Location header should point to Default.aspx)
+			if ( loginResult.StatusCode != HttpStatusCode.Found ||
+				!loginResult.Headers.Any( h => h.Name == "Location" && h.Value.ToString().EndsWith("/Default.aspx") ) )
+					throw new Exception( String.Format( "LOGIN FAILED: {0} with status code {1} says: {2}", loginResult.ResponseUri, loginResult.StatusCode, loginResult.Content ) );
+			//Restore following redirections
+			_client.FollowRedirects = true;
 		}
 
 		public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
