@@ -9,7 +9,10 @@
       <XunitPath Condition=" '' == '$(XunitPath)'">@(_XunitPath)</XunitPath>
     </PropertyGroup>
     <Error Text="Could not locate $(XunitExe). Please specify a $XunitPath Property" Condition="!EXISTS('$(XunitPath)')" />
-    <Exec Command="&quot;$(XunitPath)&quot; &quot;$(OutDir)\$(AssemblyName)$(TargetExt)&quot;" />
+    <Exec Command="&quot;$(XunitPath)&quot; &quot;$(OutDir)\$(AssemblyName)$(TargetExt)&quot;" ContinueOnError="true" IgnoreStandardErrorWarningFormat="true" >
+      <Output TaskParameter="ExitCode" ItemName="xUnitExitCodes"/>
+    </Exec>
+    <Error Text="Test error(s) occured" Code="%(xUnitExitCodes.Identity)" Condition=" '%(xUnitExitCodes.Identity)' != '0' AND '@(xUnitExitCodes)' !='' "/>
   </Target>
 
 </Project>
