@@ -10,7 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D177EBF0-5AF0-4C2B-93E3-8DDBC670AF3E}"
 	ProjectSection(SolutionItems) = preProject
 		after.csproj.targets = after.csproj.targets
-		after.sln.targets = after.sln.targets
+		build.proj = build.proj
 		build.ps1 = build.ps1
 		configure.ps1 = configure.ps1
 	EndProjectSection

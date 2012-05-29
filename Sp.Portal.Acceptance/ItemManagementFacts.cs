@@ -21,8 +21,6 @@
 			Assert.NotEmpty( response.Data.Items );
 			Assert.NotNull( response.Data.Items.First().Id );
 			Assert.NotNull( response.Data.Items.First().Label );
-			//TODO - this should be in Dispose
-			portalApi.SignOff();
 		}
 
 		public class ItemsPage

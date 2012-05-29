@@ -61,11 +61,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\RestResponseCookieExtensions.cs" />
+    <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="ItemManagementFacts.cs" />
     <Compile Include="LandingPageFacts.cs" />
     <Compile Include="PortalDataAttribute.cs" />
     <Compile Include="Wrappers\SpPortalConfiguration.cs" />
     <Compile Include="Wrappers\SpPortalApi.cs" />
+    <Compile Include="Wrappers\WSFederationAuthenticator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
