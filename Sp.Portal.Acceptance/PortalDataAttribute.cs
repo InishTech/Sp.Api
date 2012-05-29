@@ -22,6 +22,8 @@ namespace Sp.Portal.Acceptance
 		void ICustomization.Customize( IFixture fixture )
 		{
 			fixture.Register( () => new SpPortalConfiguration(
+				ConfigurationManager.AppSettings["Username"], 
+				ConfigurationManager.AppSettings["Password"],
 				ConfigurationManager.AppSettings[ "PortalBaseUrl" ] ) );
 		}
 	}
