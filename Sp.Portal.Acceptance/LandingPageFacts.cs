@@ -12,7 +12,7 @@
 		[Theory, PortalData]
 		public static void LandingPageShouldReturnHtml( SpPortalApi portalApi)
 		{
-			var request = new RestRequest( "/" );
+			var request = new RestRequest( string.Empty );
 			request.AddHeader( "Accept", "text/html" );
 			var response = portalApi.Execute( request );
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
@@ -22,7 +22,7 @@
 		[Theory, PortalData]
 		public static void LandingPageShouldContainSignedCustomerId( SpPortalApi portalApi )
 		{
-			var request = new RestRequest( "/" );
+			var request = new RestRequest( string.Empty );
 			request.AddHeader( "Accept", "text/html" );
 			var response = portalApi.Execute( request );
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );

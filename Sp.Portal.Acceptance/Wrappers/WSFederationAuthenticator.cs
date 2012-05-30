@@ -62,7 +62,7 @@ namespace Sp.Portal.Acceptance.Wrappers
 				_authClient.FollowRedirects = false;
 				var rpAuthResponse = _authClient.Execute( wresultRequest );
 				if ( rpAuthResponse.StatusCode != HttpStatusCode.Found || !rpAuthResponse.Cookies.Any( c => c.Name == "FedAuth" ) )
-					throw new InvalidOperationException( string.Format( "login with RP wasn't successful: {0} {1} {2}", rpAuthResponse.ResponseUri, rpAuthResponse.Content, rpAuthResponse.ErrorMessage ) );
+					throw new InvalidOperationException( string.Format( "Login wasn't successful: {0} {1} {2}", rpAuthResponse.ResponseUri, rpAuthResponse.Content, rpAuthResponse.ErrorMessage ) );
 
 				//Now we have FedAuth and FedAuth1 cookies stored in the cookie container
 				var restResponseCookies = rpAuthResponse.Cookies.Where( c => c.Name.StartsWith( "FedAuth" ) ).ToList();
