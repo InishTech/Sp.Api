@@ -73,7 +73,10 @@
   <ItemGroup>
     <Compile Include="AutoSoftwarePotentialData.cs" />
     <Compile Include="Helpers\CollectionExtensions.cs" />
+    <Compile Include="LicenseFacts.cs" />
     <Compile Include="ProductManagementFacts.cs" />
+    <Compile Include="Wrappers\SelfLink.cs" />
+    <Compile Include="Wrappers\SpLicenseManagementApi.cs" />
     <Compile Include="Wrappers\SpApi.cs" />
     <Compile Include="Wrappers\SpApiConfiguration.cs" />
     <Compile Include="Wrappers\SpProductManagementApi.cs" />

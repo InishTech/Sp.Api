@@ -3,7 +3,6 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 	using RestSharp;
 	using System;
 	using System.Collections.Generic;
-	using System.Net;
 
 	public class SpProductManagementApi : SpApi
 	{
@@ -46,21 +45,6 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 			public string ReferenceId { get; set; }
 			public string Label { get; set; }
 			public string Description { get; set; }
-		}
-
-		public class SelfLink
-		{
-			public Link self { get; set; }
-
-			public class Link
-			{
-				public string href { get; set; }
-
-				public Uri AsRelativeUri()
-				{
-					return new Uri( href, UriKind.Relative );
-				}
-			}
 		}
 	}
 }
