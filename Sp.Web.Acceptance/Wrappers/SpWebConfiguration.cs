@@ -1,17 +1,17 @@
 namespace Sp.Web.Acceptance.Wrappers
 {
-	public class SpApiConfiguration
+	public class SpWebConfiguration
 	{
 		readonly string _username;
 		readonly string _password;
 		readonly string _baseUrl;
 
-		public SpApiConfiguration( string username, string password )
+		public SpWebConfiguration( string username, string password )
 			: this( username, password, "https://srv.softwarepotential.com" )
 		{
 		}
 
-		public SpApiConfiguration( string username, string password, string baseUrl )
+		public SpWebConfiguration( string username, string password, string baseUrl )
 		{
 			_username = username;
 			_password = password;

@@ -21,7 +21,7 @@ namespace Sp.Web.Acceptance
 	{
 		void ICustomization.Customize( IFixture fixture )
 		{
-			fixture.Register( () => new SpApiConfiguration(
+			fixture.Register( () => new SpWebConfiguration(
 				ConfigurationManager.AppSettings[ "Username" ],
 				ConfigurationManager.AppSettings[ "Password" ],
 				ConfigurationManager.AppSettings[ "WebBaseUrl" ] ) );

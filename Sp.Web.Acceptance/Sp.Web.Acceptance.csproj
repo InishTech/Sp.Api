@@ -72,8 +72,8 @@
     <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="ItemManagementFacts.cs" />
     <Compile Include="WebDataAttribute.cs" />
-    <Compile Include="Wrappers\SpApi.cs" />
-    <Compile Include="Wrappers\SpApiConfiguration.cs" />
+    <Compile Include="Wrappers\SpWeb.cs" />
+    <Compile Include="Wrappers\SpWebConfiguration.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

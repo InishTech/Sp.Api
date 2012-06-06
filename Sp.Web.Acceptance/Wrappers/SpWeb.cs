@@ -4,16 +4,15 @@ using System;
 
 namespace Sp.Web.Acceptance.Wrappers
 {
-	public class SpApi
+	public class SpWeb
 	{
 		readonly string _baseUrl;
 		readonly RestClient _client;
 
-		public SpApi( SpApiConfiguration apiConfiguration )
+		public SpWeb( SpWebConfiguration apiConfiguration )
 		{
 			_baseUrl = apiConfiguration.BaseUrl;
-			_client = new RestClient { BaseUrl = _baseUrl };		
-		
+			_client = new RestClient { BaseUrl = _baseUrl };	
 		}
 
 		public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
