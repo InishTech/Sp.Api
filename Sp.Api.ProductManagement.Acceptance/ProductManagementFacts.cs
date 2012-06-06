@@ -36,7 +36,7 @@ namespace Sp.Api.ProductManagement.Acceptance
 		public static class GetItem
 		{
 			/// <summary>
-			/// The master list presents a set of linked child entities. Here we select an arbitrary one from the list and follow its _links.self to get theat resource's data.
+			/// The master list presents a set of linked child entities. Here we select an arbitrary one from the list and follow its _links.self to get that resource's data.
 			/// </summary>
 			/// <remarks>
 			/// Success/failure is communicated by the HTTP Status Code being OK		
@@ -113,6 +113,7 @@ namespace Sp.Api.ProductManagement.Acceptance
 
 		public class PutItem
 		{
+			// TODO
 		}
 
 		public class RandomProductFromListFixture
