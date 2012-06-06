@@ -3,6 +3,7 @@ param(
 [string] $password = $(Read-Host -prompt "Software Potential password"),
 [bool] $skipValidation=$false,
 [string] $baseUrl="https://srv.softwarepotential.com",
+[string] $webBaseUrl="https://srv.softwarepotential.com",
 [string] $portalBaseUrl="https://portal.softwarepotential.com"
 )
 
@@ -10,6 +11,7 @@ $msbuildProperties=@("TestAppConfigUsername=$username")
 $msbuildProperties=$msbuildProperties+"TestAppConfigPassword=$password"
 $msbuildProperties=$msbuildProperties+"TestAppConfigSkipCertValidation=$skipValidation"
 $msbuildProperties=$msbuildProperties+"TestAppConfigBaseUrl=$baseUrl"
+$msbuildProperties=$msbuildProperties+"TestAppConfigWebBaseUrl=$webBaseUrl"
 $msbuildProperties=$msbuildProperties+"TestAppConfigPortalBaseUrl=$portalBaseUrl"
 
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
