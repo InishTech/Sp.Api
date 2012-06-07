@@ -1,4 +1,4 @@
-﻿namespace Sp.Portal.Acceptance
+﻿namespace Sp.Web.Acceptance
 {
 	using System.Collections.Generic;
 	using System.Configuration;
@@ -6,7 +6,6 @@
 	using System.Net;
 	using Ploeh.AutoFixture;
 	using RestSharp;
-	using Sp.Web.Acceptance;
 	using Sp.Web.Acceptance.Wrappers;
 	using Xunit;
 	using Xunit.Extensions;

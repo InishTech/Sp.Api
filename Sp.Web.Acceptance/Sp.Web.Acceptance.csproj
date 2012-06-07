@@ -49,10 +49,6 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="xunit">
       <HintPath>..\packages\xunit.1.7.0.1540\lib\xunit.dll</HintPath>
@@ -69,11 +65,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CollectionExtensions.cs" />
+    <Compile Include="Helpers\RestResponseCookieExtensions.cs" />
     <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="ItemManagementFacts.cs" />
+    <Compile Include="LandingPageFacts.cs" />
     <Compile Include="WebDataAttribute.cs" />
     <Compile Include="Wrappers\SpWeb.cs" />
     <Compile Include="Wrappers\SpWebConfiguration.cs" />
+    <Compile Include="Wrappers\WSFederationAuthenticator.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
