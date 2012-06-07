@@ -58,8 +58,8 @@
 				// Use guest credentials - should authenticate, but not give CanSeeItems claim
 				// Use guest credentials - should authenticate, but not give CanSeeItems claim
 				fixture.Register( ( string username, string password ) => new SpWebConfiguration(
-					username,
-					password,
+					ConfigurationManager.AppSettings[ "Username" ],
+					ConfigurationManager.AppSettings[ "Password" ],
 					ConfigurationManager.AppSettings[ "WebBaseUrl" ].Replace( "https", "http" ) ) );
 			}
 		}
