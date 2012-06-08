@@ -89,7 +89,7 @@ namespace Sp.Api.ProductManagement.Acceptance
 			/// <returns></returns>
 			static Uri HackLinkReplacingGuidWithAlternateValue( Guid replacement, string validHref )
 			{
-				return new Uri( validHref.Substring( validHref.LastIndexOf( '/' ) ) + replacement.ToString(), UriKind.Relative );
+				return new Uri( validHref.Substring( 0, validHref.LastIndexOf( '/' ) + 1 ) + replacement.ToString(), UriKind.Relative );
 			}
 
 			public static class BadRequests
