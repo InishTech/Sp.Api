@@ -74,6 +74,7 @@
     <Compile Include="AutoSoftwarePotentialData.cs" />
     <Compile Include="Helpers\CollectionExtensions.cs" />
     <Compile Include="ProductManagementFacts.cs" />
+    <Compile Include="Helpers\Verify.cs" />
     <Compile Include="Wrappers\SpApi.cs" />
     <Compile Include="Wrappers\SpApiConfiguration.cs" />
     <Compile Include="Wrappers\SpProductManagementApi.cs" />

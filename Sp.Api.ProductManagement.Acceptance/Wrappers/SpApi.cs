@@ -1,6 +1,7 @@
 using HtmlAgilityPack;
 using RestSharp;
 using System;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 
@@ -33,7 +34,7 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 
 			// TODO this should be conditional, i.e. each conversation should only require a single login to take place.
 			// This would be an IAuthenticator. However we're likely to be changing our auth approach this placeholder behavior will do for now
-			
+
 			var loginPage = _client.Execute( new RestRequest( "login.aspx", Method.GET ) );
 			var loginPageHtml = new HtmlDocument();
 			loginPageHtml.LoadHtml( loginPage.Content );
@@ -44,15 +45,15 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 			request.AddParameter( "_ctl0:ContentPlaceHolder1:m_oPasswordTb", _password );
 			request.AddHiddenFieldValueFrom( "__EVENTVALIDATION", loginPageHtml );
 			request.AddHiddenFieldValueFrom( "__VIEWSTATE", loginPageHtml );
-			
+
 			//Suppress following redirections (HTTP status codes 3xx)
 			_client.FollowRedirects = false;
 			//Submit the login form
 			var loginResult = _client.Execute( request );
 			//Client should receive a redirection to Default.aspx page (HTTP Status 302; Location header should point to Default.aspx)
 			if ( loginResult.StatusCode != HttpStatusCode.Found ||
-				!loginResult.Headers.Any( h => h.Name == "Location" && h.Value.ToString().EndsWith("/Default.aspx") ) )
-					throw new Exception( String.Format( "LOGIN FAILED: {0} with status code {1} says: {2}", loginResult.ResponseUri, loginResult.StatusCode, loginResult.Content ) );
+				!loginResult.Headers.Any( h => h.Name == "Location" && h.Value.ToString().EndsWith( "/Default.aspx" ) ) )
+				throw new Exception( String.Format( "LOGIN FAILED: {0} with status code {1} says: {2}", loginResult.ResponseUri, loginResult.StatusCode, loginResult.Content ) );
 			//Restore following redirections
 			_client.FollowRedirects = true;
 		}
@@ -60,26 +61,30 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 		public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
 		{
 			EnsureLoggedIn();
-			request.Resource = MakeUriRelativeToRestSharpClientBaseUri( request.Resource ).ToString(  );
+			request.Resource = MakeUriRelativeToRestSharpClientBaseUri( request.Resource );
 			return _client.Execute<T>( request );
 		}
 
-		public IRestResponse Execute( RestRequest request ) 
+		public IRestResponse Execute( RestRequest request )
 		{
 			EnsureLoggedIn();
-			request.Resource = MakeUriRelativeToRestSharpClientBaseUri( request.Resource ).ToString();
+			request.Resource = MakeUriRelativeToRestSharpClientBaseUri( request.Resource );
 			return _client.Execute( request );
 		}
 
 		// Required if your BaseUri includes a path (e.g., within InishTech test environments, instances are not always at / on a machine)
-		Uri MakeUriRelativeToRestSharpClientBaseUri( string resource )
+		string MakeUriRelativeToRestSharpClientBaseUri( string resource )
 		{
 			Uri clientBaseUriEndingWithSlash = ClientBaseUri.EndsWith( "/" )
 				? new Uri( ClientBaseUri )
 				: new Uri( ClientBaseUri + "/" );
 			var requestUriAbsolute = new Uri( clientBaseUriEndingWithSlash, resource );
 			var uriRelativeToClientBaseUri = clientBaseUriEndingWithSlash.MakeRelativeUri( requestUriAbsolute );
-			return uriRelativeToClientBaseUri;
+			var result = uriRelativeToClientBaseUri.ToString();
+			string prefix = "../";
+			if ( result.StartsWith( prefix ) )
+				throw new ConfigurationErrorsException( "Translating Resource to a relative Uri yielded a relative Path:- '" + result + "'. Is the suffix cased correctly?");
+			return result;
 		}
 
 		public override string ToString()
@@ -90,7 +95,7 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 
 		string ClientBaseUri
 		{
-			get { return  _client.BaseUrl; }
+			get { return _client.BaseUrl; }
 		}
 	}
 

@@ -1,7 +1,10 @@
 ﻿using Ploeh.AutoFixture.Xunit;
+using RestSharp;
 using Sp.Api.ProductManagement.Acceptance.Helpers;
 using Sp.Api.ProductManagement.Acceptance.Wrappers;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Xunit;
@@ -95,7 +98,7 @@ namespace Sp.Api.ProductManagement.Acceptance
 				/// Malformed requests (as opposed to items that are Not Found or have Gone) generally yield Bad Request responses. If one sticks to Hypermedia _links, one should not normally encounter these
 				/// </summary>
 				// Right now this causes an Exception which, instead of the OOTB HTTP 500 instead redirects to ErrorPage.aspx which gives 200. This will be fixed as the intention is that all APIs communicate success/failure info to JSON speakers using Http Status Codes, not HTML error pages
-				[Theory(Skip = "TODO - at the moment this request returns HTTP 500"), AutoSoftwarePotentialData]
+				[Theory( Skip = "TODO - at the moment this request returns HTTP 500" ), AutoSoftwarePotentialData]
 				public static void GetNonGuidProductShould400( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
 				{
 					Uri misformattedHackedUri = new Uri( product.SelectedProduct._links.self.href + "broken", UriKind.Relative );
@@ -111,17 +114,94 @@ namespace Sp.Api.ProductManagement.Acceptance
 			}
 		}
 
+		/// <summary>
+		/// The master list presents a set of linked child entities. Here we select an arbitrary one from the list and follow its _links.self to get and then PUT an updated version of that resource's data.
+		/// </summary>
+		/// <remarks>
+		/// <para>Success/failure is communicated by the HTTP Status Code being OK.</para>
+		/// <para>Note that update may not be processed immediately hence usage of <c>Verify.EventuallyWithBackOff</c>.</para>
+		/// </remarks>
+		/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="product"/> can share the authentication work.</param>
+		/// <param name="product">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
 		public class PutItem
 		{
-			// TODO
+			[Theory, AutoSoftwarePotentialData]
+			public static void PutProductFromListWithUpdatedDescriptionShouldRoundtrip( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product, string updatedValue )
+			{
+				product.SelectedProduct.Description = updatedValue;
+
+				Assert.Equal( HttpStatusCode.OK, product.PutSelectedProduct().StatusCode );
+
+				Verify.EventuallyWithBackOff( () =>
+					Assert.Equal( updatedValue, product.GetSelectedProductAgain().Description ) );
+			}
+
+			[Theory, AutoSoftwarePotentialData]
+			public static void PutProductFromListWithUpdatedLabelShouldRoundtrip( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product, string updatedValue )
+			{
+				product.SelectedProduct.Label = updatedValue;
+
+				Assert.Equal( HttpStatusCode.OK, product.PutSelectedProduct().StatusCode );
+
+				Verify.EventuallyWithBackOff( () =>
+					Assert.Equal( updatedValue, product.GetSelectedProductAgain().Label ) );
+			}
+
+			/// <summary>
+			/// The following are examples of values that will be rejected as invalid.
+			/// - Description is Mandatory with a max length of 100 (empty is permitted).
+			/// - Label is Mandatory with a Minimum Length of 1 and max of 100.
+			/// </summary>
+			public static class InvalidData
+			{
+				[Theory, AutoSoftwarePotentialData]
+				public static void PutNullLabelShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+				{
+					product.SelectedProduct.Label = null;
+					Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+				}
+
+				[Theory, AutoSoftwarePotentialData]
+				public static void PutEmptyLabelShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+				{
+					product.SelectedProduct.Label = string.Empty;
+					Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+				}
+
+				[Theory, AutoSoftwarePotentialData]
+				public static void PutExcessivelyLongLabelShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+				{
+					product.SelectedProduct.Label = new String( 'a', 101 );
+					Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+				}
+
+				/// <summary>
+				/// While the Description can be left Empty, one is not permitted to submit a null value.
+				/// </summary>
+				[Theory, AutoSoftwarePotentialData]
+				public static void PutNullDescriptionShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+				{
+					product.SelectedProduct.Description = null;
+					Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+				}
+
+				[Theory, AutoSoftwarePotentialData]
+				public static void PutExcessivelyLongDescriptionShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+				{
+					product.SelectedProduct.Description = new String( 'a', 101 );
+					Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+				}
+			}
 		}
 
 		public class RandomProductFromListFixture
 		{
 			readonly SpProductManagementApi.Product _randomProduct;
+			readonly SpProductManagementApi _api;
 
 			public RandomProductFromListFixture( SpProductManagementApi api )
 			{
+				_api = api;
 				var apiResult = api.GetProductList();
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
 				Assert.True( apiResult.Data.Products.Any(), "RandomProductFromListFixture requires the target login to have at least one Product" );
@@ -131,6 +211,19 @@ namespace Sp.Api.ProductManagement.Acceptance
 			public SpProductManagementApi.Product SelectedProduct
 			{
 				get { return _randomProduct; }
+			}
+
+			public IRestResponse PutSelectedProduct()
+			{
+				return _api.Put( SelectedProduct );
+			}
+
+			public SpProductManagementApi.Product GetSelectedProductAgain()
+			{
+				Uri linkedAddress = SelectedProduct._links.self.AsRelativeUri();
+				var apiResult = _api.GetProduct( linkedAddress );
+				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+				return apiResult.Data;
 			}
 		}
 	}
