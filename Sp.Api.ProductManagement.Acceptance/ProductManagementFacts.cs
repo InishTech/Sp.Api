@@ -154,42 +154,48 @@ namespace Sp.Api.ProductManagement.Acceptance
 			/// </summary>
 			public static class InvalidData
 			{
-				[Theory, AutoSoftwarePotentialData]
-				public static void PutNullLabelShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+				public static class Label
 				{
-					product.SelectedProduct.Label = null;
-					Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+					[Theory, AutoSoftwarePotentialData]
+					public static void PutNullShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+					{
+						product.SelectedProduct.Label = null;
+						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+					}
+
+					[Theory, AutoSoftwarePotentialData]
+					public static void PutEmptyShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+					{
+						product.SelectedProduct.Label = string.Empty;
+						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+					}
+
+					[Theory, AutoSoftwarePotentialData]
+					public static void PutExcessivelyLongShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+					{
+						product.SelectedProduct.Label = new String( 'a', 101 );
+						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+					}
 				}
 
-				[Theory, AutoSoftwarePotentialData]
-				public static void PutEmptyLabelShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+				public static class Description
 				{
-					product.SelectedProduct.Label = string.Empty;
-					Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
-				}
+					/// <summary>
+					/// While the Description can be left Empty, one is not permitted to submit a null value.
+					/// </summary>
+					[Theory, AutoSoftwarePotentialData]
+					public static void PutNullDescriptionShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+					{
+						product.SelectedProduct.Description = null;
+						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+					}
 
-				[Theory, AutoSoftwarePotentialData]
-				public static void PutExcessivelyLongLabelShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
-				{
-					product.SelectedProduct.Label = new String( 'a', 101 );
-					Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
-				}
-
-				/// <summary>
-				/// While the Description can be left Empty, one is not permitted to submit a null value.
-				/// </summary>
-				[Theory, AutoSoftwarePotentialData]
-				public static void PutNullDescriptionShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
-				{
-					product.SelectedProduct.Description = null;
-					Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
-				}
-
-				[Theory, AutoSoftwarePotentialData]
-				public static void PutExcessivelyLongDescriptionShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
-				{
-					product.SelectedProduct.Description = new String( 'a', 101 );
-					Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+					[Theory, AutoSoftwarePotentialData]
+					public static void PutExcessivelyLongDescriptionShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+					{
+						product.SelectedProduct.Description = new String( 'a', 101 );
+						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
+					}
 				}
 			}
 		}
