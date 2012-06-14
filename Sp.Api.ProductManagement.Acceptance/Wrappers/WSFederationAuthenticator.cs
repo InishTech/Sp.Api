@@ -4,11 +4,11 @@ using System.Net;
 using HtmlAgilityPack;
 using RestSharp;
 using RestSharp.Contrib;
-using Sp.Web.Acceptance.Helpers;
+using Sp.Api.ProductManagement.Acceptance.Helpers;
 
-namespace Sp.Web.Acceptance.Wrappers
+
+namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 {
-
 	class WSFederationAuthenticator : IAuthenticator
 	{
 		readonly string _username;

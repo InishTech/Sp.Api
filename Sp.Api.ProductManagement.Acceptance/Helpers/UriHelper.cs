@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sp.Web.Acceptance.Helpers
+namespace Sp.Api.ProductManagement.Acceptance.Helpers
 {
 	class UriHelper
 	{

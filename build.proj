@@ -24,8 +24,7 @@
     <TestAppConfigUsername Condition=" '' == '$(TestAppConfigUsername)'">INSERT USERNAME HERE - $(_Instructions)</TestAppConfigUsername>
     <TestAppConfigPassword Condition=" '' == '$(TestAppConfigPassword)'">INSERT PASSWORD HERE - $(_Instructions)</TestAppConfigPassword>
     <TestAppConfigSkipCertValidation Condition=" '' == '$(TestAppConfigSkipCertValidation)'">False</TestAppConfigSkipCertValidation>
-    <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://srv.softwarepotential.com</TestAppConfigBaseUrl>
-    <TestAppConfigPortalBaseUrl Condition=" '' == '$(TestAppConfigWebBaseUrl)'">https://web.softwarepotential.com</TestAppConfigPortalBaseUrl>
+    <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://web.softwarepotential.com</TestAppConfigBaseUrl>
     <TestAppConfigPortalBaseUrl Condition=" '' == '$(TestAppConfigPortalBaseUrl)'">https://portal.softwarepotential.com</TestAppConfigPortalBaseUrl>
   </PropertyGroup>
 

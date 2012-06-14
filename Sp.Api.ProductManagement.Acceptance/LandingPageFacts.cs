@@ -1,30 +1,30 @@
-﻿namespace Sp.Web.Acceptance
+﻿namespace Sp.Api.ProductManagement.Acceptance
 {
 	using System.Net;
 	using HtmlAgilityPack;
 	using RestSharp;
-	using Sp.Web.Acceptance.Wrappers;
+	using Sp.Api.ProductManagement.Acceptance.Wrappers;
 	using Xunit;
 	using Xunit.Extensions;
 
 	public static class LandingPageFacts
 	{
-		[Theory, WebData]
-		public static void LandingPageShouldReturnHtml( SpWeb webApi )
+		[Theory, AutoSoftwarePotentialData]
+		public static void LandingPageShouldReturnHtml( SpApi spApi )
 		{
 			var request = new RestRequest( string.Empty );
 			request.AddHeader( "Accept", "text/html" );
-			var response = webApi.Execute( request );
+			var response = spApi.Execute( request );
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 			Assert.True( response.ContentType.StartsWith( "text/html" ) );
 		}
 
-		[Theory, WebData]
-		public static void LandingPageShouldContainSignedCustomerId( SpWeb webApi )
+		[Theory, AutoSoftwarePotentialData]
+		public static void LandingPageShouldContainSignedVendorId( SpApi spApi )
 		{
 			var request = new RestRequest( string.Empty );
 			request.AddHeader( "Accept", "text/html" );
-			var response = webApi.Execute( request );
+			var response = spApi.Execute( request );
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 			Assert.True( response.ContentType.StartsWith( "text/html" ) );
 
@@ -32,15 +32,15 @@
 			doc.LoadHtml( response.Content );
 			var node = doc.DocumentNode.SelectSingleNode( "//span[@data-claimid='vendorid']" );
 			Assert.NotNull( node );
-			Assert.Contains( "999", node.InnerText );
+			Assert.Contains( "BFF714F1-3C88-40E7-9E78-A73C041AC8EB", node.InnerText );
 		}
 
-		[Theory, WebData]
-		public static void SignoffShouldRedirectBackToSts( SpWeb webApi )
+		[Theory, AutoSoftwarePotentialData]
+		public static void SignoffShouldRedirectBackToSts( SpApi spApi )
 		{
-			LandingPageShouldReturnHtml( webApi );
+			LandingPageShouldReturnHtml( spApi );
 
-			var result = webApi.SignOff();
+			var result = spApi.SignOff();
 			Assert.Equal( HttpStatusCode.OK, result.StatusCode );
 			Assert.Contains( "Sp.Portal.Sts", result.ResponseUri.AbsolutePath );
 		}

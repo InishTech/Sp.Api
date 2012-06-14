@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using RestSharp;
 
-namespace Sp.Web.Acceptance.Helpers
+
+namespace Sp.Api.ProductManagement.Acceptance.Helpers
 {
 	static class RestResponseCookieExtensions
 	{
