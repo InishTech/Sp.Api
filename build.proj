@@ -41,9 +41,6 @@
     <TestAppConfigParam Include="BaseUrl">
       <Value>$(TestAppConfigBaseUrl)</Value>
     </TestAppConfigParam>
-    <TestAppConfigParam Include="WebBaseUrl">
-      <Value>$(TestAppConfigWebBaseUrl)</Value>
-    </TestAppConfigParam>
     <TestAppConfigParam Include="PortalBaseUrl">
       <Value>$(TestAppConfigPortalBaseUrl)</Value>
     </TestAppConfigParam>
