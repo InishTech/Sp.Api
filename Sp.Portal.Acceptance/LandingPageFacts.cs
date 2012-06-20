@@ -42,7 +42,7 @@
 
 			var result = portalApi.SignOff();
 			Assert.Equal( HttpStatusCode.OK, result.StatusCode );
-			Assert.Contains( "Sp.Portal.Sts", result.ResponseUri.AbsolutePath );
+			Assert.Contains( "Sp.Auth.Web", result.ResponseUri.AbsolutePath );
 		}
 	}
 }
