@@ -32,7 +32,7 @@
 			doc.LoadHtml( response.Content );
 			var node = doc.DocumentNode.SelectSingleNode( "//span[@data-claimid='customerid']" );
 			Assert.NotNull( node );
-			Assert.Contains( "bff714f1-3c88-40e7-9e78-a73c041ac8eb", node.InnerText );
+			Assert.Contains( "18840545-4947-49e3-9639-dd13d9dbd615", node.InnerText );
 		}
 
 		[Theory, PortalData]
