@@ -20,7 +20,7 @@
 		}
 
 		[Theory, PortalData]
-		public static void LandingPageShouldContainSignedCustomerId( SpPortalApi portalApi )
+		public static void LandingPageShouldContainSignedInCustomerId( SpPortalApi portalApi )
 		{
 			var request = new RestRequest( string.Empty );
 			request.AddHeader( "Accept", "text/html" );
