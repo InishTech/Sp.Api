@@ -7,7 +7,7 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 		readonly string _baseUrl;
 
 		public SpApiConfiguration( string username, string password )
-			: this( username, password, "https://srv.softwarepotential.com" )
+			: this( username, password, "https://web.softwarepotential.com" )
 		{
 		}
 

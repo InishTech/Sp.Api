@@ -77,9 +77,15 @@
     <Compile Include="ProductManagementFacts.cs" />
     <Compile Include="Wrappers\SelfLink.cs" />
     <Compile Include="Wrappers\SpLicenseManagementApi.cs" />
+    <Compile Include="Helpers\RestResponseCookieExtensions.cs" />
+    <Compile Include="Helpers\UriHelper.cs" />
+    <Compile Include="LandingPageFacts.cs" />
+    <Compile Include="ProductManagementFacts.cs" />
+    <Compile Include="Helpers\Verify.cs" />
     <Compile Include="Wrappers\SpApi.cs" />
     <Compile Include="Wrappers\SpApiConfiguration.cs" />
     <Compile Include="Wrappers\SpProductManagementApi.cs" />
+    <Compile Include="Wrappers\WSFederationAuthenticator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

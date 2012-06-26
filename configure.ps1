@@ -2,7 +2,7 @@ param(
 [string] $username = $(Read-Host -prompt "Software Potential username (account@domain.com)"),
 [string] $password = $(Read-Host -prompt "Software Potential password"),
 [bool] $skipValidation=$false,
-[string] $baseUrl="https://srv.softwarepotential.com",
+[string] $baseUrl="https://web.softwarepotential.com",
 [string] $portalBaseUrl="https://portal.softwarepotential.com"
 )
 
