@@ -13,7 +13,7 @@ namespace Sp.Api.Shared.Wrappers
 
 		internal IRestResponse<ProductsPage> GetProductList()
 		{
-			var request = new RestRequest( "Product" );
+			var request = new RestRequest( ApiPrefix.Define + "/Product" );
 			return Execute<ProductsPage>( request );
 		}
 

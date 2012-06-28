@@ -79,9 +79,6 @@
     <Compile Include="..\Sp.Api-Shared\AutoSoftwarePotentialData.cs">
       <Link>Inlined\AutoSoftwarePotentialData.cs</Link>
     </Compile>
-	<Compile Include="..\Sp.Api-Shared\Wrappers\ApiClientFactory.cs">
-      <Link>Inlined\Wrappers\ApiClientFactory.cs</Link>
-    </Compile>
     <Compile Include="LicenseFacts.cs" />
   </ItemGroup>
   <ItemGroup>

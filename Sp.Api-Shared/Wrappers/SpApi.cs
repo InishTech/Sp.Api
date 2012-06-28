@@ -30,7 +30,7 @@ namespace Sp.Api.Shared.Wrappers
 
 		public IRestResponse SignOff()
 		{
-			var signOffRequest = new RestRequest( "Authentication/LogOff", Method.GET );
+			var signOffRequest = new RestRequest( ApiPrefix.WebApiRoot + "/Authentication/LogOff", Method.GET );
 			return _client.Execute( signOffRequest );
 		}
 	}

@@ -25,11 +25,6 @@ namespace Sp.Api.Shared
 				ConfigurationManager.AppSettings[ "Username" ],
 				ConfigurationManager.AppSettings[ "Password" ],
 				ConfigurationManager.AppSettings[ "BaseUrl" ] ) );
-
-			fixture.Register<SpApiConfiguration, IApiClientFactory>( c => new FixedBaseUrisApiClientFactory( c ) );
-			fixture.Register<IApiClientFactory, SpApi>( f => f.CreateSpApiClient() );
-			fixture.Register<IApiClientFactory, SpProductManagementApi>( f => f.CreateProductManagementApiClient() );
-			fixture.Register<IApiClientFactory, SpLicenseManagementApi>( f => f.CreateLicenseManagementApiClient() );
 		}
 	}
 

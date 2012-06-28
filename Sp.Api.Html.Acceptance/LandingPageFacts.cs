@@ -14,7 +14,7 @@
 		[Theory, AutoSoftwarePotentialData]
 		public static void LandingPageShouldReturnHtml( SpApi spApi )
 		{
-			var request = new RestRequest( string.Empty );
+			var request = new RestRequest( ApiPrefix.WebApiRoot );
 			request.AddHeader( "Accept", "text/html" );
 			var response = spApi.Execute( request );
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
@@ -24,7 +24,7 @@
 		[Theory, AutoSoftwarePotentialData]
 		public static void LandingPageShouldContainSignedVendorId( SpApi spApi )
 		{
-			var request = new RestRequest( string.Empty );
+			var request = new RestRequest( ApiPrefix.WebApiRoot );
 			request.AddHeader( "Accept", "text/html" );
 			var response = spApi.Execute( request );
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );

@@ -13,7 +13,7 @@
 
 		internal IRestResponse<LicensesSummaryPage> GetList()
 		{
-			var request = new RestRequest( "License" );
+			var request = new RestRequest( ApiPrefix.Issue + "/License" );
 			return Execute<LicensesSummaryPage>( request );
 		}
 

@@ -33,4 +33,11 @@ namespace Sp.Api.Shared.Wrappers
 			get { return _baseUrl; }
 		}
 	}
+
+	static class ApiPrefix
+	{
+		public const string WebApiRoot = "Sp.Web";
+		public const string Define = "Sp.Web.Define";
+		public const string Issue = "Sp.Web.Issue";
+	}
 }

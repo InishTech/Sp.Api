@@ -71,20 +71,11 @@
     <Compile Include="..\Sp.Api-Shared\Wrappers\WSFederationAuthenticator.cs">
       <Link>Inlined\Wrappers\WSFederationAuthenticator.cs</Link>
     </Compile>
-    <Compile Include="..\Sp.Api-Shared\Wrappers\ApiClientFactory.cs">
-      <Link>Inlined\Wrappers\ApiClientFactory.cs</Link>
-    </Compile>
     <Compile Include="..\Sp.Api-Shared\AutoSoftwarePotentialData.cs">
       <Link>Inlined\AutoSoftwarePotentialData.cs</Link>
     </Compile>
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApi.cs">
       <Link>Inlined\Wrappers\SpApi.cs</Link>
-    </Compile>
-    <Compile Include="..\Sp.Api-Shared\Wrappers\SpProductManagementApi.cs">
-      <Link>Inlined\Wrappers\SpProductManagementApi.cs</Link>
-    </Compile>
-    <Compile Include="..\Sp.Api-Shared\Wrappers\SpLicenseManagementApi.cs">
-      <Link>Inlined\Wrappers\SpLicenseManagementApi.cs</Link>
     </Compile>
     <Compile Include="LandingPageFacts.cs" />
   </ItemGroup>

@@ -25,7 +25,7 @@ namespace Sp.Api.Shared.Wrappers
 				return;
 
 			client.CookieContainer = client.CookieContainer ?? new CookieContainer();
-			var auth = new InnerAuthenticator( client.BaseUrl, _username, _password );
+			var auth = new InnerAuthenticator( client.BaseUrl + "/" + ApiPrefix.WebApiRoot, _username, _password );
 			var authCookies = auth.SignInAndRetrieveFedAuthCookies();
 			client.CookieContainer.Add( new Uri( client.BaseUrl ), authCookies );
 		}
@@ -52,7 +52,7 @@ namespace Sp.Api.Shared.Wrappers
 			public CookieCollection SignInAndRetrieveFedAuthCookies()
 			{
 				// An unauthenticated request to the Web should redirect us to the STS
-				var loginPage = _authClient.Execute( new RestRequest( "/", Method.GET ) );
+				var loginPage = _authClient.Execute( new RestRequest( string.Empty, Method.GET ) );
 				var stsLoginUri = loginPage.ResponseUri;
 
 				var wresultRequest = AuthenticateAndSignInWithSts( stsLoginUri );
