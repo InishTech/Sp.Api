@@ -1,10 +1,11 @@
 ﻿
 namespace Sp.Api.ProductManagement.Acceptance
 {
+	using Sp.Api.Shared;
+	using Sp.Api.Shared.Wrappers;
 	using Sp.Test.Helpers;
 	using Ploeh.AutoFixture.Xunit;
 	using RestSharp;
-	using Sp.Api.ProductManagement.Acceptance.Wrappers;
 	using System;
 	using System.Linq;
 	using System.Net;

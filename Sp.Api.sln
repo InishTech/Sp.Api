@@ -20,6 +20,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0E569842-3DB9-4DE1-8485-295EF7560A14}"
 	ProjectSection(SolutionItems) = preProject
 		Sp.Api.Acceptance.xunit = Sp.Api.Acceptance.xunit
+		Sp.Api.Html.Acceptance.xunit = Sp.Api.Html.Acceptance.xunit
+		Sp.Api.Issue.Acceptance.xunit = Sp.Api.Issue.Acceptance.xunit
+		Sp.Api.ProductManagement.Acceptance.xunit = Sp.Api.ProductManagement.Acceptance.xunit
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Test.Helpers", "Sp.Test.Helpers\Sp.Test.Helpers.csproj", "{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}"

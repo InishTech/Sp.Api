@@ -2,5 +2,7 @@
 <xunit>
   <assemblies>
     <assembly filename="Sp.Api.ProductManagement.Acceptance\bin\Debug\Sp.Api.ProductManagement.Acceptance.dll" shadow-copy="true" />
+    <assembly filename="Sp.Api.Issue.Acceptance\bin\Debug\Sp.Api.Issue.Acceptance.dll" shadow-copy="true" />
+    <assembly filename="Sp.Api.Html.Acceptance\bin\Debug\Sp.Api.Html.Acceptance.dll" shadow-copy="true" />
   </assemblies>
 </xunit>

@@ -5,9 +5,8 @@ using HtmlAgilityPack;
 using RestSharp;
 using RestSharp.Contrib;
 using Sp.Test.Helpers;
-using Sp.Test.Helpers;
 
-namespace Sp.Api.ProductManagement.Acceptance.Wrappers
+namespace Sp.Api.Shared.Wrappers
 {
 	class WSFederationAuthenticator : IAuthenticator
 	{

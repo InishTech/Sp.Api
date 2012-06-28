@@ -1,12 +1,14 @@
-﻿namespace Sp.Api.ProductManagement.Acceptance
+﻿namespace Sp.Api.Html.Acceptance
 {
 	using System.Net;
 	using HtmlAgilityPack;
 	using RestSharp;
-	using Sp.Api.ProductManagement.Acceptance.Wrappers;
+	using Sp.Api.Shared;
+	using Sp.Api.Shared.Wrappers;
 	using Xunit;
 	using Xunit.Extensions;
 
+	//TODO - change this tests to use Selenium
 	public static class LandingPageFacts
 	{
 		[Theory, AutoSoftwarePotentialData]

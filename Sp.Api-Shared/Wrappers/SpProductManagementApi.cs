@@ -1,4 +1,4 @@
-namespace Sp.Api.ProductManagement.Acceptance.Wrappers
+namespace Sp.Api.Shared.Wrappers
 {
 	using RestSharp;
 	using System;

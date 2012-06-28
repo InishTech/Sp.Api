@@ -1,12 +1,12 @@
-using Ploeh.AutoFixture;
-using Ploeh.AutoFixture.Xunit;
-using Sp.Api.ProductManagement.Acceptance.Wrappers;
-using System;
-using System.Configuration;
-using System.Net;
-
-namespace Sp.Api.ProductManagement.Acceptance
+namespace Sp.Api.Shared
 {
+	using Ploeh.AutoFixture;
+	using Ploeh.AutoFixture.Xunit;
+	using System;
+	using System.Configuration;
+	using System.Net;
+	using Sp.Api.Shared.Wrappers;
+
 	public class AutoSoftwarePotentialData : AutoDataAttribute
 	{
 		public AutoSoftwarePotentialData()
