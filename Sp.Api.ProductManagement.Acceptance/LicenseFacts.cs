@@ -4,8 +4,8 @@
 	using System.Linq;
 	using System.Net;
 	using Ploeh.AutoFixture.Xunit;
-	using Sp.Api.ProductManagement.Acceptance.Helpers;
 	using Sp.Api.ProductManagement.Acceptance.Wrappers;
+	using Sp.Test.Helpers;
 	using Xunit;
 	using Xunit.Extensions;
 

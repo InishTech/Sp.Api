@@ -1,8 +1,7 @@
-using RestSharp;
-
 namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 {
-	using Sp.Api.ProductManagement.Acceptance.Helpers;
+	using RestSharp;
+	using Sp.Test.Helpers;
 
 	public class SpApi
 	{

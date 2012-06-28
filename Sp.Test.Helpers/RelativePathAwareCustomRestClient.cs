@@ -1,9 +1,9 @@
-﻿namespace Sp.Api.ProductManagement.Acceptance.Helpers
+﻿namespace Sp.Test.Helpers
 {
 	using System;
 	using RestSharp;
 
-	class RelativePathAwareCustomRestClient : RestClient
+	public class RelativePathAwareCustomRestClient : RestClient
 	{
 		public RelativePathAwareCustomRestClient( string baseUrl )
 		{

@@ -72,17 +72,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoSoftwarePotentialData.cs" />
-    <Compile Include="Helpers\CollectionExtensions.cs" />
     <Compile Include="LicenseFacts.cs" />
     <Compile Include="ProductManagementFacts.cs" />
     <Compile Include="Wrappers\ApiClientFactory.cs" />
-    <Compile Include="Helpers\RelativePathAwareCustomRestClient.cs" />
     <Compile Include="Wrappers\SelfLink.cs" />
     <Compile Include="Wrappers\SpLicenseManagementApi.cs" />
-    <Compile Include="Helpers\RestResponseCookieExtensions.cs" />
-    <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="LandingPageFacts.cs" />
-    <Compile Include="Helpers\Verify.cs" />
     <Compile Include="Wrappers\SpApi.cs" />
     <Compile Include="Wrappers\SpApiConfiguration.cs" />
     <Compile Include="Wrappers\SpProductManagementApi.cs" />
@@ -96,7 +91,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Sp.Test.Helpers\Sp.Test.Helpers.csproj">
+      <Project>{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}</Project>
+      <Name>Sp.Test.Helpers</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!--Hook in Test Target for use by command line build of .sln file-->

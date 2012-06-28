@@ -1,10 +1,10 @@
-﻿namespace Sp.Api.ProductManagement.Acceptance.Helpers
+﻿namespace Sp.Test.Helpers
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
-	static class CollectionExtensions
+	public static class CollectionExtensions
 	{
 		public static T ElementAtRandom<T>( this ICollection<T> thats )
 		{

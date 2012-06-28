@@ -4,8 +4,8 @@ using System.Net;
 using HtmlAgilityPack;
 using RestSharp;
 using RestSharp.Contrib;
-using Sp.Api.ProductManagement.Acceptance.Helpers;
-
+using Sp.Test.Helpers;
+using Sp.Test.Helpers;
 
 namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 {

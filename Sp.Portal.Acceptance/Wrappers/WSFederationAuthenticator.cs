@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using HtmlAgilityPack;
-using RestSharp;
-using RestSharp.Contrib;
-
-namespace Sp.Portal.Acceptance.Wrappers
+﻿namespace Sp.Portal.Acceptance.Wrappers
 {
-	using Sp.Portal.Acceptance.Helpers;
+	using System;
+	using System.Linq;
+	using System.Net;
+	using HtmlAgilityPack;
+	using RestSharp;
+	using RestSharp.Contrib;
+	using Sp.Test.Helpers;
 
 	class WSFederationAuthenticator : IAuthenticator
 	{

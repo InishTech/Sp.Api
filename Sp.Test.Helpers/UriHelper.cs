@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace Sp.Api.ProductManagement.Acceptance.Helpers
+﻿namespace Sp.Test.Helpers
 {
-	class UriHelper
+	using System;
+
+	public class UriHelper
 	{
 		/// <summary>
 		/// Returns resource Uri relative to the base Uri.

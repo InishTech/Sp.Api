@@ -1,10 +1,9 @@
-﻿using System.Net;
-using RestSharp;
-
-
-namespace Sp.Api.ProductManagement.Acceptance.Helpers
+﻿namespace Sp.Test.Helpers
 {
-	static class RestResponseCookieExtensions
+	using System.Net;
+	using RestSharp;
+
+	public static class RestResponseCookieExtensions
 	{
 		public static Cookie ToHttpCookie( this RestResponseCookie restResponseCookie )
 		{

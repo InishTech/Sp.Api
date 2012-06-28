@@ -61,8 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\RestResponseCookieExtensions.cs" />
-    <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="ItemManagementFacts.cs" />
     <Compile Include="LandingPageFacts.cs" />
     <Compile Include="PortalDataAttribute.cs" />
@@ -78,6 +76,12 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sp.Test.Helpers\Sp.Test.Helpers.csproj">
+      <Project>{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}</Project>
+      <Name>Sp.Test.Helpers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--Hook in Test Target for use by command line build of .sln file-->

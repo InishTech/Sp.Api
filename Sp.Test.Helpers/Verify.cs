@@ -1,10 +1,10 @@
-using System;
-using System.Diagnostics;
-using System.Threading;
-
-namespace Sp.Api.ProductManagement.Acceptance.Helpers
+namespace Sp.Test.Helpers
 {
-	static partial class Verify
+	using System;
+	using System.Diagnostics;
+	using System.Threading;
+
+	public static partial class Verify
 	{
 		public static void EventuallyWithBackOff( Action action )
 		{

@@ -1,15 +1,16 @@
-﻿using Ploeh.AutoFixture.Xunit;
-using RestSharp;
-using Sp.Api.ProductManagement.Acceptance.Helpers;
-using Sp.Api.ProductManagement.Acceptance.Wrappers;
-using System;
-using System.Linq;
-using System.Net;
-using Xunit;
-using Xunit.Extensions;
-
+﻿
 namespace Sp.Api.ProductManagement.Acceptance
 {
+	using Sp.Test.Helpers;
+	using Ploeh.AutoFixture.Xunit;
+	using RestSharp;
+	using Sp.Api.ProductManagement.Acceptance.Wrappers;
+	using System;
+	using System.Linq;
+	using System.Net;
+	using Xunit;
+	using Xunit.Extensions;
+
 	public class ProductManagementFacts
 	{
 		public static class GetCollection
