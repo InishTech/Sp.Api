@@ -1,23 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{187F882B-A94C-46EF-AF79-62EA9E6F1493}</ProjectGuid>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4657A23B-EB17-4FB5-90DD-7179564A6724}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sp.Api.ProductManagement.Acceptance</RootNamespace>
-    <AssemblyName>Sp.Api.ProductManagement.Acceptance</AssemblyName>
+    <RootNamespace>Sp.Api.Html.Acceptance</RootNamespace>
+    <AssemblyName>Sp.Api.Html.Acceptance</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\Sp.Api\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -27,16 +25,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack">
@@ -71,16 +65,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProductManagementFacts.cs" />
-    <Compile Include="..\Sp.Api-Shared\Wrappers\SpApi.cs">
-      <Link>Inlined\Wrappers\SpApi.cs</Link>
-    </Compile>
-    <Compile Include="..\Sp.Api-Shared\Wrappers\SpProductManagementApi.cs">
-      <Link>Inlined\Wrappers\SpProductManagementApi.cs</Link>
-    </Compile>
-    <Compile Include="..\Sp.Api-Shared\Wrappers\SpLicenseManagementApi.cs">
-      <Link>Inlined\Wrappers\SpLicenseManagementApi.cs</Link>
-    </Compile>
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApiConfiguration.cs">
       <Link>Inlined\Wrappers\SpApiConfiguration.cs</Link>
     </Compile>
@@ -93,14 +77,16 @@
     <Compile Include="..\Sp.Api-Shared\AutoSoftwarePotentialData.cs">
       <Link>Inlined\AutoSoftwarePotentialData.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <Compile Include="..\Sp.Api-Shared\Wrappers\SpApi.cs">
+      <Link>Inlined\Wrappers\SpApi.cs</Link>
+    </Compile>
+    <Compile Include="..\Sp.Api-Shared\Wrappers\SpProductManagementApi.cs">
+      <Link>Inlined\Wrappers\SpProductManagementApi.cs</Link>
+    </Compile>
+    <Compile Include="..\Sp.Api-Shared\Wrappers\SpLicenseManagementApi.cs">
+      <Link>Inlined\Wrappers\SpLicenseManagementApi.cs</Link>
+    </Compile>
+    <Compile Include="LandingPageFacts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sp.Test.Helpers\Sp.Test.Helpers.csproj">
@@ -108,8 +94,19 @@
       <Name>Sp.Test.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <!--Hook in Test Target for use by command line build of .sln file-->
-  <Import Project="$(SolutionDir)\after.csproj.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

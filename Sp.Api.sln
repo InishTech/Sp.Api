@@ -24,6 +24,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0E569842
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Test.Helpers", "Sp.Test.Helpers\Sp.Test.Helpers.csproj", "{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Api.Issue.Acceptance", "Sp.Api.Issue.Acceptance\Sp.Api.Issue.Acceptance.csproj", "{C6E2E0C8-8187-48D5-94C6-04C2B2868B9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Api.Html.Acceptance", "Sp.Api.Html.Acceptance\Sp.Api.Html.Acceptance.csproj", "{4657A23B-EB17-4FB5-90DD-7179564A6724}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +42,14 @@ Global
 		{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6E2E0C8-8187-48D5-94C6-04C2B2868B9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6E2E0C8-8187-48D5-94C6-04C2B2868B9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6E2E0C8-8187-48D5-94C6-04C2B2868B9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6E2E0C8-8187-48D5-94C6-04C2B2868B9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4657A23B-EB17-4FB5-90DD-7179564A6724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4657A23B-EB17-4FB5-90DD-7179564A6724}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4657A23B-EB17-4FB5-90DD-7179564A6724}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4657A23B-EB17-4FB5-90DD-7179564A6724}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

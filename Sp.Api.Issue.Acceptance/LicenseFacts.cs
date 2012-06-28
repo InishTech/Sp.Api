@@ -1,9 +1,10 @@
-﻿namespace Sp.Api.ProductManagement.Acceptance
+﻿namespace Sp.Api.Issue.Acceptance
 {
 	using System;
 	using System.Linq;
 	using System.Net;
 	using Ploeh.AutoFixture.Xunit;
+	using Sp.Api.ProductManagement.Acceptance;
 	using Sp.Api.ProductManagement.Acceptance.Wrappers;
 	using Sp.Test.Helpers;
 	using Xunit;
