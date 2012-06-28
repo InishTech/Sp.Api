@@ -4,7 +4,6 @@ using Sp.Api.ProductManagement.Acceptance.Wrappers;
 using System;
 using System.Configuration;
 using System.Net;
-using Xunit;
 
 namespace Sp.Api.ProductManagement.Acceptance
 {
@@ -13,7 +12,7 @@ namespace Sp.Api.ProductManagement.Acceptance
 		public AutoSoftwarePotentialData()
 			: base( new Fixture()
 				.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() )
-				.Customize( new SoftwarePotentialApiConfigurationFromAppSettingsCustomization() ))
+				.Customize( new SoftwarePotentialApiConfigurationFromAppSettingsCustomization() ) )
 		{
 		}
 	}
@@ -26,6 +25,11 @@ namespace Sp.Api.ProductManagement.Acceptance
 				ConfigurationManager.AppSettings[ "Username" ],
 				ConfigurationManager.AppSettings[ "Password" ],
 				ConfigurationManager.AppSettings[ "BaseUrl" ] ) );
+
+			fixture.Register<SpApiConfiguration, IApiClientFactory>( c => new FixedBaseUrisApiClientFactory( c ) );
+			fixture.Register<IApiClientFactory, SpApi>( f => f.CreateSpApiClient() );
+			fixture.Register<IApiClientFactory, SpProductManagementApi>( f => f.CreateProductManagementApiClient() );
+			fixture.Register<IApiClientFactory, SpLicenseManagementApi>( f => f.CreateLicenseManagementApiClient() );
 		}
 	}
 

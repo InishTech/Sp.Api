@@ -3,8 +3,6 @@ using RestSharp;
 using Sp.Api.ProductManagement.Acceptance.Helpers;
 using Sp.Api.ProductManagement.Acceptance.Wrappers;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Xunit;
@@ -183,7 +181,7 @@ namespace Sp.Api.ProductManagement.Acceptance
 					/// <summary>
 					/// While the Description can be left Empty, one is not permitted to submit a null value.
 					/// </summary>
-					[Theory, AutoSoftwarePotentialData]
+					[Theory( Skip = "TP 1109" ), AutoSoftwarePotentialData]
 					public static void PutNullDescriptionShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Description = null;

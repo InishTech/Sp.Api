@@ -1,16 +1,16 @@
 ﻿using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.IE;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using OpenQA.Selenium.Safari;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium;
 using System.Configuration;
 
 namespace Sp.Portal.Html.Acceptance
 {
+	using System;
+
 	public class BrowserDriverDataProvider : SingleItemTheoryDataProvider
 	{
 		protected override IEnumerable<object> SingleItemDataSource()
@@ -24,13 +24,16 @@ namespace Sp.Portal.Html.Acceptance
 			{
 				Authenticate( driver );
 				yield return driver;
-			}		
+			}
 		}
 
 		static FirefoxProfile GetSeleniumFirefoxProfile()
 		{
+			const string profileName = "Selenium";
 			FirefoxProfileManager profileManager = new FirefoxProfileManager();
-			FirefoxProfile profile = profileManager.GetProfile( "Selenium" );
+			FirefoxProfile profile = profileManager.GetProfile( profileName );
+			if ( profile == null )
+				throw new InvalidOperationException( "Cannot find Firefox profile " + profileName );
 			profile.SetPreference( "browser.ssl_override_behavior", 1 );
 			profile.AcceptUntrustedCertificates = false;
 			return profile;
@@ -41,10 +44,10 @@ namespace Sp.Portal.Html.Acceptance
 			driver.Navigate().GoToUrl( ConfigurationManager.AppSettings[ "PortalBaseUrl" ] );
 
 			IWebElement username = driver.FindElement( By.Id( "Username" ) );
-			username.SendKeys( ConfigurationManager.AppSettings["Username"] );
-			
+			username.SendKeys( ConfigurationManager.AppSettings[ "Username" ] );
+
 			IWebElement password = driver.FindElement( By.Id( "Password" ) );
-			password.SendKeys( ConfigurationManager.AppSettings["Password"] );
+			password.SendKeys( ConfigurationManager.AppSettings[ "Password" ] );
 
 			password.Submit();
 		}

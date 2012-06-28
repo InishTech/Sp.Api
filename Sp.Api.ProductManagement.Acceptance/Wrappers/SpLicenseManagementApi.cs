@@ -13,7 +13,7 @@
 
 		internal IRestResponse<LicensesSummaryPage> GetList()
 		{
-			var request = new RestRequest( "ProductManagement/License" );
+			var request = new RestRequest( "License" );
 			return Execute<LicensesSummaryPage>( request );
 		}
 
@@ -37,4 +37,5 @@
 			public bool IsRenewable { get; set; }
 		}
 	}
+
 }

@@ -75,12 +75,13 @@
     <Compile Include="Helpers\CollectionExtensions.cs" />
     <Compile Include="LicenseFacts.cs" />
     <Compile Include="ProductManagementFacts.cs" />
+    <Compile Include="Wrappers\ApiClientFactory.cs" />
+    <Compile Include="Helpers\RelativePathAwareCustomRestClient.cs" />
     <Compile Include="Wrappers\SelfLink.cs" />
     <Compile Include="Wrappers\SpLicenseManagementApi.cs" />
     <Compile Include="Helpers\RestResponseCookieExtensions.cs" />
     <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="LandingPageFacts.cs" />
-    <Compile Include="ProductManagementFacts.cs" />
     <Compile Include="Helpers\Verify.cs" />
     <Compile Include="Wrappers\SpApi.cs" />
     <Compile Include="Wrappers\SpApiConfiguration.cs" />

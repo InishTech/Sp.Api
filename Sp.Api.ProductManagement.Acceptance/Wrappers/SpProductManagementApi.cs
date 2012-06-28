@@ -13,7 +13,7 @@ namespace Sp.Api.ProductManagement.Acceptance.Wrappers
 
 		internal IRestResponse<ProductsPage> GetProductList()
 		{
-			var request = new RestRequest( "ProductManagement/" );
+			var request = new RestRequest( "Product" );
 			return Execute<ProductsPage>( request );
 		}
 
