@@ -4,7 +4,8 @@ param(
 	[string] $additionalMsBuildArgs="",
 	[string] $configuration="Debug", 
 	[string] $verbosity="n", 
-	[string] $fileVerbosity="d"
+	[string] $fileVerbosity="d",
+	[string] $logFile="build.log"
 )
 
 function warn( [string]$message) {
@@ -18,6 +19,6 @@ $msbuild="$env:windir\Microsoft.NET\Framework\v4.0.30319\MSBuild"
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
 
 warn "Starting at $([datetime]::Now)" 
-$parameters=@("$solution","/v:$verbosity","/m","/t:$targets","/fl","/flp:LogFile=build.log;Verbosity=$fileVerbosity",$properties,$additionalMsBuildArgs)
+$parameters=@("$solution","/v:$verbosity","/m","/t:$targets","/fl","/flp:LogFile=$logFile;Verbosity=$fileVerbosity",$properties,$additionalMsBuildArgs)
 Write-Host "Running $msbuild $parameters"
 . $msbuild @parameters
