@@ -63,12 +63,20 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Download-LatestChromeDriver.ps1" />
+    <None Include="Extract-Zip.ps1" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="lib\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\after.csproj.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  
+  <Target Name="AfterBuild" Condition=" !EXISTS( '$(OutDir)/ChromeDriver.exe') ">
+    <PropertyGroup>
+      <_TempZipLocation>"$(IntermediateOutputPath)\LatestChromeDriver.zip"</_TempZipLocation>
+    </PropertyGroup>
+    <Exec IgnoreStandardErrorWarningFormat="true" Command="powershell -Version 3 -NoProfile ./Download-LatestChromeDriver.ps1 $(_TempZipLocation)" />
+    <Exec IgnoreStandardErrorWarningFormat="true" Command="powershell -NoProfile ./Extract-Zip.ps1 $(_TempZipLocation) &quot;$(OutDir).&quot;" />
+  </Target>
+  
 </Project>
