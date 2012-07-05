@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BrowserDriverDataProvider.cs" />
-    <Compile Include="Licenses.cs" />
+    <Compile Include="LicenseList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
