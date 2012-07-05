@@ -53,6 +53,8 @@ namespace Sp.Api.Shared.Wrappers
 			{
 				// An unauthenticated request to the Web should redirect us to the STS
 				var loginPage = _authClient.Execute( new RestRequest( string.Empty, Method.GET ) );
+				if ( loginPage.StatusCode != HttpStatusCode.OK )
+					throw new InvalidOperationException( string.Format( "Request for {0} failed with HTTP status code {1}", _authClient.BaseUrl, loginPage.StatusCode ) );
 				var stsLoginUri = loginPage.ResponseUri;
 
 				var wresultRequest = AuthenticateAndSignInWithSts( stsLoginUri );
