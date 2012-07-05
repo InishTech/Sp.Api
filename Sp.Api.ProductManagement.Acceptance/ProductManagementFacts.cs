@@ -75,11 +75,10 @@ namespace Sp.Api.ProductManagement.Acceptance
 				string validHref = product.SelectedProduct._links.self.href;
 				Uri invalidHref = HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
 				var apiResult = api.GetProduct( invalidHref );
+				// We don't want to have landed on an error page that has a StatusCode of 200
 				Assert.Equal( HttpStatusCode.NotFound, apiResult.StatusCode );
-				// Our final Location should match what we asked for (i.e., we don't want to have landed on an error page that has a StatusCode of 200)
+				// Our final Location should match what we asked for
 				Assert.Contains( invalidHref.ToString(), apiResult.ResponseUri.ToString() );
-				// No data should be yielded
-				Assert.Null( apiResult.Data );
 			}
 
 			/// <summary>
