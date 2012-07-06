@@ -53,8 +53,9 @@ namespace Sp.Api.Shared.Wrappers
 			{
 				// An unauthenticated request to the Web should redirect us to the STS
 				var loginPage = _authClient.Execute( new RestRequest( string.Empty, Method.GET ) );
+
 				if ( loginPage.StatusCode != HttpStatusCode.OK )
-					throw new InvalidOperationException( string.Format( "Request for {0} failed with HTTP status code {1}", _authClient.BaseUrl, loginPage.StatusCode ) );
+					throw new InvalidOperationException( "Request for " + _authClient.BaseUrl + " failed; " + loginPage.ToDiagnosticString() );
 				var stsLoginUri = loginPage.ResponseUri;
 
 				var wresultRequest = AuthenticateAndSignInWithSts( stsLoginUri );
@@ -63,7 +64,7 @@ namespace Sp.Api.Shared.Wrappers
 				_authClient.FollowRedirects = false;
 				var rpAuthResponse = _authClient.Execute( wresultRequest );
 				if ( rpAuthResponse.StatusCode != HttpStatusCode.Found || !rpAuthResponse.Cookies.Any( c => c.Name == "FedAuth" ) )
-					throw new InvalidOperationException( string.Format( "Login wasn't successful: {0} {1} {2}", rpAuthResponse.ResponseUri, rpAuthResponse.Content, rpAuthResponse.ErrorMessage ) );
+					throw new InvalidOperationException( "Login wasn't successful; " + loginPage.ToDiagnosticString() );
 
 				//Now we have FedAuth and FedAuth1 cookies stored in the cookie container
 				var restResponseCookies = rpAuthResponse.Cookies.Where( c => c.Name.StartsWith( "FedAuth" ) ).ToList();
@@ -90,7 +91,7 @@ namespace Sp.Api.Shared.Wrappers
 
 				var authenticationResult = _authClient.Execute( request );
 				if ( authenticationResult.StatusCode != HttpStatusCode.OK || !authenticationResult.Content.Contains( "wresult" ) )
-					throw new InvalidOperationException( string.Format( "Authentication with STS wasn't successful: {0} {1}", authenticationResult.ResponseUri, authenticationResult.Content ) );
+					throw new InvalidOperationException( "Authentication with STS wasn't successful; " + authenticationResult.ToDiagnosticString() );
 				_authClient.BaseUrl = baseUriCopy;
 
 				return PrepareFederationWSignInRequest( _authClient.BaseUrl, authenticationResult.Content );
@@ -118,5 +119,14 @@ namespace Sp.Api.Shared.Wrappers
 			}
 		}
 
+	}
+
+	static class RestResponseExtensions
+	{
+		public static string ToDiagnosticString(this IRestResponse restResponse)
+		{
+				return string.Format( "Response url: {0}; Response status: {1}; HTTP status code: {2} ({3}); Error message: {4}; Content: {5}",
+					restResponse.ResponseUri, restResponse.ResponseStatus, restResponse.StatusCode, restResponse.StatusDescription, restResponse.ErrorMessage, restResponse.Content );
+		}
 	}
 }
