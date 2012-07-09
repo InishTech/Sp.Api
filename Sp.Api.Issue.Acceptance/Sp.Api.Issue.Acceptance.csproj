@@ -64,12 +64,6 @@
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApi.cs">
       <Link>Inlined\Wrappers\SpApi.cs</Link>
     </Compile>
-    <Compile Include="..\Sp.Api-Shared\Wrappers\SpProductManagementApi.cs">
-      <Link>Inlined\Wrappers\SpProductManagementApi.cs</Link>
-    </Compile>
-    <Compile Include="..\Sp.Api-Shared\Wrappers\SpLicenseManagementApi.cs">
-      <Link>Inlined\Wrappers\SpLicenseManagementApi.cs</Link>
-    </Compile>
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApiConfiguration.cs">
       <Link>Inlined\Wrappers\SpApiConfiguration.cs</Link>
     </Compile>
@@ -80,6 +74,7 @@
       <Link>Inlined\AutoSoftwarePotentialData.cs</Link>
     </Compile>
     <Compile Include="LicenseFacts.cs" />
+    <Compile Include="SpIssueApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
