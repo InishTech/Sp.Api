@@ -11,7 +11,7 @@
 	using Xunit;
 	using Xunit.Extensions;
 
-	public class ProductManagementFacts
+	public class ProductFacts
 	{
 		public static class GetCollection
 		{
@@ -23,7 +23,7 @@
 			/// </remarks>
 			/// <param name="api">Api wrapper.</param>
 			[Theory, AutoSoftwarePotentialData]
-			public static void GetProductListShouldYieldData( SpProductManagementApi api )
+			public static void GetProductListShouldYieldData( SpDefineApi api )
 			{
 				var apiResult = api.GetProductList();
 				// It should always be possible to get the list
@@ -46,7 +46,7 @@
 			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="product"/> can share the authentication work.</param>
 			/// <param name="product">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
 			[Theory, AutoSoftwarePotentialData]
-			public static void GetProductFromListShouldYieldData( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+			public static void GetProductFromListShouldYieldData( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 			{
 				Uri linkedAddress = product.SelectedProduct._links.self.AsRelativeUri();
 				var apiResult = api.GetProduct( linkedAddress );
@@ -69,7 +69,7 @@
 			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="product"/> can share the authentication work.</param>
 			/// <param name="product">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
 			[Theory, AutoSoftwarePotentialData]
-			public static void GetNonExistingProductShould404( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product, Guid anonymousId )
+			public static void GetNonExistingProductShould404( [Frozen] SpDefineApi api, RandomProductFromListFixture product, Guid anonymousId )
 			{
 				string validHref = product.SelectedProduct._links.self.href;
 				Uri invalidHref = HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
@@ -97,7 +97,7 @@
 				/// </summary>
 				// Right now this causes an Exception which, instead of the OOTB HTTP 500 instead redirects to ErrorPage.aspx which gives 200. This will be fixed as the intention is that all APIs communicate success/failure info to JSON speakers using Http Status Codes, not HTML error pages
 				[Theory( Skip = "TODO - at the moment this request returns HTTP 500" ), AutoSoftwarePotentialData]
-				public static void GetNonGuidProductShould400( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+				public static void GetNonGuidProductShould400( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 				{
 					Uri misformattedHackedUri = new Uri( product.SelectedProduct._links.self.href + "broken", UriKind.Relative );
 					var apiResult = api.GetProduct( misformattedHackedUri );
@@ -124,7 +124,7 @@
 		public class PutItem
 		{
 			[Theory, AutoSoftwarePotentialData]
-			public static void PutProductFromListWithUpdatedDescriptionShouldRoundtrip( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product, string updatedValue )
+			public static void PutProductFromListWithUpdatedDescriptionShouldRoundtrip( [Frozen] SpDefineApi api, RandomProductFromListFixture product, string updatedValue )
 			{
 				product.SelectedProduct.Description = updatedValue;
 
@@ -135,7 +135,7 @@
 			}
 
 			[Theory, AutoSoftwarePotentialData]
-			public static void PutProductFromListWithUpdatedLabelShouldRoundtrip( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product, string updatedValue )
+			public static void PutProductFromListWithUpdatedLabelShouldRoundtrip( [Frozen] SpDefineApi api, RandomProductFromListFixture product, string updatedValue )
 			{
 				product.SelectedProduct.Label = updatedValue;
 
@@ -155,21 +155,21 @@
 				public static class Label
 				{
 					[Theory, AutoSoftwarePotentialData]
-					public static void PutNullShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+					public static void PutNullShouldReject( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Label = null;
 						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
 					}
 
 					[Theory, AutoSoftwarePotentialData]
-					public static void PutEmptyShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+					public static void PutEmptyShouldReject( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Label = string.Empty;
 						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
 					}
 
 					[Theory, AutoSoftwarePotentialData]
-					public static void PutExcessivelyLongShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+					public static void PutExcessivelyLongShouldReject( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Label = new String( 'a', 101 );
 						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
@@ -182,14 +182,14 @@
 					/// While the Description can be left Empty, one is not permitted to submit a null value.
 					/// </summary>
 					[Theory( Skip = "TP 1109" ), AutoSoftwarePotentialData]
-					public static void PutNullDescriptionShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+					public static void PutNullDescriptionShouldReject( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Description = null;
 						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
 					}
 
 					[Theory, AutoSoftwarePotentialData]
-					public static void PutExcessivelyLongDescriptionShouldReject( [Frozen] SpProductManagementApi api, RandomProductFromListFixture product )
+					public static void PutExcessivelyLongDescriptionShouldReject( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Description = new String( 'a', 101 );
 						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
@@ -200,10 +200,10 @@
 
 		public class RandomProductFromListFixture
 		{
-			readonly SpProductManagementApi.Product _randomProduct;
-			readonly SpProductManagementApi _api;
+			readonly SpDefineApi.Product _randomProduct;
+			readonly SpDefineApi _api;
 
-			public RandomProductFromListFixture( SpProductManagementApi api )
+			public RandomProductFromListFixture( SpDefineApi api )
 			{
 				_api = api;
 				var apiResult = api.GetProductList();
@@ -212,7 +212,7 @@
 				_randomProduct = apiResult.Data.Products.ElementAtRandom();
 			}
 
-			public SpProductManagementApi.Product SelectedProduct
+			public SpDefineApi.Product SelectedProduct
 			{
 				get { return _randomProduct; }
 			}
@@ -222,7 +222,7 @@
 				return _api.Put( SelectedProduct );
 			}
 
-			public SpProductManagementApi.Product GetSelectedProductAgain()
+			public SpDefineApi.Product GetSelectedProductAgain()
 			{
 				Uri linkedAddress = SelectedProduct._links.self.AsRelativeUri();
 				var apiResult = _api.GetProduct( linkedAddress );

@@ -4,9 +4,9 @@ namespace Sp.Api.Shared.Wrappers
 	using System;
 	using System.Collections.Generic;
 
-	public class SpProductManagementApi : SpApi
+	public class SpDefineApi : SpApi
 	{
-		public SpProductManagementApi( SpApiConfiguration apiConfiguration )
+		public SpDefineApi( SpApiConfiguration apiConfiguration )
 			: base( apiConfiguration )
 		{
 		}
@@ -23,7 +23,7 @@ namespace Sp.Api.Shared.Wrappers
 			return Execute<Product>( request );
 		}
 
-		public IRestResponse Put( SpProductManagementApi.Product product )
+		public IRestResponse Put( SpDefineApi.Product product )
 		{
 			var request = new RestRequest( product._links.self.href, Method.PUT );
 			request.RequestFormat = DataFormat.Json;
