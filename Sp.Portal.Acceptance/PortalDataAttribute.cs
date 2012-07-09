@@ -1,13 +1,18 @@
-﻿using System;
-using System.Configuration;
-using System.Net;
-using Ploeh.AutoFixture;
-using Ploeh.AutoFixture.Xunit;
-using Sp.Portal.Acceptance.Wrappers;
-
+﻿/* Copyright (c) 2012 Inish Technology Ventures Limited.  All rights reserved.
+ * 
+ * This code is licensed under the BSD 3-Clause License included with this source
+ * 
+ * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Portal.Acceptance
 {
-	class PortalDataAttribute: AutoDataAttribute
+	using System;
+	using System.Configuration;
+	using System.Net;
+	using Ploeh.AutoFixture;
+	using Ploeh.AutoFixture.Xunit;
+	using Sp.Portal.Acceptance.Wrappers;
+
+	class PortalDataAttribute : AutoDataAttribute
 	{
 		public PortalDataAttribute()
 			: base( new Fixture()
