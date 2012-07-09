@@ -43,7 +43,7 @@
 			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="license"/> can share the authentication work.</param>
 			/// <param name="license">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
 			[Theory, AutoSoftwarePotentialData]
-			public static void ElementFromListShouldContainData( [Frozen] SpProductManagementApi api, RandomLicenseFromListFixture license )
+			public static void ElementFromListShouldContainData( [Frozen] SpLicenseManagementApi api, RandomLicenseFromListFixture license )
 			{
 				// There should always be valid Activation Key
 				Assert.NotEmpty( license.SelectedLicense.ActivationKey );
@@ -56,7 +56,7 @@
 			}
 
 			[Theory(Skip = "Fields to be exercised by future License creation+migration examples"), AutoSoftwarePotentialData]
-			public static void ElementFromListShouldContainDataUntestedProperties( [Frozen] SpProductManagementApi api, RandomLicenseFromListFixture license )
+			public static void ElementFromListShouldContainDataUntestedProperties( [Frozen] SpLicenseManagementApi api, RandomLicenseFromListFixture license )
 			{
 				// TODO these are here so the properties are referenced. TODO: Add roundtrip test which verifies that true and false values can propagate
 				// There is always a flag indicating the evaluation status
