@@ -1,5 +1,4 @@
-﻿
-namespace Sp.Api.ProductManagement.Acceptance
+﻿namespace Sp.Api.ProductManagement.Acceptance
 {
 	using Sp.Api.Shared;
 	using Sp.Api.Shared.Wrappers;

@@ -7,8 +7,8 @@
     <ProjectGuid>{187F882B-A94C-46EF-AF79-62EA9E6F1493}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sp.Api.ProductManagement.Acceptance</RootNamespace>
-    <AssemblyName>Sp.Api.ProductManagement.Acceptance</AssemblyName>
+    <RootNamespace>Sp.Api.Define.Acceptance</RootNamespace>
+    <AssemblyName>Sp.Api.Define.Acceptance</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
@@ -71,12 +71,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProductManagementFacts.cs" />
+    <Compile Include="ProductFacts.cs" />
+    <Compile Include="SpDefineApi.cs" />
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApi.cs">
       <Link>Inlined\Wrappers\SpApi.cs</Link>
-    </Compile>
-    <Compile Include="..\Sp.Api-Shared\Wrappers\SpProductManagementApi.cs">
-      <Link>Inlined\Wrappers\SpProductManagementApi.cs</Link>
     </Compile>
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApiConfiguration.cs">
       <Link>Inlined\Wrappers\SpApiConfiguration.cs</Link>
