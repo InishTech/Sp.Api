@@ -22,7 +22,7 @@
 			/// </remarks>
 			/// <param name="api">Api wrapper.</param>
 			[Theory, AutoSoftwarePotentialData]
-			public static void GetListShouldYieldData( SpLicenseManagementApi api )
+			public static void GetListShouldYieldData( SpIssueApi api )
 			{
 				var apiResult = api.GetList();
 				// It should always be possible to get the list
@@ -43,7 +43,7 @@
 			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="license"/> can share the authentication work.</param>
 			/// <param name="license">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
 			[Theory, AutoSoftwarePotentialData]
-			public static void ElementFromListShouldContainData( [Frozen] SpLicenseManagementApi api, RandomLicenseFromListFixture license )
+			public static void ElementFromListShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
 			{
 				// There should always be valid Activation Key
 				Assert.NotEmpty( license.SelectedLicense.ActivationKey );
@@ -56,7 +56,7 @@
 			}
 
 			[Theory(Skip = "Fields to be exercised by future License creation+migration examples"), AutoSoftwarePotentialData]
-			public static void ElementFromListShouldContainDataUntestedProperties( [Frozen] SpLicenseManagementApi api, RandomLicenseFromListFixture license )
+			public static void ElementFromListShouldContainDataUntestedProperties( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
 			{
 				// TODO these are here so the properties are referenced. TODO: Add roundtrip test which verifies that true and false values can propagate
 				// There is always a flag indicating the evaluation status
@@ -70,9 +70,9 @@
 		// TODO when we support creating licenses via the REST API, this fixture should create one on the fly
 		public class RandomLicenseFromListFixture
 		{
-			readonly SpLicenseManagementApi.LicenseSummary _randomItem;
+			readonly SpIssueApi.LicenseSummary _randomItem;
 
-			public RandomLicenseFromListFixture( SpLicenseManagementApi api )
+			public RandomLicenseFromListFixture( SpIssueApi api )
 			{
 				var apiResult = api.GetList();
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
@@ -80,7 +80,7 @@
 				_randomItem = apiResult.Data.Licenses.ElementAtRandom();
 			}
 
-			public SpLicenseManagementApi.LicenseSummary SelectedLicense
+			public SpIssueApi.LicenseSummary SelectedLicense
 			{
 				get { return _randomItem; }
 			}

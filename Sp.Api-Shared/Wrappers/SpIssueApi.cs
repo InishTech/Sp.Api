@@ -1,4 +1,4 @@
-﻿namespace Sp.Api.Issue
+﻿namespace Sp.Api.Shared.Wrappers
 {
 	using System;
 	using System.Collections.Generic;

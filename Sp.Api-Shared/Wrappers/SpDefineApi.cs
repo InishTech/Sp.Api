@@ -1,4 +1,4 @@
-namespace Sp.Api.Define
+namespace Sp.Api.Shared.Wrappers
 {
 	using RestSharp;
 	using System;
