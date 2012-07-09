@@ -1,8 +1,9 @@
 ﻿namespace Sp.Api.Issue
 {
+	using RestSharp;
+	using Sp.Api.Shared.Wrappers;
 	using System;
 	using System.Collections.Generic;
-	using RestSharp;
 
 	public class SpIssueApi : SpApi
 	{
@@ -37,5 +38,4 @@
 			public bool IsRenewable { get; set; }
 		}
 	}
-
 }

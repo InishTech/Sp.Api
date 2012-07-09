@@ -1,6 +1,7 @@
 namespace Sp.Api.Define
 {
 	using RestSharp;
+	using Sp.Api.Shared.Wrappers;
 	using System;
 	using System.Collections.Generic;
 
