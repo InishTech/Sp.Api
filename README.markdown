@@ -2,7 +2,7 @@ This is the master repository for the InishTech Software Potential Service Accep
 
 At present, this is used against internal builds of the Service as it's being developed.
 
-It is intended to mirror these appropriate editions/subsets of these acceptance tests onto the [Software Potential github](https://github.com/InishTech/) as items get deployed to production and are considered ready for use.
+It is intended to mirror these appropriate editions/subsets of these acceptance tests onto the [Software Potential github](https://github.com/SoftwarePotential/) as items get deployed to production and are considered ready for use.
 
 # Before you start
 
