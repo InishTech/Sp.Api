@@ -30,7 +30,7 @@
     <TestAppConfigUsername Condition=" '' == '$(TestAppConfigPortalUsername)'">INSERT PORTAL USERNAME HERE - $(_Instructions)</TestAppConfigUsername>
     <TestAppConfigPassword Condition=" '' == '$(TestAppConfigPassword)'">INSERT PASSWORD HERE - $(_Instructions)</TestAppConfigPassword>
     <TestAppConfigSkipCertValidation Condition=" '' == '$(TestAppConfigSkipCertValidation)'">False</TestAppConfigSkipCertValidation>
-    <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://srv.softwarepotential.com/home</TestAppConfigBaseUrl>
+    <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://srv.softwarepotential.com</TestAppConfigBaseUrl>
     <TestAppConfigPortalBaseUrl Condition=" '' == '$(TestAppConfigPortalBaseUrl)'">https://srv.softwarepotential.com/portal</TestAppConfigPortalBaseUrl>
   </PropertyGroup>
 
