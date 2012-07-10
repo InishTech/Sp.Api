@@ -27,15 +27,19 @@
   <PropertyGroup>
     <_Instructions>Need to run "./configure.ps1" from the root folder before running the tests.</_Instructions>
     <TestAppConfigUsername Condition=" '' == '$(TestAppConfigUsername)'">INSERT USERNAME HERE - $(_Instructions)</TestAppConfigUsername>
+    <TestAppConfigUsername Condition=" '' == '$(TestAppConfigPortalUsername)'">INSERT PORTAL USERNAME HERE - $(_Instructions)</TestAppConfigUsername>
     <TestAppConfigPassword Condition=" '' == '$(TestAppConfigPassword)'">INSERT PASSWORD HERE - $(_Instructions)</TestAppConfigPassword>
     <TestAppConfigSkipCertValidation Condition=" '' == '$(TestAppConfigSkipCertValidation)'">False</TestAppConfigSkipCertValidation>
-    <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://web.softwarepotential.com</TestAppConfigBaseUrl>
-    <TestAppConfigPortalBaseUrl Condition=" '' == '$(TestAppConfigPortalBaseUrl)'">https://portal.softwarepotential.com</TestAppConfigPortalBaseUrl>
+    <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://srv.softwarepotential.com/home</TestAppConfigBaseUrl>
+    <TestAppConfigPortalBaseUrl Condition=" '' == '$(TestAppConfigPortalBaseUrl)'">https://srv.softwarepotential.com/portal</TestAppConfigPortalBaseUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <TestAppConfigParam Include="Username">
       <Value>$(TestAppConfigUsername)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="PortalUsername">
+      <Value>$(TestAppConfigPortalUsername)</Value>
     </TestAppConfigParam>
     <TestAppConfigParam Include="Password">
       <Value>$(TestAppConfigPassword)</Value>

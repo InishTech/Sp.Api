@@ -4,11 +4,13 @@
 # 
 # FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License 
 param(
-	[string] $username = $(Read-Host -prompt "Software Potential username (account@domain.com)"),
+
+	[string] $Username = $(Read-Host -prompt "Software Potential username (account@domain.com)"),
+	[string] $portalUsername = $(Read-Host -prompt "Software Potential Portal username (account@domain.com)"),
 	[string] $password = $(Read-Host -prompt "Software Potential password"),
 	[bool] $skipValidation=$false,
-	[string] $baseUrl="https://web.softwarepotential.com",
-	[string] $portalBaseUrl="https://portal.softwarepotential.com"
+	[string] $baseUrl="https://srv.softwarepotential.com/home",
+	[string] $portalBaseUrl="https://srv.softwarepotential.com/portal"
 )
 
 $msbuildProperties=@("TestAppConfigUsername=$username")
@@ -16,6 +18,7 @@ $msbuildProperties=$msbuildProperties+"TestAppConfigPassword=$password"
 $msbuildProperties=$msbuildProperties+"TestAppConfigSkipCertValidation=$skipValidation"
 $msbuildProperties=$msbuildProperties+"TestAppConfigBaseUrl=$baseUrl"
 $msbuildProperties=$msbuildProperties+"TestAppConfigPortalBaseUrl=$portalBaseUrl"
+$msbuildProperties=$msbuildProperties+"TestAppConfigPortalUsername=$portalUsername"
 
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
 
