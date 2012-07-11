@@ -61,7 +61,7 @@ namespace Sp.Portal.Acceptance
 				// Use guest credentials - should authenticate, but not give CanSeeItems claim
 				fixture.Register( ( string username, string password ) => new SpPortalConfiguration(
 					"guest",
-					ConfigurationManager.AppSettings[ "Password" ],
+					ConfigurationManager.AppSettings[ "PortalPassword" ],
 					ConfigurationManager.AppSettings[ "PortalBaseUrl" ] ) );
 			}
 		}

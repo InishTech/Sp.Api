@@ -39,10 +39,10 @@ namespace Sp.Portal.Html.Acceptance
 			driver.Navigate().GoToUrl( ConfigurationManager.AppSettings[ "PortalBaseUrl" ] );
 
 			IWebElement username = driver.FindElement( By.Id( "Username" ) );
-			username.SendKeys( ConfigurationManager.AppSettings[ "Username" ] );
+			username.SendKeys( ConfigurationManager.AppSettings[ "PortalUsername" ] );
 
 			IWebElement password = driver.FindElement( By.Id( "Password" ) );
-			password.SendKeys( ConfigurationManager.AppSettings[ "Password" ] );
+			password.SendKeys( ConfigurationManager.AppSettings[ "PortalPassword" ] );
 
 			password.Submit();
 		}

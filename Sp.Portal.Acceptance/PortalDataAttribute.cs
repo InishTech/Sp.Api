@@ -17,7 +17,7 @@ namespace Sp.Portal.Acceptance
 		public PortalDataAttribute()
 			: base( new Fixture()
 				.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() )
-				.Customize( new SoftwarePotentialApiConfigurationFromAppSettingsCustomization() ))
+				.Customize( new SoftwarePotentialApiConfigurationFromAppSettingsCustomization() ) )
 		{
 		}
 	}
@@ -27,8 +27,8 @@ namespace Sp.Portal.Acceptance
 		void ICustomization.Customize( IFixture fixture )
 		{
 			fixture.Register( () => new SpPortalConfiguration(
-				ConfigurationManager.AppSettings["PortalUsername"], 
-				ConfigurationManager.AppSettings["Password"],
+				ConfigurationManager.AppSettings[ "PortalUsername" ],
+				ConfigurationManager.AppSettings[ "PortalPassword" ],
 				ConfigurationManager.AppSettings[ "PortalBaseUrl" ] ) );
 		}
 	}

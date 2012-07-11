@@ -8,17 +8,19 @@ param(
 	[string] $Username = $(Read-Host -prompt "Software Potential username (account@domain.com)"),
 	[string] $portalUsername = $(Read-Host -prompt "Software Potential Portal username (account@domain.com)"),
 	[string] $password = $(Read-Host -prompt "Software Potential password"),
-	[bool] $skipValidation=$false,
+	[string] $portalPassword = $(Read-Host -prompt "Software Potential Portal password"),
 	[string] $baseUrl="https://srv.softwarepotential.com",
-	[string] $portalBaseUrl="https://srv.softwarepotential.com/portal"
+	[string] $portalBaseUrl="https://srv.softwarepotential.com/portal",
+	[bool] $skipValidation=$false
 )
 
 $msbuildProperties=@("TestAppConfigUsername=$username")
 $msbuildProperties=$msbuildProperties+"TestAppConfigPassword=$password"
-$msbuildProperties=$msbuildProperties+"TestAppConfigSkipCertValidation=$skipValidation"
 $msbuildProperties=$msbuildProperties+"TestAppConfigBaseUrl=$baseUrl"
 $msbuildProperties=$msbuildProperties+"TestAppConfigPortalBaseUrl=$portalBaseUrl"
 $msbuildProperties=$msbuildProperties+"TestAppConfigPortalUsername=$portalUsername"
+$msbuildProperties=$msbuildProperties+"TestAppConfigPortalPassword=$portalPassword"
+$msbuildProperties=$msbuildProperties+"TestAppConfigSkipCertValidation=$skipValidation"
 
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
 

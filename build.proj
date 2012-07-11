@@ -30,11 +30,12 @@
   <PropertyGroup>
     <_Instructions>Need to run "./configure.ps1" from the root folder before running the tests.</_Instructions>
     <TestAppConfigUsername Condition=" '' == '$(TestAppConfigUsername)'">INSERT USERNAME HERE - $(_Instructions)</TestAppConfigUsername>
-    <TestAppConfigUsername Condition=" '' == '$(TestAppConfigPortalUsername)'">INSERT PORTAL USERNAME HERE - $(_Instructions)</TestAppConfigUsername>
+    <TestAppConfigPortalUsername Condition=" '' == '$(TestAppConfigPortalUsername)'">INSERT PORTAL USERNAME HERE - $(_Instructions)</TestAppConfigPortalUsername>
     <TestAppConfigPassword Condition=" '' == '$(TestAppConfigPassword)'">INSERT PASSWORD HERE - $(_Instructions)</TestAppConfigPassword>
-    <TestAppConfigSkipCertValidation Condition=" '' == '$(TestAppConfigSkipCertValidation)'">False</TestAppConfigSkipCertValidation>
+    <TestAppConfigPortalPassword Condition=" '' == '$(TestAppConfigPortalPassword)'">INSERT PORTAL PASSWORD HERE - $(_Instructions)</TestAppConfigPortalPassword>
     <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://srv.softwarepotential.com</TestAppConfigBaseUrl>
     <TestAppConfigPortalBaseUrl Condition=" '' == '$(TestAppConfigPortalBaseUrl)'">https://srv.softwarepotential.com/portal</TestAppConfigPortalBaseUrl>
+    <TestAppConfigSkipCertValidation Condition=" '' == '$(TestAppConfigSkipCertValidation)'">False</TestAppConfigSkipCertValidation>
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,14 +48,17 @@
     <TestAppConfigParam Include="Password">
       <Value>$(TestAppConfigPassword)</Value>
     </TestAppConfigParam>
-    <TestAppConfigParam Include="SkipCertValidation">
-      <Value>$(TestAppConfigSkipCertValidation)</Value>
+    <TestAppConfigParam Include="PortalPassword">
+      <Value>$(TestAppConfigPortalPassword)</Value>
     </TestAppConfigParam>
     <TestAppConfigParam Include="BaseUrl">
       <Value>$(TestAppConfigBaseUrl)</Value>
     </TestAppConfigParam>
     <TestAppConfigParam Include="PortalBaseUrl">
       <Value>$(TestAppConfigPortalBaseUrl)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="SkipCertValidation">
+      <Value>$(TestAppConfigSkipCertValidation)</Value>
     </TestAppConfigParam>
   </ItemGroup>
 
