@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8319F0D8-79A8-456F-A647-9F4A1623B228}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D177EBF0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0E569842-3DB9-4DE1-8485-295EF7560A14}"
 	ProjectSection(SolutionItems) = preProject
-		Sp.Api.Html.Acceptance.xunit = Sp.Api.Html.Acceptance.xunit
+		Sp.Api.Acceptance.xunit = Sp.Api.Acceptance.xunit
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Test.Helpers", "Sp.Test.Helpers\Sp.Test.Helpers.csproj", "{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}"
