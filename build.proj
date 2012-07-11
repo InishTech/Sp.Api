@@ -5,9 +5,12 @@
   
   FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <Solution Include="Sp.Api.sln"/>
-    <Solution Include="Sp.Portal.Acceptance.sln"/>
+  <ItemGroup Condition=" '' != '$(Solution)' ">
+    <Solution Include="$(Solution)" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '' == '$(Solution)' ">
+    <Solution Include="*.sln" />
   </ItemGroup>
 
   <Target Name="Build">
