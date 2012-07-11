@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D177EBF0-5AF0-4C2B-93E3-8DDBC670AF3E}"
+	ProjectSection(SolutionItems) = preProject
+		after.csproj.targets = after.csproj.targets
+		build.proj = build.proj
+		build.ps1 = build.ps1
+		configure.ps1 = configure.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0E569842-3DB9-4DE1-8485-295EF7560A14}"
+	ProjectSection(SolutionItems) = preProject
+		Sp.Api.Customer.Acceptance.xunit = Sp.Api.Customer.Acceptance.xunit
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Api.Customer.Acceptance", "Sp.Api.Customer.Acceptance\Sp.Api.Customer.Acceptance.csproj", "{187F882B-A94C-46EF-AF79-62EA9E6F1493}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Api.Customer.Html.Acceptance", "Sp.Api.Customer.Html.Acceptance\Sp.Api.Customer.Html.Acceptance.csproj", "{C717F07C-6169-4203-914A-5743F834B2B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Test.Helpers", "Sp.Test.Helpers\Sp.Test.Helpers.csproj", "{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Test.Html", "Sp.Test.Html\Sp.Test.Html.csproj", "{052A210C-1890-4731-BE07-DD78A045811D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{052A210C-1890-4731-BE07-DD78A045811D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{052A210C-1890-4731-BE07-DD78A045811D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{052A210C-1890-4731-BE07-DD78A045811D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{052A210C-1890-4731-BE07-DD78A045811D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{187F882B-A94C-46EF-AF79-62EA9E6F1493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{187F882B-A94C-46EF-AF79-62EA9E6F1493}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{187F882B-A94C-46EF-AF79-62EA9E6F1493}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{187F882B-A94C-46EF-AF79-62EA9E6F1493}.Release|Any CPU.Build.0 = Release|Any CPU
+		{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C717F07C-6169-4203-914A-5743F834B2B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C717F07C-6169-4203-914A-5743F834B2B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C717F07C-6169-4203-914A-5743F834B2B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C717F07C-6169-4203-914A-5743F834B2B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
