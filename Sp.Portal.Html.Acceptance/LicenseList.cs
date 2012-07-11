@@ -11,6 +11,7 @@ namespace Sp.Portal.Html.Acceptance
 	using System;
 	using System.Configuration;
 	using Xunit.Extensions;
+	using Sp.Test.Html;
 
 	public class LicenseList
 	{
@@ -20,6 +21,7 @@ namespace Sp.Portal.Html.Acceptance
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
+				driver.Authenticate();
 				driver.Navigate().GoToUrl( ConfigurationManager.AppSettings[ "PortalBaseUrl" ] + "/license" );
 				// If we cannot respond in 5 seconds for any reason, a human will seriously distrust the software, no excuses
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
@@ -28,6 +30,21 @@ namespace Sp.Portal.Html.Acceptance
 					.FindElements( By.TagName( "li" ) )
 					.Count > 0 );
 			}
+		}
+	}
+	static class RemoteWebDriverExtensions
+	{
+		public static void Authenticate( this RemoteWebDriver driver )
+		{
+			driver.Navigate().GoToUrl( ConfigurationManager.AppSettings[ "PortalBaseUrl" ] );
+
+			IWebElement username = driver.FindElement( By.Id( "Username" ) );
+			username.SendKeys( ConfigurationManager.AppSettings[ "Username" ] );
+
+			IWebElement password = driver.FindElement( By.Id( "Password" ) );
+			password.SendKeys( ConfigurationManager.AppSettings[ "Password" ] );
+
+			password.Submit();
 		}
 	}
 }

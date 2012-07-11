@@ -56,16 +56,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BrowserDriverDataProvider.cs" />
     <Compile Include="LicenseList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Download-LatestChromeDriver.ps1" />
-    <None Include="Extract-Zip.ps1" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sp.Test.Html\Sp.Test.Html.csproj">
+      <Project>{052A210C-1890-4731-BE07-DD78A045811D}</Project>
+      <Name>Sp.Test.Html</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\after.csproj.targets" />
@@ -74,7 +77,7 @@
     <PropertyGroup>
       <_TempZipLocation>"$(IntermediateOutputPath)\LatestChromeDriver.zip"</_TempZipLocation>
     </PropertyGroup>
-    <Exec IgnoreStandardErrorWarningFormat="true" Command="powershell -Version 3 -NoProfile ./Download-LatestChromeDriver.ps1 $(_TempZipLocation)" />
-    <Exec IgnoreStandardErrorWarningFormat="true" Command="powershell -NoProfile ./Extract-Zip.ps1 $(_TempZipLocation) &quot;$(OutDir).&quot;" />
+    <Exec IgnoreStandardErrorWarningFormat="true" Command="powershell -Version 3 -NoProfile ../Sp.Test.Html/Download-LatestChromeDriver.ps1 $(_TempZipLocation)" />
+    <Exec IgnoreStandardErrorWarningFormat="true" Command="powershell -NoProfile ../Sp.Test.Html/Extract-Zip.ps1 $(_TempZipLocation) &quot;$(OutDir).&quot;" />
   </Target>
 </Project>

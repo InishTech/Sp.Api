@@ -3,43 +3,25 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
-namespace Sp.Portal.Html.Acceptance
+namespace Sp.Test.Html
 {
-	using OpenQA.Selenium;
 	using OpenQA.Selenium.Chrome;
 	using OpenQA.Selenium.Firefox;
 	using OpenQA.Selenium.Remote;
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Configuration;
 	using System.Linq;
 
 	public class BrowserDriverDataProvider : SingleItemTheoryDataProvider
 	{
 		protected override IEnumerable<object> SingleItemDataSource()
 		{
-			var drivers = new RemoteWebDriver[] 
+			return new RemoteWebDriver[] 
 			{
 				new ChromeDriver(),
 				new FirefoxDriver( GetSeleniumFirefoxProfile() )
 			};
-
-			return drivers
-				.Do( Authenticate );
-		}
-
-		static void Authenticate( RemoteWebDriver driver )
-		{
-			driver.Navigate().GoToUrl( ConfigurationManager.AppSettings[ "PortalBaseUrl" ] );
-
-			IWebElement username = driver.FindElement( By.Id( "PortalUsername" ) );
-			username.SendKeys( ConfigurationManager.AppSettings[ "PortalUsername" ] );
-
-			IWebElement password = driver.FindElement( By.Id( "Password" ) );
-			password.SendKeys( ConfigurationManager.AppSettings[ "Password" ] );
-
-			password.Submit();
 		}
 
 		static FirefoxProfile GetSeleniumFirefoxProfile()
@@ -55,7 +37,7 @@ namespace Sp.Portal.Html.Acceptance
 		}
 	}
 
-	static class QuitGuardExtensions
+	public static class QuitGuardExtensions
 	{
 		public static IDisposable FinallyQuitGuard( this RemoteWebDriver that )
 		{
@@ -111,17 +93,5 @@ namespace Sp.Portal.Html.Acceptance
 		}
 
 		protected abstract IEnumerable<object[]> DataSource();
-	}
-
-	static class DoExtensions
-	{
-		public static IEnumerable<T> Do<T>( this IEnumerable<T> thats, Action<T> action )
-		{
-			foreach ( var item in thats )
-			{
-				action( item );
-				yield return item;
-			}
-		}
 	}
 }
