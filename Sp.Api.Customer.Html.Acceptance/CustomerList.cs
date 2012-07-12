@@ -13,20 +13,19 @@ namespace Sp.Api.Customer.Html.Acceptance
 	using OpenQA.Selenium;
 	using System;
 
-	public class CustomerRegistrationList
+	public class CustomerList
 	{
-		[Theory( Skip="TODO" )]
-		[ClassData( typeof( BrowserDriverDataProvider ) )]
+		[Theory, ClassData( typeof( BrowserDriverDataProvider ) )]
 		public static void ShouldIncludeAtLeastOneCustomer( RemoteWebDriver driver )
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
+				driver.Navigate().GoToUrl( ConfigurationManager.AppSettings[ "BaseUrl" ] + "/Sp.Web.CustomerManagement" );
 				driver.Authenticate();
-				driver.Navigate().GoToUrl( ConfigurationManager.AppSettings[ "BaseUrl" ] + "/customer?registrationStatus" );
 				// If we cannot respond in 5 seconds for any reason, a human will seriously distrust the software, no excuses
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
 				wait.Until( d => d
-					.FindElement( By.Id( "customer-registration-list" ) )
+					.FindElement( By.Id( "customer-list" ) )
 					.FindElements( By.TagName( "li" ) )
 					.Count > 0 );
 			}
@@ -37,8 +36,6 @@ namespace Sp.Api.Customer.Html.Acceptance
 	{
 		public static void Authenticate( this RemoteWebDriver driver )
 		{
-			driver.Navigate().GoToUrl( ConfigurationManager.AppSettings[ "BaseUrl" ] );
-
 			IWebElement username = driver.FindElement( By.Id( "Username" ) );
 			username.SendKeys( ConfigurationManager.AppSettings[ "Username" ] );
 
