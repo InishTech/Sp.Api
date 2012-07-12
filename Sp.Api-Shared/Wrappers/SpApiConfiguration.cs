@@ -44,5 +44,6 @@ namespace Sp.Api.Shared.Wrappers
 		public const string WebApiRoot = "Sp.Web";
 		public const string Define = "Sp.Web.Define";
 		public const string Issue = "Sp.Web.Issue";
+		public const string Customer = "Sp.Web.CustomerManagement";
 	}
 }
