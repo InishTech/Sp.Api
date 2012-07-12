@@ -12,7 +12,7 @@ namespace Sp.Api.Shared.Wrappers
 		readonly string _baseUrl;
 
 		public SpApiConfiguration( string username, string password )
-			: this( username, password, "https://web.softwarepotential.com" )
+			: this( username, password, "https://srv.softwarepotential.com" )
 		{
 		}
 
