@@ -2,7 +2,7 @@
  * 
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
- * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */ 
+ * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Api.Shared.Wrappers
 {
 	using RestSharp;
@@ -11,16 +11,13 @@ namespace Sp.Api.Shared.Wrappers
 	public class SpApi
 	{
 		readonly IRestClient _client;
-		readonly string _password;
-		readonly string _username;
 
 		public SpApi( SpApiConfiguration apiConfiguration )
 		{
-			_client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl );
-			_username = apiConfiguration.Username;
-			_password = apiConfiguration.Password;
-
-			_client.Authenticator = new WSFederationAuthenticator( _username, _password );
+			_client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl )
+			{
+				Authenticator = new WSFederationAuthenticator( apiConfiguration.Username, apiConfiguration.Password )
+			};
 		}
 
 		public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
