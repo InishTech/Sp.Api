@@ -6,7 +6,7 @@
   FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Target Name="Test" AfterTargets="Build" Condition=" 'true' != '$(SpSkipTests)' AND 'true' != '$(BuildingInsideVisualStudio)'">
+  <Target Name="Test" AfterTargets="Build" Condition=" 'true' != '$(SpSkipTests)' AND 'true' != '$(BuildingInsideVisualStudio)'" DependsOnTargets="NuGetPackageRestoreSolutionLevelPackagesWorkaround">
     <ItemGroup Condition=" '' == '$(XunitPath)'">
       <_XunitPath Include="$(SolutionDir)packages\xunit.runners.*\tools\xunit.console.clr4.exe"/>
     </ItemGroup>
@@ -18,6 +18,11 @@
       <Output TaskParameter="ExitCode" ItemName="xUnitExitCodes"/>
     </Exec>
     <Error Text="Test error(s) occured" Code="%(xUnitExitCodes.Identity)" Condition=" '%(xUnitExitCodes.Identity)' != '0' AND '@(xUnitExitCodes)' !='' "/>
+  </Target>
+
+  <!--See http://nuget.codeplex.com/discussions/365785 for any updates on whether this is necessary and/or can be improved upon -->
+  <Target Name="NuGetPackageRestoreSolutionLevelPackagesWorkaround">
+    <Exec WorkingDirectory="$(MSBuildThisFileDirectory)" LogStandardErrorAsError="true" Command=".nuget\nuget.exe install .nuget/packages.config -o packages" />
   </Target>
 
 </Project>
