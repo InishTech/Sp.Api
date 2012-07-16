@@ -39,6 +39,8 @@ namespace Sp.Api.Shared.Wrappers
 		}
 	}
 
+	// NB this is not the long terma approach - will be using hypermedia and HAL to navigate instead of computing urls the way anything relaiant on this currently does
+	// TODO TP 1105 these should be determined by going to an api landing location
 	static class ApiPrefix
 	{
 		public const string WebApiRoot = "Sp.Web";
