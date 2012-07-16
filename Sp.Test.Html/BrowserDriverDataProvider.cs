@@ -13,9 +13,9 @@ namespace Sp.Test.Html
 	using System.Collections.Generic;
 	using System.Linq;
 
-	public class BrowserDriverDataProvider : SingleItemTheoryDataProvider
+	public class BrowserDriverDataProvider : TupleTheoryDataProvider<RemoteWebDriver>
 	{
-		protected override IEnumerable<object> SingleItemDataSource()
+		protected override IEnumerable<RemoteWebDriver> Generate()
 		{
 			return new RemoteWebDriver[] 
 			{
@@ -70,14 +70,14 @@ namespace Sp.Test.Html
 		}
 	}
 
-	public abstract class SingleItemTheoryDataProvider : TheoryDataProvider
+	public abstract class TupleTheoryDataProvider<T1> : TheoryDataProvider
 	{
+		protected abstract IEnumerable<T1> Generate();
+
 		protected override sealed IEnumerable<object[]> DataSource()
 		{
-			return SingleItemDataSource().Select( x => new[] { x } );
+			return Generate().Select( x => new object[] { x } );
 		}
-
-		protected abstract IEnumerable<object> SingleItemDataSource();
 	}
 
 	public abstract class TheoryDataProvider : IEnumerable<object[]>

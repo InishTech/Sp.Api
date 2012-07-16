@@ -5,23 +5,24 @@
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Api.Customer.Html.Acceptance
 {
-	using OpenQA.Selenium.Remote;
-	using Xunit.Extensions;
-	using Sp.Test.Html;
-	using System.Configuration;
-	using OpenQA.Selenium.Support.UI;
 	using OpenQA.Selenium;
+	using OpenQA.Selenium.Remote;
+	using OpenQA.Selenium.Support.UI;
+	using Ploeh.AutoFixture.Xunit;
+	using Sp.Api.Shared;
+	using Sp.Api.Shared.Wrappers;
+	using Sp.Test.Html;
 	using System;
+	using Xunit.Extensions;
 
 	public class CustomerList
 	{
-		[Theory, ClassData( typeof( BrowserDriverDataProvider ) )]
-		public static void ShouldIncludeAtLeastOneCustomer( RemoteWebDriver driver )
+		[Theory, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialDataFixture> ) )]
+		public static void ShouldIncludeAtLeastOneCustomer( RemoteWebDriver driver, AuthenticatingNavigator navigator ) 
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
-				driver.Navigate().GoToUrl( ConfigurationManager.AppSettings[ "BaseUrl" ] + "/Sp.Web.CustomerManagement" );
-				driver.Authenticate();
+				navigator.NavigateWithAuthenticate( driver, "Sp.Web.CustomerManagement" );
 				// If we cannot respond in 5 seconds for any reason, a human will seriously distrust the software, no excuses
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
 				wait.Until( d => d
@@ -29,20 +30,6 @@ namespace Sp.Api.Customer.Html.Acceptance
 					.FindElements( By.TagName( "li" ) )
 					.Count > 0 );
 			}
-		}
-	}
-
-	static class RemoteWebDriverExtensions
-	{
-		public static void Authenticate( this RemoteWebDriver driver )
-		{
-			IWebElement username = driver.FindElement( By.Id( "Username" ) );
-			username.SendKeys( ConfigurationManager.AppSettings[ "Username" ] );
-
-			IWebElement password = driver.FindElement( By.Id( "Password" ) );
-			password.SendKeys( ConfigurationManager.AppSettings[ "Password" ] );
-
-			password.Submit();
 		}
 	}
 }

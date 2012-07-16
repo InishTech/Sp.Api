@@ -8,21 +8,20 @@ namespace Sp.Portal.Html.Acceptance
 	using OpenQA.Selenium;
 	using OpenQA.Selenium.Remote;
 	using OpenQA.Selenium.Support.UI;
-	using System;
-	using System.Configuration;
-	using Xunit.Extensions;
+	using Sp.Api.Shared;
+	using Sp.Portal.Acceptance;
 	using Sp.Test.Html;
+	using System;
+	using Xunit.Extensions;
 
 	public class LicenseList
 	{
-		[Theory]
-		[ClassData( typeof( BrowserDriverDataProvider ) )]
-		public static void ShouldIncludeAtLeastOneLicense( RemoteWebDriver driver )
+		[Theory, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
+		public static void ShouldIncludeAtLeastOneLicense( RemoteWebDriver driver, AuthenticatingNavigator navigator ) 
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
-				driver.Navigate().GoToUrl( ConfigurationManager.AppSettings[ "PortalBaseUrl" ] + "/license" );
-				driver.Authenticate();
+				navigator.NavigateWithAuthenticate( driver, "license" );
 				// If we cannot respond in 5 seconds for any reason, a human will seriously distrust the software, no excuses
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
 				wait.Until( d => d
@@ -30,19 +29,6 @@ namespace Sp.Portal.Html.Acceptance
 					.FindElements( By.TagName( "li" ) )
 					.Count > 0 );
 			}
-		}
-	}
-	static class RemoteWebDriverExtensions
-	{
-		public static void Authenticate( this RemoteWebDriver driver )
-		{
-			IWebElement username = driver.FindElement( By.Id( "Username" ) );
-			username.SendKeys( ConfigurationManager.AppSettings[ "PortalUsername" ] );
-
-			IWebElement password = driver.FindElement( By.Id( "Password" ) );
-			password.SendKeys( ConfigurationManager.AppSettings[ "PortalPassword" ] );
-
-			password.Submit();
 		}
 	}
 }
