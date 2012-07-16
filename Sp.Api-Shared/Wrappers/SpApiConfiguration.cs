@@ -11,11 +11,6 @@ namespace Sp.Api.Shared.Wrappers
 		readonly string _password;
 		readonly string _baseUrl;
 
-		public SpApiConfiguration( string username, string password )
-			: this( username, password, "https://srv.softwarepotential.com" )
-		{
-		}
-
 		public SpApiConfiguration( string username, string password, string baseUrl )
 		{
 			_username = username;
