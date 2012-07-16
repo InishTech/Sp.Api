@@ -5,10 +5,10 @@
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Portal.Acceptance
 {
-	using System.Net;
 	using HtmlAgilityPack;
 	using RestSharp;
 	using Sp.Portal.Acceptance.Wrappers;
+	using System.Net;
 	using Xunit;
 	using Xunit.Extensions;
 

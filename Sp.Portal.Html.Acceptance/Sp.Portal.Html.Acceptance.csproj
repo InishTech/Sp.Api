@@ -40,6 +40,15 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.1\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Ploeh.AutoFixture">
+      <HintPath>..\packages\AutoFixture.2.11.4\lib\Ploeh.AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.Xunit">
+      <HintPath>..\packages\AutoFixture.Xunit.2.11.4\lib\Ploeh.AutoFixture.Xunit.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.SemanticComparison">
+      <HintPath>..\packages\AutoFixture.2.11.4\lib\Ploeh.SemanticComparison.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="WebDriver">
@@ -58,6 +67,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Sp.Api-Shared\AuthenticatingNavigator.cs">
+      <Link>Inlined\AuthenticatingNavigator.cs</Link>
+    </Compile>
+    <Compile Include="..\Sp.Api-Shared\Wrappers\SpApiConfiguration.cs">
+      <Link>Inlined\Wrappers\SpApiConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Sp.Portal.Acceptance\SoftwarePotentialPortalDataFixture.cs">
+      <Link>Inlined\SoftwarePotentialPortalDataFixture.cs</Link>
+    </Compile>
     <Compile Include="LicenseList.cs" />
   </ItemGroup>
   <ItemGroup>

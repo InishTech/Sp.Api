@@ -14,6 +14,7 @@ namespace Sp.Portal.Acceptance
 	using Sp.Portal.Acceptance.Wrappers;
 	using Xunit;
 	using Xunit.Extensions;
+	using Sp.Api.Shared.Wrappers;
 
 	public static class ItemManagementFacts
 	{
@@ -59,7 +60,7 @@ namespace Sp.Portal.Acceptance
 			void ICustomization.Customize( IFixture fixture )
 			{
 				// Use guest credentials - should authenticate, but not give CanSeeItems claim
-				fixture.Register( ( string username, string password ) => new SpPortalConfiguration(
+				fixture.Register( ( string username, string password ) => new SpApiConfiguration(
 					"guest",
 					ConfigurationManager.AppSettings[ "PortalPassword" ],
 					ConfigurationManager.AppSettings[ "PortalBaseUrl" ] ) );

@@ -9,14 +9,14 @@
 
 	public static class CustomerList
 	{
-		[Theory, AutoSoftwarePotentialData]
+		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldAlwaysBeAvailable( SpCustomerApi api )
 		{
 			var response = api.GetList();
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 		}
 
-		[Theory, AutoSoftwarePotentialData]
+		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldHaveAtLeastOneItem( SpCustomerApi api )
 		{
 			var response = api.GetList();
@@ -26,20 +26,20 @@
 
 		public static class Items
 		{
-			[Theory, AutoSoftwarePotentialData]
+			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldHaveAName( RandomCustomerFromListFixture item )
 			{
 				Assert.NotEmpty( item.Selected.Name );
 			}
 
-			[Theory, AutoSoftwarePotentialData]
+			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldHaveANonNullDescription( RandomCustomerFromListFixture item )
 			{
 				Assert.NotNull( item.Selected.Description );
 			}
 
 			// For now, it's always false; When this becomes variable, this pinning test will be replaced with other more appropriate ones
-			[Theory, AutoSoftwarePotentialData]
+			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldHaveAnIsRegisteredField( RandomCustomerFromListFixture item )
 			{
 				Assert.False( item.Selected.IsRegistered );

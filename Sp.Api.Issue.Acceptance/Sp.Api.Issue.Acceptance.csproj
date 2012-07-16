@@ -61,6 +61,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Sp.Api-Shared\AutoSoftwarePotentialData.cs">
+      <Link>Inlined\AutoSoftwarePotentialData.cs</Link>
+    </Compile>
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApi.cs">
       <Link>Inlined\Wrappers\SpApi.cs</Link>
     </Compile>
@@ -70,8 +73,8 @@
     <Compile Include="..\Sp.Api-Shared\Wrappers\WSFederationAuthenticator.cs">
       <Link>Inlined\Wrappers\WSFederationAuthenticator.cs</Link>
     </Compile>
-    <Compile Include="..\Sp.Api-Shared\AutoSoftwarePotentialData.cs">
-      <Link>Inlined\AutoSoftwarePotentialData.cs</Link>
+    <Compile Include="..\Sp.Api-Shared\AutoSoftwarePotentialApiData.cs">
+      <Link>Inlined\AutoSoftwarePotentialApiData.cs</Link>
     </Compile>
     <Compile Include="LicenseFacts.cs" />
     <Compile Include="SpIssueApi.cs" />

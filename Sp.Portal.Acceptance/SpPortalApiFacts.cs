@@ -11,6 +11,7 @@ namespace Sp.Portal.Acceptance
 	using RestSharp;
 	using Sp.Portal.Acceptance.Wrappers;
 	using Xunit;
+	using Sp.Api.Shared.Wrappers;
 
 	public static class SpPortalApiFacts
 	{
@@ -34,7 +35,7 @@ namespace Sp.Portal.Acceptance
 			void ICustomization.Customize( IFixture fixture )
 			{
 				// Use random strings for username and password
-				fixture.Register( ( string username, string password ) => new SpPortalConfiguration(
+				fixture.Register( ( string username, string password ) => new SpApiConfiguration(
 					username,
 					password,
 					ConfigurationManager.AppSettings[ "PortalBaseUrl" ] ) );

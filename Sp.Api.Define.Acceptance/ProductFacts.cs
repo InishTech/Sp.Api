@@ -27,7 +27,7 @@ namespace Sp.Api.Define.Acceptance
 			/// There are no standard failure conditions for this request - even an empty list returns a well formed result, just with the 'Products' collection empty.
 			/// </remarks>
 			/// <param name="api">Api wrapper.</param>
-			[Theory, AutoSoftwarePotentialData]
+			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetProductListShouldYieldData( SpDefineApi api )
 			{
 				var apiResult = api.GetProductList();
@@ -50,7 +50,7 @@ namespace Sp.Api.Define.Acceptance
 			/// </remarks>
 			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="product"/> can share the authentication work.</param>
 			/// <param name="product">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
-			[Theory, AutoSoftwarePotentialData]
+			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetProductFromListShouldYieldData( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 			{
 				Uri linkedAddress = product.SelectedProduct._links.self.AsRelativeUri();
@@ -73,7 +73,7 @@ namespace Sp.Api.Define.Acceptance
 			/// </summary>
 			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="product"/> can share the authentication work.</param>
 			/// <param name="product">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
-			[Theory, AutoSoftwarePotentialData]
+			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetNonExistingProductShould404( [Frozen] SpDefineApi api, RandomProductFromListFixture product, Guid anonymousId )
 			{
 				string validHref = product.SelectedProduct._links.self.href;
@@ -101,7 +101,7 @@ namespace Sp.Api.Define.Acceptance
 				/// Malformed requests (as opposed to items that are Not Found or have Gone) generally yield Bad Request responses. If one sticks to Hypermedia _links, one should not normally encounter these
 				/// </summary>
 				// Right now this causes an Exception which, instead of the OOTB HTTP 500 instead redirects to ErrorPage.aspx which gives 200. This will be fixed as the intention is that all APIs communicate success/failure info to JSON speakers using Http Status Codes, not HTML error pages
-				[Theory( Skip = "TODO - at the moment this request returns HTTP 500" ), AutoSoftwarePotentialData]
+				[Theory( Skip = "TODO - at the moment this request returns HTTP 500" ), AutoSoftwarePotentialApiData]
 				public static void GetNonGuidProductShould400( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 				{
 					Uri misformattedHackedUri = new Uri( product.SelectedProduct._links.self.href + "broken", UriKind.Relative );
@@ -128,7 +128,7 @@ namespace Sp.Api.Define.Acceptance
 		/// <param name="product">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
 		public class PutItem
 		{
-			[Theory, AutoSoftwarePotentialData]
+			[Theory, AutoSoftwarePotentialApiData]
 			public static void PutProductFromListWithUpdatedDescriptionShouldRoundtrip( [Frozen] SpDefineApi api, RandomProductFromListFixture product, string updatedValue )
 			{
 				product.SelectedProduct.Description = updatedValue;
@@ -139,7 +139,7 @@ namespace Sp.Api.Define.Acceptance
 					Assert.Equal( updatedValue, product.GetSelectedProductAgain().Description ) );
 			}
 
-			[Theory, AutoSoftwarePotentialData]
+			[Theory, AutoSoftwarePotentialApiData]
 			public static void PutProductFromListWithUpdatedLabelShouldRoundtrip( [Frozen] SpDefineApi api, RandomProductFromListFixture product, string updatedValue )
 			{
 				product.SelectedProduct.Label = updatedValue;
@@ -159,21 +159,21 @@ namespace Sp.Api.Define.Acceptance
 			{
 				public static class Label
 				{
-					[Theory, AutoSoftwarePotentialData]
+					[Theory, AutoSoftwarePotentialApiData]
 					public static void PutNullShouldReject( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Label = null;
 						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
 					}
 
-					[Theory, AutoSoftwarePotentialData]
+					[Theory, AutoSoftwarePotentialApiData]
 					public static void PutEmptyShouldReject( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Label = string.Empty;
 						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
 					}
 
-					[Theory, AutoSoftwarePotentialData]
+					[Theory, AutoSoftwarePotentialApiData]
 					public static void PutExcessivelyLongShouldReject( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Label = new String( 'a', 101 );
@@ -186,14 +186,14 @@ namespace Sp.Api.Define.Acceptance
 					/// <summary>
 					/// While the Description can be left Empty, one is not permitted to submit a null value.
 					/// </summary>
-					[Theory( Skip = "TP 1109" ), AutoSoftwarePotentialData]
+					[Theory( Skip = "TP 1109" ), AutoSoftwarePotentialApiData]
 					public static void PutNullDescriptionShouldReject( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Description = null;
 						Assert.Equal( HttpStatusCode.BadRequest, product.PutSelectedProduct().StatusCode );
 					}
 
-					[Theory, AutoSoftwarePotentialData]
+					[Theory, AutoSoftwarePotentialApiData]
 					public static void PutExcessivelyLongDescriptionShouldReject( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 					{
 						product.SelectedProduct.Description = new String( 'a', 101 );

@@ -13,10 +13,10 @@ namespace Sp.Api.Html.Acceptance
 	using Xunit;
 	using Xunit.Extensions;
 
-	//TODO - change this tests to use Selenium
+	//TODO - change these tests to use Selenium
 	public static class LandingPageFacts
 	{
-		[Theory, AutoSoftwarePotentialData]
+		[Theory, AutoSoftwarePotentialApiData]
 		public static void LandingPageShouldReturnHtml( SpApi spApi )
 		{
 			var request = new RestRequest( ApiPrefix.WebApiRoot );
@@ -26,7 +26,7 @@ namespace Sp.Api.Html.Acceptance
 			Assert.True( response.ContentType.StartsWith( "text/html" ) );
 		}
 
-		[Theory, AutoSoftwarePotentialData]
+		[Theory, AutoSoftwarePotentialApiData]
 		public static void LandingPageShouldContainSignedVendorId( SpApi spApi )
 		{
 			var request = new RestRequest( ApiPrefix.WebApiRoot );
@@ -42,7 +42,7 @@ namespace Sp.Api.Html.Acceptance
 			Assert.Contains( "bff714f1-3c88-40e7-9e78-a73c041ac8eb", node.InnerText );
 		}
 
-		[Theory, AutoSoftwarePotentialData]
+		[Theory, AutoSoftwarePotentialApiData]
 		public static void SignoffShouldRedirectBackToSts( SpApi spApi )
 		{
 			LandingPageShouldReturnHtml( spApi );

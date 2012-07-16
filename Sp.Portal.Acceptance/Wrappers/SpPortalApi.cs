@@ -6,6 +6,7 @@
 namespace Sp.Portal.Acceptance.Wrappers
 {
 	using RestSharp;
+	using Sp.Api.Shared.Wrappers;
 	using Sp.Test.Helpers;
 
 	public class SpPortalApi
@@ -14,7 +15,7 @@ namespace Sp.Portal.Acceptance.Wrappers
 		readonly string _username;
 		readonly string _password;
 
-		public SpPortalApi( SpPortalConfiguration apiConfiguration )
+		public SpPortalApi( SpApiConfiguration apiConfiguration )
 		{
 			_client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl );
 			

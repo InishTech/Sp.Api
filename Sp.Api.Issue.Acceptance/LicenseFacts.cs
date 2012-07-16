@@ -26,7 +26,7 @@ namespace Sp.Api.Issue.Acceptance
 			/// There are no standard failure conditions for this request - even an empty list returns a well formed result, just with the 'Licenses' collection empty.
 			/// </remarks>
 			/// <param name="api">Api wrapper.</param>
-			[Theory, AutoSoftwarePotentialData]
+			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetListShouldYieldData( SpIssueApi api )
 			{
 				var apiResult = api.GetList();
@@ -47,7 +47,7 @@ namespace Sp.Api.Issue.Acceptance
 			/// </remarks>
 			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="license"/> can share the authentication work.</param>
 			/// <param name="license">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
-			[Theory, AutoSoftwarePotentialData]
+			[Theory, AutoSoftwarePotentialApiData]
 			public static void ElementFromListShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
 			{
 				// There should always be valid Activation Key
@@ -60,7 +60,7 @@ namespace Sp.Api.Issue.Acceptance
 				Assert.NotEqual( default( DateTime ), license.SelectedLicense.IssueDate );
 			}
 
-			[Theory(Skip = "Fields to be exercised by future License creation+migration examples"), AutoSoftwarePotentialData]
+			[Theory(Skip = "Fields to be exercised by future License creation+migration examples"), AutoSoftwarePotentialApiData]
 			public static void ElementFromListShouldContainDataUntestedProperties( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
 			{
 				// TODO these are here so the properties are referenced. TODO: Add roundtrip test which verifies that true and false values can propagate
