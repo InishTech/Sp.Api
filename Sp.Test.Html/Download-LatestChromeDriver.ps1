@@ -23,3 +23,4 @@ $downloadUrl="http:$href"
 Write-Host "Downloading $downloadUrl to $filename"
 
 (New-Object System.Net.WebClient).DownloadFile( $downloadUrl, $filename)
+Unblock-File $filename
