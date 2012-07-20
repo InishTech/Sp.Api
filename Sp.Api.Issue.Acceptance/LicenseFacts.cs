@@ -29,7 +29,7 @@ namespace Sp.Api.Issue.Acceptance
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetListShouldYieldData( SpIssueApi api )
 			{
-				var apiResult = api.GetList();
+				var apiResult = api.GetLicenseList();
 				// It should always be possible to get the list
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
 				// If the request is OK, there should always be some Data
@@ -39,36 +39,55 @@ namespace Sp.Api.Issue.Acceptance
 				Assert.NotNull( apiResult.Data.Licenses );
 			}
 
-			/// <summary>
-			/// The master collection provides a set of summary records. Here we select an arbitrary one from the list and make assertions as to its format.
-			/// </summary>
-			/// <remarks>
-			/// Success/failure is communicated by the HTTP Status Code being OK		
-			/// </remarks>
-			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="license"/> can share the authentication work.</param>
-			/// <param name="license">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
+			public static class Items
+			{
+				/// <summary>
+				/// The master collection provides a set of summary records. Here we select an arbitrary one from the list and make assertions as to its format.
+				/// </summary>
+				/// <remarks>
+				/// Success/failure is communicated by the HTTP Status Code being OK		
+				/// </remarks>
+				/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="license"/> can share the authentication work.</param>
+				/// <param name="license">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void ElementFromListShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
+				{
+					// There should always be valid Activation Key
+					Assert.NotEmpty( license.SelectedLicense.ActivationKey );
+					// There should always be a Product Label
+					Assert.NotEmpty( license.SelectedLicense.ProductLabel );
+					// There should always be a Version Label
+					Assert.NotEmpty( license.SelectedLicense.VersionLabel );
+					// There is always an IssueDate
+					Assert.NotEqual( default( DateTime ), license.SelectedLicense.IssueDate );
+				}
+
+				[Theory( Skip = "Fields to be exercised by future License creation+migration examples" ), AutoSoftwarePotentialApiData]
+				public static void ElementFromListShouldContainDataUntestedProperties( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
+				{
+					// TODO these are here so the properties are referenced. TODO: Add roundtrip test which verifies that true and false values can propagate
+					// There is always a flag indicating the evaluation status
+					var dummy = license.SelectedLicense.IsEvaluation;
+					// TODO these are here so the properties are referenced. TODO: Add roundtrip test which verifies that true and false values can propagate
+					// There is always a flag indicating the evaluation status
+					var dummy2 = license.SelectedLicense.IsRenewable;
+				}
+			}
+		}
+
+		public static class PutCustomer
+		{
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void ElementFromListShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
 			{
-				// There should always be valid Activation Key
-				Assert.NotEmpty( license.SelectedLicense.ActivationKey );
-				// There should always be a Product Label
-				Assert.NotEmpty( license.SelectedLicense.ProductLabel );
-				// There should always be a Version Label
-				Assert.NotEmpty( license.SelectedLicense.VersionLabel );
-				// There is always an IssueDate
-				Assert.NotEqual( default( DateTime ), license.SelectedLicense.IssueDate );
-			}
-
-			[Theory(Skip = "Fields to be exercised by future License creation+migration examples"), AutoSoftwarePotentialApiData]
-			public static void ElementFromListShouldContainDataUntestedProperties( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
-			{
-				// TODO these are here so the properties are referenced. TODO: Add roundtrip test which verifies that true and false values can propagate
-				// There is always a flag indicating the evaluation status
-				var dummy = license.SelectedLicense.IsEvaluation;
-				// TODO these are here so the properties are referenced. TODO: Add roundtrip test which verifies that true and false values can propagate
-				// There is always a flag indicating the evaluation status
-				var dummy2 = license.SelectedLicense.IsRenewable;
+				var customerUri = customer._links.self.href.AsRelativeUri();
+				api.PutLicenseCustomerAssignment( license.SelectedLicense._links.assignCustomer.AsRelativeUri(), customerUri );
+				Verify.EventuallyWithBackOff( x =>
+				{
+					var updated = api.GetItem( license.SelectedLicense._links.self.AsRelativeUri() );
+					Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
+					Assert.Equal( customerUri, updated._links.customer.AsRelativeUri() );
+				} );
 			}
 		}
 
@@ -79,7 +98,7 @@ namespace Sp.Api.Issue.Acceptance
 
 			public RandomLicenseFromListFixture( SpIssueApi api )
 			{
-				var apiResult = api.GetList();
+				var apiResult = api.GetLicenseList();
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
 				Assert.True( apiResult.Data.Licenses.Any(), GetType().Name + " requires the target login to have at least one License" );
 				_randomItem = apiResult.Data.Licenses.ElementAtRandom();

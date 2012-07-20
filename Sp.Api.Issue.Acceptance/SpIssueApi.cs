@@ -17,10 +17,25 @@ namespace Sp.Api.Issue
 		{
 		}
 
-		internal IRestResponse<LicensesSummaryPage> GetList()
+		internal IRestResponse<LicensesSummaryPage> GetLicenseList()
 		{
 			var request = new RestRequest( ApiPrefix.Issue + "/License" );
 			return Execute<LicensesSummaryPage>( request );
+		}
+
+		internal IRestResponse<LicenseSummary> GetLicense( Uri uri )
+		{
+			var request = new RestRequest( uri );
+			return Execute<LicenseSummary>( request );
+		}
+
+		public IRestResponse PutLicenseCustomerAssignment( Uri licenseUri, Uri customerUri )
+		{
+			var request = new RestRequest( licenseUri, Method.PUT );
+			request.RequestFormat = DataFormat.Json;
+			request.AddBody( new { href = customerUri.ToString(  ) } );
+
+			return Execute( request );
 		}
 
 		public class LicensesSummaryPage
