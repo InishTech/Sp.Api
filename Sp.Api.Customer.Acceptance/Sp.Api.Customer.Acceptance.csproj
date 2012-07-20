@@ -54,6 +54,7 @@
       <Link>Inlined\Wrappers\WSFederationAuthenticator.cs</Link>
     </Compile>
     <Compile Include="CustomerList.cs" />
+    <Compile Include="RandomCustomerFromListFixture.cs" />
     <Compile Include="SpCustomerApi.cs" />
   </ItemGroup>
   <ItemGroup>

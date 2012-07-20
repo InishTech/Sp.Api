@@ -3,6 +3,9 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
+
+using Sp.Api.Customer.Acceptance;
+
 namespace Sp.Api.Issue.Acceptance
 {
 	using System;
@@ -78,15 +81,15 @@ namespace Sp.Api.Issue.Acceptance
 		public static class PutCustomer
 		{
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void ElementFromListShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
+			public static void PutCustomerAssignmentShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
 			{
-				var customerUri = customer._links.self.href.AsRelativeUri();
-				api.PutLicenseCustomerAssignment( license.SelectedLicense._links.assignCustomer.AsRelativeUri(), customerUri );
-				Verify.EventuallyWithBackOff( x =>
+				var customerUrl = customer.Selected._links.self.href;
+				api.PutLicenseCustomerAssignment( new Uri( license.SelectedLicense._links.customerAssignment.href), new Uri( customerUrl ) );
+				Verify.EventuallyWithBackOff( () =>
 				{
-					var updated = api.GetItem( license.SelectedLicense._links.self.AsRelativeUri() );
+					var updated = api.GetLicense( new Uri( license.SelectedLicense._links.self.href ) );
 					Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
-					Assert.Equal( customerUri, updated._links.customer.AsRelativeUri() );
+					Assert.Equal( customerUrl, updated.Data._links.customer.href );
 				} );
 			}
 		}

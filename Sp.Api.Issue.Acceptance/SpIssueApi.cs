@@ -56,6 +56,21 @@ namespace Sp.Api.Issue
 			public DateTime IssueDate { get; set; }
 			public bool IsEvaluation { get; set; }
 			public bool IsRenewable { get; set; }
+
+			public Links _links { get; set; }
+
+			public class Links
+			{
+				public Link self { get; set; }
+				public Link customer { get; set; }
+				public Link customerAssignment { get; set; }
+			}
+
+			public class Link
+			{
+				public string href { get; set; }
+			}
 		}
 	}
+
 }

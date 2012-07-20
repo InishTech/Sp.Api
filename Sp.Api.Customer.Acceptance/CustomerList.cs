@@ -1,8 +1,6 @@
 ﻿namespace Sp.Api.Customer.Acceptance
 {
 	using Sp.Api.Shared;
-	using Sp.Test.Helpers;
-	using System.Linq;
 	using System.Net;
 	using Xunit;
 	using Xunit.Extensions;
@@ -43,24 +41,6 @@
 			public static void ShouldHaveAnIsRegisteredField( RandomCustomerFromListFixture item )
 			{
 				Assert.False( item.Selected.IsRegistered );
-			}
-
-			public class RandomCustomerFromListFixture
-			{
-				readonly SpCustomerApi.CustomerSummary _randomItem;
-
-				public RandomCustomerFromListFixture( SpCustomerApi api )
-				{
-					var apiResult = api.GetList();
-					Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-					Assert.True( apiResult.Data.Customers.Any(), GetType().Name + " requires the target login to have at least one Customer" );
-					_randomItem = apiResult.Data.Customers.ElementAtRandom();
-				}
-
-				public SpCustomerApi.CustomerSummary Selected
-				{
-					get { return _randomItem; }
-				}
 			}
 		}
 	}

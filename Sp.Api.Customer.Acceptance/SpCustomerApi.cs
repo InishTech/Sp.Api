@@ -27,6 +27,18 @@ namespace Sp.Api.Customer.Acceptance
 			public string Name { get; set; }
 			public string Description { get; set; }
 			public bool IsRegistered { get; set; }
+
+			public Links _links { get; set; }
+
+			public class Links
+			{
+				public Link self { get; set; }
+			}
+
+			public class Link
+			{
+				public string href { get; set; }
+			}
 		}
 	}
 }
