@@ -31,11 +31,12 @@ namespace Sp.Api.Issue
 
 		public IRestResponse PutLicenseCustomerAssignment( Uri licenseUri, Uri customerUri )
 		{
-			var request = new RestRequest( licenseUri, Method.PUT );
-			request.RequestFormat = DataFormat.Json;
-			request.AddBody( new { href = customerUri.ToString(  ) } );
+			throw new NotImplementedException();
+			//var request = new RestRequest( licenseUri, Method.PUT );
+			//request.RequestFormat = DataFormat.Json;
+			//request.AddBody( new { href = customerUri.ToString(  ) } );
 
-			return Execute( request );
+			//return Execute( request );
 		}
 
 		public class LicensesSummaryPage

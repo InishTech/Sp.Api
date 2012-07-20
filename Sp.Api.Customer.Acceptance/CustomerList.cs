@@ -1,4 +1,6 @@
-﻿namespace Sp.Api.Customer.Acceptance
+﻿using System;
+
+namespace Sp.Api.Customer.Acceptance
 {
 	using Sp.Api.Shared;
 	using System.Net;
@@ -35,6 +37,22 @@
 			{
 				Assert.NotNull( item.Selected.Description );
 			}
+
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void ShouldHaveAValidSelfLink( RandomCustomerFromListFixture item )
+			{
+				VerifyLinkValid( item, links => links.self );
+			}
+
+			static void VerifyLinkValid( RandomCustomerFromListFixture item, Func<SpCustomerApi.CustomerSummary.Links, SpCustomerApi.CustomerSummary.Link> linkSelector )
+			{
+				var linksSet = item.Selected._links;
+				Assert.NotNull( linksSet );
+				var linkToVerify = linkSelector( linksSet );
+				Assert.NotNull(linkToVerify);
+				Assert.NotEmpty( linkToVerify.href );
+			}
+
 
 			// For now, it's always false; When this becomes variable, this pinning test will be replaced with other more appropriate ones
 			[Theory, AutoSoftwarePotentialApiData]

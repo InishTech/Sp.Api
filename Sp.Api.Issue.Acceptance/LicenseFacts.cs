@@ -42,7 +42,7 @@ namespace Sp.Api.Issue.Acceptance
 				Assert.NotNull( apiResult.Data.Licenses );
 			}
 
-			public static class Items
+			public static class ElementFromList
 			{
 				/// <summary>
 				/// The master collection provides a set of summary records. Here we select an arbitrary one from the list and make assertions as to its format.
@@ -53,27 +53,50 @@ namespace Sp.Api.Issue.Acceptance
 				/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="license"/> can share the authentication work.</param>
 				/// <param name="license">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
 				[Theory, AutoSoftwarePotentialApiData]
-				public static void ElementFromListShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
+				public static void ShouldContainData( RandomLicenseFromListFixture license )
 				{
 					// There should always be valid Activation Key
-					Assert.NotEmpty( license.SelectedLicense.ActivationKey );
+					Assert.NotEmpty( license.Selected.ActivationKey );
 					// There should always be a Product Label
-					Assert.NotEmpty( license.SelectedLicense.ProductLabel );
+					Assert.NotEmpty( license.Selected.ProductLabel );
 					// There should always be a Version Label
-					Assert.NotEmpty( license.SelectedLicense.VersionLabel );
+					Assert.NotEmpty( license.Selected.VersionLabel );
 					// There is always an IssueDate
-					Assert.NotEqual( default( DateTime ), license.SelectedLicense.IssueDate );
+					Assert.NotEqual( default( DateTime ), license.Selected.IssueDate );
+				}
+
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void ShouldHaveAValidSelfLink( RandomLicenseFromListFixture item )
+				{
+					VerifyLinkValid( item, links => links.self );
+				}
+
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void ShouldHaveAValidCustomerAssignmentLink( RandomLicenseFromListFixture item )
+				{
+					VerifyLinkValid( item, links => links.customerAssignment );
+				}
+
+				static void VerifyLinkValid( RandomLicenseFromListFixture item, Func<SpIssueApi.LicenseSummary.Links, SpIssueApi.LicenseSummary.Link> linkSelector )
+				{
+					var linksSet = item.Selected._links;
+					Assert.NotNull( linksSet );
+					var linkToVerify = linkSelector( linksSet );
+					Assert.NotNull( linkToVerify );
+					Assert.NotEmpty( linkToVerify.href );
 				}
 
 				[Theory( Skip = "Fields to be exercised by future License creation+migration examples" ), AutoSoftwarePotentialApiData]
-				public static void ElementFromListShouldContainDataUntestedProperties( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
+				public static void ShouldContainData_UntestedProperties( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
 				{
 					// TODO these are here so the properties are referenced. TODO: Add roundtrip test which verifies that true and false values can propagate
 					// There is always a flag indicating the evaluation status
-					var dummy = license.SelectedLicense.IsEvaluation;
+					var dummy = license.Selected.IsEvaluation;
 					// TODO these are here so the properties are referenced. TODO: Add roundtrip test which verifies that true and false values can propagate
 					// There is always a flag indicating the evaluation status
-					var dummy2 = license.SelectedLicense.IsRenewable;
+					var dummy2 = license.Selected.IsRenewable;
+					// For a later test
+					var dummy3 = license.Selected._links.customer;
 				}
 			}
 		}
@@ -84,10 +107,10 @@ namespace Sp.Api.Issue.Acceptance
 			public static void PutCustomerAssignmentShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
 			{
 				var customerUrl = customer.Selected._links.self.href;
-				api.PutLicenseCustomerAssignment( new Uri( license.SelectedLicense._links.customerAssignment.href), new Uri( customerUrl ) );
+				api.PutLicenseCustomerAssignment( new Uri( license.Selected._links.customerAssignment.href ), new Uri( customerUrl ) );
 				Verify.EventuallyWithBackOff( () =>
 				{
-					var updated = api.GetLicense( new Uri( license.SelectedLicense._links.self.href ) );
+					var updated = api.GetLicense( new Uri( license.Selected._links.self.href ) );
 					Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
 					Assert.Equal( customerUrl, updated.Data._links.customer.href );
 				} );
@@ -107,7 +130,7 @@ namespace Sp.Api.Issue.Acceptance
 				_randomItem = apiResult.Data.Licenses.ElementAtRandom();
 			}
 
-			public SpIssueApi.LicenseSummary SelectedLicense
+			public SpIssueApi.LicenseSummary Selected
 			{
 				get { return _randomItem; }
 			}
