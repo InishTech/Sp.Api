@@ -3,6 +3,7 @@ namespace Sp.Api.Customer.Acceptance
 	using RestSharp;
 	using Sp.Api.Shared.Wrappers;
 	using System.Collections.Generic;
+	using System;
 
 	public class SpCustomerApi : SpApi
 	{
@@ -17,8 +18,18 @@ namespace Sp.Api.Customer.Acceptance
 			return Execute<CustomerSummaryPage>( request );
 		}
 
+		internal IRestResponse AddCustomer(string addLink, CustomerSummary customer )
+		{
+			var request = new RestRequest( addLink, Method.POST );
+			request.RequestFormat = DataFormat.Json;
+			request.AddBody(  customer );
+			return Execute( request );
+		}
+
 		public class CustomerSummaryPage
 		{
+
+			public AddLink _links { get; private set; }
 			public List<CustomerSummary> Customers { get; set; }
 		}
 
@@ -38,6 +49,22 @@ namespace Sp.Api.Customer.Acceptance
 			public class Link
 			{
 				public string href { get; set; }
+			}
+		}
+
+
+		public class AddLink
+		{
+			public Link add { get; set; }
+
+			public class Link
+			{
+				public string href { get; set; }
+
+				public Uri AsRelativeUri()
+				{
+					return new Uri( href, UriKind.Relative );
+				}
 			}
 		}
 	}
