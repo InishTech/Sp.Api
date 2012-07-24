@@ -48,7 +48,9 @@
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApiConfiguration.cs">
       <Link>Inlined\Wrappers\SpApiConfiguration.cs</Link>
     </Compile>
+    <Compile Include="CustomerCreate.cs" />
     <Compile Include="CustomerList.cs" />
+    <Compile Include="Learning.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Castle.Core">
