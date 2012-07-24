@@ -33,7 +33,7 @@ namespace Sp.Api.Customer.Acceptance
 		/// <summary>
 		/// The following are examples of values that will be rejected as invalid.
 		/// - Description is Mandatory with a max length of 100 (empty is permitted).
-		/// - Label is Mandatory with a Minimum Length of 1 and max of 100.
+		/// - Name is Mandatory with a Minimum Length of 1 and max of 100.
 		/// </summary>
 		public static class InvalidData
 		{
