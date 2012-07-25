@@ -28,8 +28,11 @@ namespace Sp.Api.Customer.Acceptance
 
 		public class CustomerSummaryPage
 		{
-
-			public AddLink _links { get; private set; }
+			public Links _links { get; set; }
+			public class Links
+			{
+				public Link add { get; set; }
+			}
 			public List<CustomerSummary> Customers { get; set; }
 		}
 
@@ -45,27 +48,11 @@ namespace Sp.Api.Customer.Acceptance
 			{
 				public Link self { get; set; }
 			}
-
-			public class Link
-			{
-				public string href { get; set; }
-			}
 		}
 
-
-		public class AddLink
+		public class Link
 		{
-			public Link add { get; set; }
-
-			public class Link
-			{
-				public string href { get; set; }
-
-				public Uri AsRelativeUri()
-				{
-					return new Uri( href, UriKind.Relative );
-				}
-			}
+			public string href { get; set; }
 		}
 	}
 }

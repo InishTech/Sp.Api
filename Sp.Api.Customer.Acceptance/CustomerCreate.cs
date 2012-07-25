@@ -11,7 +11,7 @@ namespace Sp.Api.Customer.Acceptance
 	public class CustomerCreate
 	{
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void CreateShouldSucceed( SpCustomerApi api )
+		public static void ShouldSucceed( SpCustomerApi api )
 		{
 			var addLink = api.GetList().Data._links.add.href;
 			var response = api.AddCustomer( addLink, new SpCustomerApi.CustomerSummary() { Name = "apiNewName", Description = "apiDescription" } );
@@ -19,7 +19,7 @@ namespace Sp.Api.Customer.Acceptance
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void CreateShouldResultInNewCustomer( SpCustomerApi api )
+		public static void ShouldResultInNewCustomer( SpCustomerApi api )
 		{
 			var addLink = api.GetList().Data._links.add.href;
 			string newCustomerName = "apiNewName" + Guid.NewGuid();

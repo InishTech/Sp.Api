@@ -53,7 +53,7 @@ namespace Sp.Api.Customer.Acceptance
 				VerifyLinkValid( item, links => links.self );
 			}
 
-			static void VerifyLinkValid( RandomCustomerFromListFixture item, Func<SpCustomerApi.CustomerSummary.Links, SpCustomerApi.CustomerSummary.Link> linkSelector )
+			static void VerifyLinkValid( RandomCustomerFromListFixture item, Func<SpCustomerApi.CustomerSummary.Links, SpCustomerApi.Link> linkSelector )
 			{
 				var linksSet = item.Selected._links;
 				Assert.NotNull( linksSet );
@@ -61,8 +61,7 @@ namespace Sp.Api.Customer.Acceptance
 				Assert.NotNull(linkToVerify);
 				Assert.NotEmpty( linkToVerify.href );
 			}
-
-
+			
 			// For now, it's always false; When this becomes variable, this pinning test will be replaced with other more appropriate ones
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldHaveAnIsRegisteredField( RandomCustomerFromListFixture item )
