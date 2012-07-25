@@ -12,28 +12,30 @@ namespace Sp.Api.Customer.Acceptance
 		{
 		}
 
-		internal IRestResponse<CustomerSummaryPage> GetList()
+		internal IRestResponse<CustomerSummaryPage> GetCustomerList()
 		{
 			var request = new RestRequest( ApiPrefix.Customer );
 			return Execute<CustomerSummaryPage>( request );
 		}
 
-		internal IRestResponse AddCustomer(string addLink, CustomerSummary customer )
+		internal IRestResponse CreateCustomer( string addLink, CustomerSummary customer )
 		{
 			var request = new RestRequest( addLink, Method.POST );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody(  customer );
+			request.AddBody( customer );
 			return Execute( request );
 		}
 
 		public class CustomerSummaryPage
 		{
+			public List<CustomerSummary> Customers { get; set; }
+
 			public Links _links { get; set; }
+
 			public class Links
 			{
 				public Link add { get; set; }
 			}
-			public List<CustomerSummary> Customers { get; set; }
 		}
 
 		public class CustomerSummary

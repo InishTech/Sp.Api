@@ -12,14 +12,14 @@ namespace Sp.Api.Customer.Acceptance
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldAlwaysBeAvailable( SpCustomerApi api )
 		{
-			var response = api.GetList();
+			var response = api.GetCustomerList();
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldHaveALinkForAdd( SpCustomerApi api )
 		{
-			var response = api.GetList();
+			var response = api.GetCustomerList();
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 			Assert.NotNull( response.Data._links );
 			Assert.NotEmpty( response.Data._links.add.href );
@@ -28,7 +28,7 @@ namespace Sp.Api.Customer.Acceptance
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldHaveAtLeastOneItem( SpCustomerApi api )
 		{
-			var response = api.GetList();
+			var response = api.GetCustomerList();
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 			Assert.NotEmpty( response.Data.Customers );
 		}

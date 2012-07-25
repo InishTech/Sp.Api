@@ -20,7 +20,7 @@ namespace Sp.Api.Customer.Html.Acceptance
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
-				navigator.NavigateWithAuthenticate( driver, "Sp.Web.CustomerManagement" );
+				navigator.NavigateWithAuthenticate( driver, "Sp.Web.CustomerManagement/customer" );
 				// If we cannot respond in 5 seconds for any reason, a human will seriously distrust the software, no excuses
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
 				wait.Until( d => d

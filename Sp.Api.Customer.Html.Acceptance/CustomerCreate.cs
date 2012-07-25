@@ -17,21 +17,20 @@ namespace Sp.Api.Customer.Html.Acceptance
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
-				navigator.NavigateWithAuthenticate( driver, "Sp.Web.CustomerManagement" );
+				navigator.NavigateWithAuthenticate( driver, "Sp.Web.CustomerManagement/customer" );
 
 				IWebElement nameElement = driver.FindElement( By.Id( "name" ) );
-				string customerName = "name" + Guid.NewGuid();
-				nameElement.SendKeys( customerName );
+				string anonymousCustomerName = "anonymousName" + Guid.NewGuid();
+				nameElement.SendKeys( anonymousCustomerName );
 
 				IWebElement descriptionElement = driver.FindElement( By.Id( "description" ) );
-				descriptionElement.SendKeys( "description" );
+				descriptionElement.SendKeys( "anonymousDescription" );
 
-				IWebElement createBtn = driver.FindElement( By.Id( "add-customer" ) );
-				createBtn.Click();
+				IWebElement createButton = driver.FindElement( By.Id( "add-customer" ) );
+				createButton.Click();
 
 				var names = driver.FindElementsByClassName( "customerName" );
-				Assert.True( names.Any( x => x.Text.Equals( customerName ) ) );
-
+				Assert.True( names.Any( x => x.Text.Equals( anonymousCustomerName ) ) );
 			}
 		}
 	}
