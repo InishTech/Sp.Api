@@ -13,7 +13,7 @@ namespace Sp.Api.Customer.Html.Acceptance
 	public class CustomerCreate
 	{
 		[Theory, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialDataFixture> ) )]
-		public static void CreateCustomerShouldSuceed( RemoteWebDriver driver, AuthenticatingNavigator navigator )
+		public static void CreateCustomerShouldSucceed( RemoteWebDriver driver, AuthenticatingNavigator navigator )
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
