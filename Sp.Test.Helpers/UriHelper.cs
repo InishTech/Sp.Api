@@ -35,6 +35,5 @@ namespace Sp.Test.Helpers
 			var uriRelativeToClientBaseUri = baseUriEndingWithSlash.MakeRelativeUri( requestUriAbsolute );
 			return uriRelativeToClientBaseUri;
 		}
-
 	}
 }

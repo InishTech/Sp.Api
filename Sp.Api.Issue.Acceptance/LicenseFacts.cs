@@ -13,7 +13,6 @@ namespace Sp.Api.Issue.Acceptance
 	using System.Net;
 	using Ploeh.AutoFixture.Xunit;
 	using Sp.Api.Shared;
-	using Sp.Api.Shared.Wrappers;
 	using Sp.Test.Helpers;
 	using Xunit;
 	using Xunit.Extensions;
@@ -40,6 +39,20 @@ namespace Sp.Api.Issue.Acceptance
 				//-- Portal consumer expects Issue date, activation key, product, version, eval, renewal
 				// An empty list is always represented as an empty collection, not null
 				Assert.NotNull( apiResult.Data.Licenses );
+			}
+
+			public static class GetItem
+			{
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void GetLicenseShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
+				{
+					var licenseUrl = license.Selected._links.self.AsRelativeUri();
+					//Now get that specific resource
+					var apiResult = api.GetLicense( licenseUrl );
+					Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+					Assert.Equal( license.Selected.ActivationKey, apiResult.Data.ActivationKey );
+				}
+
 			}
 
 			public static class ElementFromList
@@ -106,13 +119,18 @@ namespace Sp.Api.Issue.Acceptance
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void PutCustomerAssignmentShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
 			{
-				var customerUrl = customer.Selected._links.self.href;
-				api.PutLicenseCustomerAssignment( new Uri( license.Selected._links.customerAssignment.href ), new Uri( customerUrl ) );
+				var customerUrl = customer.Selected._links.self.AsRelativeUri();
+				var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
+				var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, customerUrl );
+				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
 				Verify.EventuallyWithBackOff( () =>
 				{
-					var updated = api.GetLicense( new Uri( license.Selected._links.self.href ) );
+					var updated = api.GetLicense( license.Selected._links.self.AsRelativeUri() );
 					Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
-					Assert.Equal( customerUrl, updated.Data._links.customer.href );
+					Assert.NotNull( updated.Data._links.customer );
+					Assert.Equal( customerUrl, updated.Data._links.customer.AsRelativeUri() );
+					Console.WriteLine( "Got license from " + license.Selected._links.self.AsRelativeUri() );
+					Console.WriteLine( "Its customer url is " + customerUrl );
 				} );
 			}
 		}

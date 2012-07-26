@@ -1,3 +1,5 @@
+using System;
+
 namespace Sp.Api.Customer.Acceptance
 {
 	using RestSharp;
@@ -38,6 +40,11 @@ namespace Sp.Api.Customer.Acceptance
 			public class Link
 			{
 				public string href { get; set; }
+
+				public Uri AsRelativeUri()
+				{
+					return new Uri( href, UriKind.Relative );
+				}
 			}
 		}
 	}
