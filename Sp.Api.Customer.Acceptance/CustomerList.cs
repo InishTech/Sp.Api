@@ -12,14 +12,23 @@ namespace Sp.Api.Customer.Acceptance
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldAlwaysBeAvailable( SpCustomerApi api )
 		{
-			var response = api.GetList();
+			var response = api.GetCustomerList();
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
+		}
+
+		[Theory, AutoSoftwarePotentialApiData]
+		public static void ShouldHaveALinkForAdd( SpCustomerApi api )
+		{
+			var response = api.GetCustomerList();
+			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
+			Assert.NotNull( response.Data._links );
+			Assert.NotEmpty( response.Data._links.add.href );
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldHaveAtLeastOneItem( SpCustomerApi api )
 		{
-			var response = api.GetList();
+			var response = api.GetCustomerList();
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 			Assert.NotEmpty( response.Data.Customers );
 		}
@@ -44,7 +53,7 @@ namespace Sp.Api.Customer.Acceptance
 				VerifyLinkValid( item, links => links.self );
 			}
 
-			static void VerifyLinkValid( RandomCustomerFromListFixture item, Func<SpCustomerApi.CustomerSummary.Links, SpCustomerApi.CustomerSummary.Link> linkSelector )
+			static void VerifyLinkValid( RandomCustomerFromListFixture item, Func<SpCustomerApi.CustomerSummary.Links, SpCustomerApi.Link> linkSelector )
 			{
 				var linksSet = item.Selected._links;
 				Assert.NotNull( linksSet );
@@ -52,8 +61,7 @@ namespace Sp.Api.Customer.Acceptance
 				Assert.NotNull(linkToVerify);
 				Assert.NotEmpty( linkToVerify.href );
 			}
-
-
+			
 			// For now, it's always false; When this becomes variable, this pinning test will be replaced with other more appropriate ones
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldHaveAnIsRegisteredField( RandomCustomerFromListFixture item )
