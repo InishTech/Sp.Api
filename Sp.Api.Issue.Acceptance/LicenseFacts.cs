@@ -41,20 +41,6 @@ namespace Sp.Api.Issue.Acceptance
 				Assert.NotNull( apiResult.Data.Licenses );
 			}
 
-			public static class GetItem
-			{
-				[Theory, AutoSoftwarePotentialApiData]
-				public static void GetLicenseShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license )
-				{
-					var licenseUrl = license.Selected._links.self.AsRelativeUri();
-					//Now get that specific resource
-					var apiResult = api.GetLicense( licenseUrl );
-					Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-					Assert.Equal( license.Selected.ActivationKey, apiResult.Data.ActivationKey );
-				}
-
-			}
-
 			public static class ElementFromList
 			{
 				/// <summary>
@@ -64,7 +50,7 @@ namespace Sp.Api.Issue.Acceptance
 				/// Success/failure is communicated by the HTTP Status Code being OK		
 				/// </remarks>
 				/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="license"/> can share the authentication work.</param>
-				/// <param name="license">Arbitrarily chosen product from the configured user's list (the account needs at least one)</param>
+				/// <param name="license">Arbitrarily chosen license from the configured user's list</param>
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void ShouldContainData( RandomLicenseFromListFixture license )
 				{
@@ -114,6 +100,48 @@ namespace Sp.Api.Issue.Acceptance
 			}
 		}
 
+		public static class GetItem
+		{
+			/// <summary>
+			/// /// The master list presents a set of linked child entities. Here we select an arbitrary one from the list and follow its _links.self to get that resource's 			/// </summary>
+			/// <remarks>
+			/// Success/failure is communicated by the HTTP Status Code being OK		
+			/// </remarks>
+			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="preSelectedLicense"/> can share the authentication work.</param>
+			/// <param name="preSelectedLicense">Arbitrarily chosen license from the configured user's list</param>
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void GetLicenseShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture preSelectedLicense )
+			{
+				var linkedAddress = preSelectedLicense.Selected._links.self.AsRelativeUri();
+				//Now query the API for that specific license by following the link obtained in the previous step
+				var apiResult = api.GetLicense( linkedAddress );
+				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+				//Compare properties of the pre-selected license (from the list) and the license obtained separately
+				Assert.Equal( preSelectedLicense.Selected.ActivationKey, apiResult.Data.ActivationKey );
+				Assert.Equal( preSelectedLicense.Selected.IsEvaluation, apiResult.Data.IsEvaluation );
+				Assert.Equal( preSelectedLicense.Selected.IsRenewable, apiResult.Data.IsRenewable );
+				Assert.Equal( preSelectedLicense.Selected.IssueDate, apiResult.Data.IssueDate );
+			}
+
+			/// <summary>
+			/// Normal usage should just involve following _links as illustrated in GetProductFromListShouldYieldData. Here we simulate what would happen if the item [had not yet become accessible|had been deleted]
+			/// </summary>
+			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="license"/> can share the authentication work.</param>
+			/// <param name="license">Arbitrarily chosen license from the configured user's list</param>
+			/// <param name="anonymousId">Random id</param>
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void GetNonExistingLicenseShould404( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, Guid anonymousId )
+			{
+				string validHref = license.Selected._links.self.href;
+				Uri invalidHref = HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
+				var apiResult = api.GetLicense( invalidHref );
+				// We don't want to have landed on an error page that has a StatusCode of 200
+				Assert.Equal( HttpStatusCode.NotFound, apiResult.StatusCode );
+				// Our final Location should match what we asked for
+				Assert.Contains( invalidHref.ToString(), apiResult.ResponseUri.ToString() );
+			}
+		}
+
 		public static class PutCustomer
 		{
 			[Theory, AutoSoftwarePotentialApiData]
@@ -122,7 +150,7 @@ namespace Sp.Api.Issue.Acceptance
 				var customerUrl = customer.Selected._links.self.AsRelativeUri();
 				var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
 				var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, customerUrl );
-				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+				Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 				Verify.EventuallyWithBackOff( () =>
 				{
 					var updated = api.GetLicense( license.Selected._links.self.AsRelativeUri() );
@@ -133,6 +161,26 @@ namespace Sp.Api.Issue.Acceptance
 					Console.WriteLine( "Its customer url is " + customerUrl );
 				} );
 			}
+
+			[Theory(Skip = "TP 1041"), AutoSoftwarePotentialApiData]
+			public static void PutCustomerAssignmentWithNonExistingCustomerIdShouldReturnStatusForbidden( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer, Guid anonymousId )
+			{
+				var validCustomerUrl = customer.Selected._links.self.href;
+				var invalidCustomerUrl = HackLinkReplacingGuidWithAlternateValue( anonymousId, validCustomerUrl );
+				var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
+				var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, invalidCustomerUrl );
+				Assert.Equal( HttpStatusCode.Forbidden, apiResult.StatusCode );
+			}
+		}
+
+		/// <summary>
+		/// This is purely for the purposes of this low-level test.
+		/// Client side should never need to generate or mess with links - the Apis are intended to communicate via standard HAL hypermedia constructs in the _links object. 
+		/// </summary>
+		/// <returns></returns>
+		static Uri HackLinkReplacingGuidWithAlternateValue( Guid replacement, string validHref )
+		{
+			return new Uri( validHref.Substring( 0, validHref.LastIndexOf( '/' ) + 1 ) + replacement.ToString(), UriKind.Relative );
 		}
 
 		// TODO when we support creating licenses via the REST API, this fixture should create one on the fly
