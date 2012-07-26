@@ -11,22 +11,27 @@
 	public class CustomerCreate
 	{
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void ShouldYieldOk( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription)
+		public static void ShouldYieldAccepted( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
 		{
 			var addLink = GetCustomerAddHref( api );
 			var response = api.CreateCustomer( addLink, new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
-			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
+			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
+			string result = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
+			Assert.NotEmpty( result );
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void ShouldResultInNewCustomer( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
+		public static void ShouldEventuallyBeCreated( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
 		{
 			var addLink = GetCustomerAddHref( api );
+			
 			var response = api.CreateCustomer( addLink, new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
-			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
+			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
+			var result = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
 
 			Verify.EventuallyWithBackOff( () =>
-				Assert.True( api.GetCustomerList().Data.Customers.Any( x => x.Name.Equals( anonymousCustomerName ) ) ) );
+				// TODO use api.GetCustomer( resultLocation ) to get the single item instead of looking for it in the list
+				Assert.True( api.GetCustomerList().Data.Customers.Any( x => x._links.self.href == result ) ) );
 		}
 
 		/// <summary>
