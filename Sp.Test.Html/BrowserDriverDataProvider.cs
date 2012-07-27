@@ -19,11 +19,11 @@ namespace Sp.Test.Html
 		{
 			return new RemoteWebDriver[] 
 			{
-				new ChromeDriver(),
-				#if DEBUG
+#if DEBUG
 				// TODO Temporarily inhibit on our Windows Server 2008 R2 test rig - TODO: reinstate
+				new ChromeDriver(),
+#endif
 				new FirefoxDriver( GetSeleniumFirefoxProfile() )
-				#endif
 			};
 		}
 
