@@ -6,7 +6,6 @@
 namespace Sp.Api.Define.Acceptance
 {
 	using Sp.Api.Shared;
-	using Sp.Api.Shared.Wrappers;
 	using Sp.Test.Helpers;
 	using Ploeh.AutoFixture.Xunit;
 	using RestSharp;
@@ -77,22 +76,12 @@ namespace Sp.Api.Define.Acceptance
 			public static void GetNonExistingProductShould404( [Frozen] SpDefineApi api, RandomProductFromListFixture product, Guid anonymousId )
 			{
 				string validHref = product.SelectedProduct._links.self.href;
-				Uri invalidHref = HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
+				Uri invalidHref = UriHelper.HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
 				var apiResult = api.GetProduct( invalidHref );
 				// We don't want to have landed on an error page that has a StatusCode of 200
 				Assert.Equal( HttpStatusCode.NotFound, apiResult.StatusCode );
 				// Our final Location should match what we asked for
 				Assert.Contains( invalidHref.ToString(), apiResult.ResponseUri.ToString() );
-			}
-
-			/// <summary>
-			/// This is purely for the purposes of this low-level test.
-			/// Client side should never need to generate or mess with links - the Apis are intended to communicate via standard HAL hypermedia constructs in the _links object. 
-			/// </summary>
-			/// <returns></returns>
-			static Uri HackLinkReplacingGuidWithAlternateValue( Guid replacement, string validHref )
-			{
-				return new Uri( validHref.Substring( 0, validHref.LastIndexOf( '/' ) + 1 ) + replacement.ToString(), UriKind.Relative );
 			}
 
 			public static class BadRequests

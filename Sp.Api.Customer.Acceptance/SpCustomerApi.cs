@@ -26,6 +26,12 @@ namespace Sp.Api.Customer.Acceptance
 			return Execute( request );
 		}
 
+		internal IRestResponse<CustomerSummary> GetCustomer( Uri uri )
+		{
+			var request = new RestRequest( uri );
+			return Execute<CustomerSummary>( request );
+		}
+
 		public class CustomerSummaryPage
 		{
 			public List<CustomerSummary> Customers { get; set; }

@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Sp.Api.Customer.Acceptance
+﻿namespace Sp.Api.Customer.Acceptance
 {
+	using System;
 	using Sp.Api.Shared;
 	using System.Net;
 	using Xunit;

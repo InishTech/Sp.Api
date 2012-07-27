@@ -4,6 +4,7 @@
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 
+using Ploeh.SemanticComparison.Fluent;
 using Sp.Api.Customer.Acceptance;
 
 namespace Sp.Api.Issue.Acceptance
@@ -65,18 +66,18 @@ namespace Sp.Api.Issue.Acceptance
 				}
 
 				[Theory, AutoSoftwarePotentialApiData]
-				public static void ShouldHaveAValidSelfLink( RandomLicenseFromListFixture item )
+				public static void ShouldHaveAWellFormedSelfLink( RandomLicenseFromListFixture item )
 				{
-					VerifyLinkValid( item, links => links.self );
+					VerifyLinkWellFormed( item, links => links.self );
 				}
 
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void ShouldHaveAValidCustomerAssignmentLink( RandomLicenseFromListFixture item )
 				{
-					VerifyLinkValid( item, links => links.customerAssignment );
+					VerifyLinkWellFormed( item, links => links.customerAssignment );
 				}
 
-				static void VerifyLinkValid( RandomLicenseFromListFixture item, Func<SpIssueApi.LicenseSummary.Links, SpIssueApi.LicenseSummary.Link> linkSelector )
+				static void VerifyLinkWellFormed( RandomLicenseFromListFixture item, Func<SpIssueApi.LicenseSummary.Links, SpIssueApi.LicenseSummary.Link> linkSelector )
 				{
 					var linksSet = item.Selected._links;
 					Assert.NotNull( linksSet );
@@ -116,11 +117,11 @@ namespace Sp.Api.Issue.Acceptance
 				//Now query the API for that specific license by following the link obtained in the previous step
 				var apiResult = api.GetLicense( linkedAddress );
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-				//Compare properties of the pre-selected license (from the list) and the license obtained separately
-				Assert.Equal( preSelectedLicense.Selected.ActivationKey, apiResult.Data.ActivationKey );
-				Assert.Equal( preSelectedLicense.Selected.IsEvaluation, apiResult.Data.IsEvaluation );
-				Assert.Equal( preSelectedLicense.Selected.IsRenewable, apiResult.Data.IsRenewable );
-				Assert.Equal( preSelectedLicense.Selected.IssueDate, apiResult.Data.IssueDate );
+
+				//The license obtained as a separete resource should be identical to the license previously selected from the list
+				apiResult.Data.AsSource().OfLikeness<SpIssueApi.LicenseSummary>()
+					.Without(p => p._links)
+					.ShouldEqual( preSelectedLicense.Selected );
 			}
 
 			/// <summary>
@@ -129,11 +130,12 @@ namespace Sp.Api.Issue.Acceptance
 			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="license"/> can share the authentication work.</param>
 			/// <param name="license">Arbitrarily chosen license from the configured user's list</param>
 			/// <param name="anonymousId">Random id</param>
+			/// TODO - consider where to place low-level infrastructure tests
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetNonExistingLicenseShould404( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, Guid anonymousId )
 			{
 				string validHref = license.Selected._links.self.href;
-				Uri invalidHref = HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
+				Uri invalidHref = UriHelper.HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
 				var apiResult = api.GetLicense( invalidHref );
 				// We don't want to have landed on an error page that has a StatusCode of 200
 				Assert.Equal( HttpStatusCode.NotFound, apiResult.StatusCode );
@@ -157,30 +159,19 @@ namespace Sp.Api.Issue.Acceptance
 					Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
 					Assert.NotNull( updated.Data._links.customer );
 					Assert.Equal( customerUrl, updated.Data._links.customer.AsRelativeUri() );
-					Console.WriteLine( "Got license from " + license.Selected._links.self.AsRelativeUri() );
-					Console.WriteLine( "Its customer url is " + customerUrl );
 				} );
 			}
 
 			[Theory(Skip = "TP 1041"), AutoSoftwarePotentialApiData]
-			public static void PutCustomerAssignmentWithNonExistingCustomerIdShouldReturnStatusForbidden( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer, Guid anonymousId )
+			public static void PutCustomerAssignmentWithNonExistingCustomerIdShouldReturnStatusBadRequest( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer, Guid anonymousId )
 			{
 				var validCustomerUrl = customer.Selected._links.self.href;
-				var invalidCustomerUrl = HackLinkReplacingGuidWithAlternateValue( anonymousId, validCustomerUrl );
+				var invalidCustomerUrl = UriHelper.HackLinkReplacingGuidWithAlternateValue( anonymousId, validCustomerUrl );
 				var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
 				var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, invalidCustomerUrl );
-				Assert.Equal( HttpStatusCode.Forbidden, apiResult.StatusCode );
+				Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
+				//TODO - assert the message conveys fact that the customer was not found
 			}
-		}
-
-		/// <summary>
-		/// This is purely for the purposes of this low-level test.
-		/// Client side should never need to generate or mess with links - the Apis are intended to communicate via standard HAL hypermedia constructs in the _links object. 
-		/// </summary>
-		/// <returns></returns>
-		static Uri HackLinkReplacingGuidWithAlternateValue( Guid replacement, string validHref )
-		{
-			return new Uri( validHref.Substring( 0, validHref.LastIndexOf( '/' ) + 1 ) + replacement.ToString(), UriKind.Relative );
 		}
 
 		// TODO when we support creating licenses via the REST API, this fixture should create one on the fly
