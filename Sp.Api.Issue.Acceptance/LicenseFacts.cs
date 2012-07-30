@@ -170,7 +170,7 @@ namespace Sp.Api.Issue.Acceptance
 				var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
 				var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, invalidCustomerUrl );
 				Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
-				//TODO - assert the message conveys fact that the customer was not found
+				//TODO TP 1120 - assert the message conveys fact that the customer was not found
 			}
 		}
 
