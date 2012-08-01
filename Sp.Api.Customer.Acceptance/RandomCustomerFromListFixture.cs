@@ -5,6 +5,7 @@
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 using System.Linq;
 using System.Net;
+using RestSharp;
 using Sp.Test.Helpers;
 using Xunit;
 
@@ -17,7 +18,9 @@ namespace Sp.Api.Customer.Acceptance
 		public RandomCustomerFromListFixture( SpCustomerApi api )
 		{
 			var apiResult = api.GetCustomerList();
+			Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
 			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+			Assert.NotNull(apiResult.Data.Customers);
 			Assert.True( apiResult.Data.Customers.Any(), GetType().Name + " requires the target login to have at least one Customer" );
 			_randomItem = apiResult.Data.Customers.ElementAtRandom();
 		}

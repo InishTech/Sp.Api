@@ -29,6 +29,9 @@ namespace Sp.Api.Customer.Acceptance
 			//The customer obtained as a separete resource should be identical to the customer previously selected from the list
 			apiResult.Data.AsSource().OfLikeness<SpCustomerApi.CustomerSummary>()
 				.Without( p => p._links )
+				//TODO - find a way of comparing nested properties (of complex types) using Semantic comparison
+				.Without( p => p._embedded )
+				.Without( p => p._signature )
 				.ShouldEqual( preSelectedCustomer.Selected );
 		}
 

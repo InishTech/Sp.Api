@@ -50,7 +50,6 @@ namespace Sp.Api.Issue.Acceptance
 				/// <remarks>
 				/// Success/failure is communicated by the HTTP Status Code being OK		
 				/// </remarks>
-				/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="license"/> can share the authentication work.</param>
 				/// <param name="license">Arbitrarily chosen license from the configured user's list</param>
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void ShouldContainData( RandomLicenseFromListFixture license )
@@ -149,28 +148,17 @@ namespace Sp.Api.Issue.Acceptance
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void PutCustomerAssignmentShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
 			{
-				var customerUrl = customer.Selected._links.self.AsRelativeUri();
 				var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
-				var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, customerUrl );
+				var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, customer.Selected );
 				Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 				Verify.EventuallyWithBackOff( () =>
 				{
 					var updated = api.GetLicense( license.Selected._links.self.AsRelativeUri() );
 					Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
 					Assert.NotNull( updated.Data._links.customer );
-					Assert.Equal( customerUrl, updated.Data._links.customer.AsRelativeUri() );
+					var updatedCustomerSelfLink = customer.Selected._links.self;
+					Assert.Equal( updatedCustomerSelfLink.AsRelativeUri(), updated.Data._links.customer.AsRelativeUri() );
 				} );
-			}
-
-			[Theory(Skip = "TP 1041"), AutoSoftwarePotentialApiData]
-			public static void PutCustomerAssignmentWithNonExistingCustomerIdShouldReturnStatusBadRequest( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer, Guid anonymousId )
-			{
-				var validCustomerUrl = customer.Selected._links.self.href;
-				var invalidCustomerUrl = UriHelper.HackLinkReplacingGuidWithAlternateValue( anonymousId, validCustomerUrl );
-				var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
-				var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, invalidCustomerUrl );
-				Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
-				//TODO TP 1120 - assert the message conveys fact that the customer was not found
 			}
 		}
 

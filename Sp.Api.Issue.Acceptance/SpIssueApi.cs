@@ -3,6 +3,9 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
+
+using Sp.Api.Customer.Acceptance;
+
 namespace Sp.Api.Issue
 {
 	using RestSharp;
@@ -29,11 +32,11 @@ namespace Sp.Api.Issue
 			return Execute<LicenseSummary>( request );
 		}
 
-		public IRestResponse PutLicenseCustomerAssignment( Uri licenseUri, Uri customerUri )
+		public IRestResponse PutLicenseCustomerAssignment( Uri licenseUri, SpCustomerApi.CustomerSummary customer )
 		{
 			var request = new RestRequest( licenseUri, Method.PUT );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody( new { href = customerUri.ToString() } );
+			request.AddBody( customer );
 
 			return Execute( request );
 		}

@@ -52,6 +52,16 @@ namespace Sp.Api.Customer.Acceptance
 
 			public Links _links { get; set; }
 
+			public JsonSignature _signature { get; set; }
+
+			public _Embedded _embedded { get; set; }
+
+			public class _Embedded
+			{
+				public Guid Id { get; set; }
+				public Guid VendorId { get; set; }
+			}
+
 			public class Links
 			{
 				public Link self { get; set; }
@@ -66,6 +76,11 @@ namespace Sp.Api.Customer.Acceptance
 			{
 				return new Uri( href, UriKind.Relative );
 			}
+		}
+
+		public class JsonSignature
+		{
+			public string Value { get; set; }
 		}
 	}
 }
