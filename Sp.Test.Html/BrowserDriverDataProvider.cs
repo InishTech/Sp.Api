@@ -7,6 +7,7 @@ namespace Sp.Test.Html
 {
 	using OpenQA.Selenium.Chrome;
 	using OpenQA.Selenium.Firefox;
+	using OpenQA.Selenium.IE;
 	using OpenQA.Selenium.Remote;
 	using System;
 	using System.Collections;
@@ -19,10 +20,8 @@ namespace Sp.Test.Html
 		{
 			return new RemoteWebDriver[] 
 			{
-#if DEBUG
-				// TODO Temporarily inhibit on our Windows Server 2008 R2 test rig - TODO: reinstate
+				new InternetExplorerDriver(),
 				new ChromeDriver(),
-#endif
 				new FirefoxDriver( GetSeleniumFirefoxProfile() )
 			};
 		}
