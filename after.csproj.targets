@@ -25,4 +25,5 @@
     <Exec WorkingDirectory="$(MSBuildThisFileDirectory)" LogStandardErrorAsError="true" Command=".nuget\nuget.exe install .nuget/packages.config -o packages" />
   </Target>
 
+  <Import Project="$(MSBuildThisFileDirectory)/Sp.Test.Html/after.html.csproj.targets" Condition="$(MSBuildProjectName.EndsWith('Html.Acceptance'))" />
 </Project>

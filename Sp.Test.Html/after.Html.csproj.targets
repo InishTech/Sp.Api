@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2012 Inish Technology Ventures Limited.  All rights reserved.
+  
+  This code is licensed under the BSD 3-Clause License included with this source
+  
+  FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="_Verify">
+
+  <Target Name="_Verify">
+    <Error Text="Should only include in Html test suites as this is not just a passive .targets file" Condition="!$(MSBuildProjectName.EndsWith('Html.Acceptance'))" />
+  </Target>
+
+  <ItemGroup>
+    <WebDriverDriver Include="IE">
+      <Url>http://code.google.com/p/selenium/downloads/list</Url>
+      <Prefix>IEDriverServer_x64_</Prefix>
+      <InternalName>IEDriverServer.exe</InternalName>
+    </WebDriverDriver>
+    <WebDriverDriver Include="Chrome">
+      <Url>http://code.google.com/p/chromedriver/downloads/list</Url>
+      <Prefix>chromedriver_win_</Prefix>
+      <InternalName>ChromeDriver.exe</InternalName>
+    </WebDriverDriver>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <CompileDependsOn>
+      $(CompileDependsOn);
+      BeforeCompileDownloadWebDriverDrivers
+    </CompileDependsOn>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      AfterBuildUnzipWebDriverDrivers
+    </BuildDependsOn>
+    <_PackageShimsPath>$(SolutionDir)packages\SeleniumDrivers</_PackageShimsPath>
+  </PropertyGroup>
+
+  <Target 
+    Name="BeforeCompileDownloadWebDriverDrivers" 
+    Inputs="$(MSBuildThisFileFullPath)"
+    Outputs="@(WebDriverDriver->'$(_PackageShimsPath)\_%(Identity)Driver.zip')">
+    <MakeDir Directories="$(_PackageShimsPath)" Condition="!EXISTS('$(_PackageShimsPath)')" />
+    <Exec IgnoreStandardErrorWarningFormat="true" Command="powershell -Version 3 -NoProfile ../Sp.Test.Html/Download-GoogleCodeDownload.ps1 $(_PackageShimsPath)\_%(Identity)Driver.zip %(WebDriverDriver.Prefix) %(WebDriverDriver.Url)" />
+    <ItemGroup>
+      <FileWrites Include="@(WebDriverDriver->'$(_PackageShimsPath)\_%(Identity)Driver.zip')"/>
+    </ItemGroup>
+  </Target>
+
+  <Target
+    Name="AfterBuildUnzipWebDriverDrivers"
+    Inputs="@(WebDriverDriver->'$(_PackageShimsPath)\_%(Identity)Driver.zip')"
+    Outputs="@(WebDriverDriver->'$(OutDir)\%(InternalName)')">
+    <!--Remove files as Explorer will be popping up if the file is already there otherwise-->
+    <Delete Files="@(WebDriverDriver->'$(OutDir)\%(InternalName)')" />
+    <Exec IgnoreStandardErrorWarningFormat="true" Command="powershell -NoProfile ../Sp.Test.Html/Extract-Zip.ps1 $(_PackageShimsPath)\_%(WebDriverDriver.Identity)Driver.zip &quot;$(OutDir).&quot;" />
+    <Touch Files="@(WebDriverDriver->'$(OutDir)\%(InternalName)')" />
+    <ItemGroup>
+      <FileWrites Include="@(WebDriverDriver->'$(OutDir)\%(InternalName)')"/>
+    </ItemGroup>
+  </Target>
+</Project>

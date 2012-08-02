@@ -35,12 +35,11 @@
     <Compile Include="BrowserDriverDataProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Download-LatestChromeDriver.ps1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Include="after.Html.csproj.targets">
+      <SubType>Designer</SubType>
     </None>
-    <None Include="Extract-Zip.ps1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Download-GoogleCodeDownload.ps1" />
+    <None Include="Extract-Zip.ps1" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
