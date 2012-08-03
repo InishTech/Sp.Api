@@ -19,7 +19,7 @@ namespace Sp.Api.Issue.Acceptance
 
 	public static class LicenseFacts
 	{
-		public static class GetCollection
+		public static class Collection
 		{
 			/// <summary>
 			/// The master license list yields a JSON response object which contains the License List collection in a 'Licenses' value.
@@ -70,7 +70,7 @@ namespace Sp.Api.Issue.Acceptance
 				}
 
 				[Theory, AutoSoftwarePotentialApiData]
-				public static void ShouldHaveAValidCustomerAssignmentLink( RandomLicenseFromListFixture item )
+				public static void ShouldHaveAWellFormedCustomerAssignmentLink( RandomLicenseFromListFixture item )
 				{
 					VerifyLinkWellFormed( item, links => links.customerAssignment );
 				}
@@ -99,7 +99,7 @@ namespace Sp.Api.Issue.Acceptance
 			}
 		}
 
-		public static class GetItem
+		public static class Item
 		{
 			/// <summary>
 			/// /// The master list presents a set of linked child entities. Here we select an arbitrary one from the list and follow its _links.self to get that resource's 			/// </summary>
@@ -142,43 +142,51 @@ namespace Sp.Api.Issue.Acceptance
 			}
 		}
 
-		public static class PutCustomer
+		public static class CustomerAssignment
 		{
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void PutCustomerAssignmentShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
+			public static class Put
 			{
-				var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
-				var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, customer.Selected );
-				Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
-				Verify.EventuallyWithBackOff( () =>
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void ShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license,
+				                                             RandomCustomerFromListFixture customer )
 				{
-					var updated = api.GetLicense( license.Selected._links.self.AsRelativeUri() );
-					Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
-					Assert.NotNull( updated.Data._links.customer );
-					var updatedCustomerSelfLink = customer.Selected._links.self;
-					Assert.Equal( updatedCustomerSelfLink.AsRelativeUri(), updated.Data._links.customer.AsRelativeUri() );
-				} );
+					var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
+					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, customer.Selected );
+					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
+					Verify.EventuallyWithBackOff( () =>
+					{
+						var updated = api.GetLicense( license.Selected._links.self.AsRelativeUri() );
+						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
+						Assert.NotNull( updated.Data._links.customer );
+						var customerSelfLink = customer.Selected._links.self;
+						Assert.Equal( customerSelfLink.AsRelativeUri(), updated.Data._links.customer.AsRelativeUri() );
+					} );
+				}
 			}
-		}
 
-		public static class DeleteCustomer
-		{
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void DeleteCustomerAssignmentShouldResetCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
+			public static class Delete
 			{
-				//Assign a customer first
-				PutCustomer.PutCustomerAssignmentShouldUpdateCustomerLink(api, license, customer);
-
-				//Unassign the customer
-				var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
-				var apiResult = api.DeleteLicenseCustomerAssignment( licenseCustomerAssignmentUrl );
-				Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
-				Verify.EventuallyWithBackOff( () =>
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void ShouldResetCustomerLink( 
+					[Frozen] SpIssueApi api,
+				    RandomLicenseFromListFixture license,
+				    RandomCustomerFromListFixture customer )
 				{
-					var updated = api.GetLicense( license.Selected._links.self.AsRelativeUri() );
-					Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
-					Assert.Null( updated.Data._links.customer );
-				} );
+					//Assign a customer first
+					// (This is not strictly necessary, we just want to observe a real user actually seeing the change take place in the License list itself
+					Put.ShouldUpdateCustomerLink( api, license, customer );
+
+					//Unassign the customer
+					var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
+					var apiResult = api.DeleteLicenseCustomerAssignment( licenseCustomerAssignmentUrl );
+					Assert.Contains( apiResult.StatusCode, new[] { HttpStatusCode.NoContent, HttpStatusCode.NotFound } ); // TODO assert should be reversed
+					Verify.EventuallyWithBackOff( () =>
+					{
+						var updated = api.GetLicense( license.Selected._links.self.AsRelativeUri() );
+						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
+						Assert.Null( updated.Data._links.customer );
+					} );
+				}
 			}
 		}
 
