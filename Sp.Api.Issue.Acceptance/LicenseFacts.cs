@@ -4,9 +4,6 @@
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 
-using Ploeh.SemanticComparison.Fluent;
-using Sp.Api.Customer.Acceptance;
-
 namespace Sp.Api.Issue.Acceptance
 {
 	using System;
@@ -17,6 +14,8 @@ namespace Sp.Api.Issue.Acceptance
 	using Sp.Test.Helpers;
 	using Xunit;
 	using Xunit.Extensions;
+	using Ploeh.SemanticComparison.Fluent;
+	using Sp.Api.Customer.Acceptance;
 
 	public static class LicenseFacts
 	{
@@ -158,6 +157,27 @@ namespace Sp.Api.Issue.Acceptance
 					Assert.NotNull( updated.Data._links.customer );
 					var updatedCustomerSelfLink = customer.Selected._links.self;
 					Assert.Equal( updatedCustomerSelfLink.AsRelativeUri(), updated.Data._links.customer.AsRelativeUri() );
+				} );
+			}
+		}
+
+		public static class DeleteCustomer
+		{
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void DeleteCustomerAssignmentShouldResetCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
+			{
+				//Assign a customer first
+				PutCustomer.PutCustomerAssignmentShouldUpdateCustomerLink(api, license, customer);
+
+				//Unassign the customer
+				var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
+				var apiResult = api.DeleteLicenseCustomerAssignment( licenseCustomerAssignmentUrl );
+				Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
+				Verify.EventuallyWithBackOff( () =>
+				{
+					var updated = api.GetLicense( license.Selected._links.self.AsRelativeUri() );
+					Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
+					Assert.Null( updated.Data._links.customer );
 				} );
 			}
 		}

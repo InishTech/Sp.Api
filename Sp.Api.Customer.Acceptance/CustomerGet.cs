@@ -25,12 +25,11 @@ namespace Sp.Api.Customer.Acceptance
 			//Now query the API for that specific customer by following the link obtained in the previous step
 			var apiResult = api.GetCustomer( linkedAddress );
 			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-
 			//The customer obtained as a separete resource should be identical to the customer previously selected from the list
 			apiResult.Data.AsSource().OfLikeness<SpCustomerApi.CustomerSummary>()
 				.Without( p => p._links )
-				//TODO - find a way of comparing nested properties (of complex types) using Semantic comparison
-				.Without( p => p._embedded )
+				.With( x => x._embedded )
+					.EqualsWhen( ( x, y ) => x._embedded.AsSource().OfLikeness<SpCustomerApi.CustomerSummary._Embedded>().Equals( y._embedded ) )
 				.Without( p => p._signature )
 				.ShouldEqual( preSelectedCustomer.Selected );
 		}

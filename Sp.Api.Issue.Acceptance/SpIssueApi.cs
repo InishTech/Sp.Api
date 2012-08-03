@@ -32,11 +32,18 @@ namespace Sp.Api.Issue
 			return Execute<LicenseSummary>( request );
 		}
 
-		public IRestResponse PutLicenseCustomerAssignment( Uri licenseUri, SpCustomerApi.CustomerSummary customer )
+		public IRestResponse PutLicenseCustomerAssignment( Uri licenseCustomerAssignmentUrl, SpCustomerApi.CustomerSummary customer )
 		{
-			var request = new RestRequest( licenseUri, Method.PUT );
+			var request = new RestRequest( licenseCustomerAssignmentUrl, Method.PUT );
 			request.RequestFormat = DataFormat.Json;
 			request.AddBody( customer );
+
+			return Execute( request );
+		}
+
+		public IRestResponse DeleteLicenseCustomerAssignment( Uri licenseCustomerAssignmentUrl )
+		{
+			var request = new RestRequest( licenseCustomerAssignmentUrl, Method.DELETE );
 
 			return Execute( request );
 		}
