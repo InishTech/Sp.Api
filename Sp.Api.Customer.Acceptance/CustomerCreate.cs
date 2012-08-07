@@ -1,5 +1,6 @@
 ﻿namespace Sp.Api.Customer.Acceptance
 {
+	using Ploeh.AutoFixture.Xunit;
 	using Sp.Api.Shared;
 	using Sp.Test.Helpers;
 	using System;
@@ -11,7 +12,7 @@
 	public class CustomerCreate
 	{
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void ShouldYieldAccepted( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
+		public static void ShouldYieldAcceptedWithALocationHref( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
 		{
 			var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
@@ -20,25 +21,64 @@
 			Assert.NotEmpty( result );
 		}
 
-		[Theory, AutoSoftwarePotentialApiData]
-		public static void ShouldEventuallyBeCreated( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
+		public class Fresh
 		{
-			string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerDescription );
-
-			Verify.EventuallyWithBackOff( () =>
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void ShouldEventuallyBeGettable( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
 			{
-				var apiResult = api.GetCustomer( createdAtLocation );
-				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-				var resultData = apiResult.Data;
-			} );
-		}
+				string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerDescription );
 
-		static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
-		{
-			var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
-			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
-			var createdAtLocation = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
-			return createdAtLocation;
+				Verify.EventuallyWithBackOff( () =>
+				{
+					var apiResult = api.GetCustomer( createdAtLocation );
+					Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+					var resultData = apiResult.Data;
+				} );
+			}
+
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void ShouldHaveSendInviteLink( Fixture customer )
+			{
+				Assert.NotNull( customer.Data._links.sendInvite );
+			}
+
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void ShouldNotBeRegistered( Fixture customer )
+			{
+				Assert.False( customer.Data.IsRegistered );
+			}
+
+			public class Fixture
+			{
+				readonly SpCustomerApi.CustomerSummary _data;
+
+				public Fixture( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
+				{
+					string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerDescription );
+
+					var data = default( SpCustomerApi.CustomerSummary );
+					Verify.EventuallyWithBackOff( () =>
+					{
+						var apiResult = api.GetCustomer( createdAtLocation );
+						Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+						data = apiResult.Data;
+					} );
+					_data = data;
+				}
+
+				internal SpCustomerApi.CustomerSummary Data
+				{
+					get { return _data; }
+				}
+			}
+
+			static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
+			{
+				var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
+				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
+				var createdAtLocation = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
+				return createdAtLocation;
+			}
 		}
 
 		/// <summary>
