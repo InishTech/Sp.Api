@@ -32,7 +32,7 @@
 			Assert.NotEmpty( response.Data.Customers );
 		}
 
-		public static class Items
+		public static class RandomItem
 		{
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldHaveAName( RandomCustomerFromListFixture item )

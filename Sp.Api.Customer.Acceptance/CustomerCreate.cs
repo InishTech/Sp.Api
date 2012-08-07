@@ -13,25 +13,32 @@
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldYieldAccepted( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
 		{
-			var addLink = GetCustomerAddHref( api );
-			var response = api.CreateCustomer( addLink, new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
+			var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 			string result = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
+
 			Assert.NotEmpty( result );
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldEventuallyBeCreated( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
 		{
-			var addLink = GetCustomerAddHref( api );
-			
-			var response = api.CreateCustomer( addLink, new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
-			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
-			var result = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
+			string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerDescription );
 
 			Verify.EventuallyWithBackOff( () =>
-				// TODO use api.GetCustomer( resultLocation ) to get the single item instead of looking for it in the list
-				Assert.True( api.GetCustomerList().Data.Customers.Any( x => x._links.self.href == result ) ) );
+			{
+				var apiResult = api.GetCustomer( createdAtLocation );
+				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+				var resultData = apiResult.Data;
+			} );
+		}
+
+		static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
+		{
+			var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
+			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
+			var createdAtLocation = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
+			return createdAtLocation;
 		}
 
 		/// <summary>
@@ -46,24 +53,21 @@
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void PutNullShouldReject( SpCustomerApi api, string anonymousDescription )
 				{
-					var addLink = GetCustomerAddHref( api );
-					var response = api.CreateCustomer( addLink, new SpCustomerApi.CustomerSummary() { Name = null, Description = anonymousDescription } );
+					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = null, Description = anonymousDescription } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void PutEmptyShouldReject( SpCustomerApi api, string anonymousDescription )
 				{
-					var addLink = GetCustomerAddHref( api );
-					var response = api.CreateCustomer( addLink, new SpCustomerApi.CustomerSummary() { Name = string.Empty, Description = anonymousDescription } );
+					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = string.Empty, Description = anonymousDescription } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void PutExcessivelyLongShouldReject( SpCustomerApi api, string anonymousDescription )
 				{
-					var addLink = GetCustomerAddHref( api );
-					var response = api.CreateCustomer( addLink, new SpCustomerApi.CustomerSummary() { Name = new String( 'a', 101 ), Description = anonymousDescription } );
+					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = new String( 'a', 101 ), Description = anonymousDescription } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 			}
@@ -73,14 +77,13 @@
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void PutExcessivelyLongShouldReject( SpCustomerApi api, string anonymousName )
 				{
-					var addLink = GetCustomerAddHref( api );
-					var response = api.CreateCustomer( addLink, new SpCustomerApi.CustomerSummary() { Name = anonymousName, Description = new String( 'a', 101 ) } );
+					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousName, Description = new String( 'a', 101 ) } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 			}
 		}
 
-		static string GetCustomerAddHref( SpCustomerApi api )
+		static string CustomerAddHref( SpCustomerApi api )
 		{
 			var customerListResponse = api.GetCustomerList();
 			Assert.Equal( HttpStatusCode.OK, customerListResponse.StatusCode );
