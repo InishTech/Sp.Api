@@ -12,7 +12,7 @@
 	public static class CustomerGet
 	{
 		/// <summary>
-		/// The master list presents a set of linked child entities. Here we select an arbitrary one from the list and follow its _links.self to get that resource's 			
+		/// The master list presents a set of linked child entities. Here we select an arbitrary one from the list and follow its _links.self to get that resource's data
 		/// </summary>
 		/// <remarks>
 		/// Success/failure is communicated by the HTTP Status Code being OK		
@@ -26,7 +26,7 @@
 			//Now query the API for that specific customer by following the link obtained in the previous step
 			var apiResult = api.GetCustomer( linkedAddress.href );
 			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-			//The customer obtained as a separete resource should be identical to the customer previously selected from the list
+			//The customer obtained as a separate resource should be identical to the customer previously selected from the list
 			apiResult.Data.AsSource().OfLikeness<SpCustomerApi.CustomerSummary>()
 				.Without( p => p._links )
 				.With( x => x._embedded )
