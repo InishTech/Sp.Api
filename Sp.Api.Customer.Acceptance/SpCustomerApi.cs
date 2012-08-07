@@ -31,9 +31,9 @@ namespace Sp.Api.Customer.Acceptance
 			return Execute( request );
 		}
 
-		internal IRestResponse<CustomerSummary> GetCustomer( Uri uri )
+		internal IRestResponse<CustomerSummary> GetCustomer( string href )
 		{
-			var request = new RestRequest( uri );
+			var request = new RestRequest( href );
 			return Execute<CustomerSummary>( request );
 		}
 
@@ -76,11 +76,6 @@ namespace Sp.Api.Customer.Acceptance
 		public class Link
 		{
 			public string href { get; set; }
-
-			public Uri AsRelativeUri()
-			{
-				return new Uri( href, UriKind.Relative );
-			}
 		}
 
 		public class JsonSignature

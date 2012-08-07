@@ -12,7 +12,8 @@
 	public static class CustomerGet
 	{
 		/// <summary>
-		/// /// The master list presents a set of linked child entities. Here we select an arbitrary one from the list and follow its _links.self to get that resource's 			/// </summary>
+		/// The master list presents a set of linked child entities. Here we select an arbitrary one from the list and follow its _links.self to get that resource's 			
+		/// </summary>
 		/// <remarks>
 		/// Success/failure is communicated by the HTTP Status Code being OK		
 		/// </remarks>
@@ -21,9 +22,9 @@
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void GetCustomerShouldContainData( [Frozen] SpCustomerApi api, RandomCustomerFromListFixture preSelectedCustomer )
 		{
-			var linkedAddress = preSelectedCustomer.Selected._links.self.AsRelativeUri();
+			var linkedAddress = preSelectedCustomer.Selected._links.self;
 			//Now query the API for that specific customer by following the link obtained in the previous step
-			var apiResult = api.GetCustomer( linkedAddress );
+			var apiResult = api.GetCustomer( linkedAddress.href );
 			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
 			//The customer obtained as a separete resource should be identical to the customer previously selected from the list
 			apiResult.Data.AsSource().OfLikeness<SpCustomerApi.CustomerSummary>()
@@ -44,7 +45,7 @@
 		public static void GetNonExistingCustomerShould404( [Frozen] SpCustomerApi api, RandomCustomerFromListFixture customer, Guid anonymousId )
 		{
 			string validHref = customer.Selected._links.self.href;
-			Uri invalidHref = UriHelper.HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
+			var invalidHref = UriHelper.HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
 			var apiResult = api.GetCustomer( invalidHref );
 			// We don't want to have landed on an error page that has a StatusCode of 200
 			Assert.Equal( HttpStatusCode.NotFound, apiResult.StatusCode );

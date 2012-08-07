@@ -41,9 +41,9 @@ namespace Sp.Test.Helpers
 		/// Client side should never need to generate or mess with links - the Apis are intended to communicate via standard HAL hypermedia constructs in the _links object. 
 		/// </summary>
 		/// <returns></returns>
-		public static Uri HackLinkReplacingGuidWithAlternateValue( Guid replacement, string validHref )
+		public static string HackLinkReplacingGuidWithAlternateValue( Guid replacement, string validHref )
 		{
-			return new Uri( validHref.Substring( 0, validHref.LastIndexOf( '/' ) + 1 ) + replacement.ToString(), UriKind.Relative );
+			return validHref.Substring( 0, validHref.LastIndexOf( '/' ) + 1 ) + replacement.ToString();
 		}
 	}
 }
