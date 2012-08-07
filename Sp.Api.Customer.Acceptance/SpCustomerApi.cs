@@ -7,8 +7,8 @@ namespace Sp.Api.Customer.Acceptance
 {
 	using RestSharp;
 	using Sp.Api.Shared.Wrappers;
-	using System.Collections.Generic;
 	using System;
+	using System.Collections.Generic;
 
 	public class SpCustomerApi : SpApi
 	{

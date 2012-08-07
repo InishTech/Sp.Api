@@ -1,14 +1,14 @@
-﻿using System;
-using System.Net;
-using Ploeh.AutoFixture.Xunit;
-using Ploeh.SemanticComparison.Fluent;
-using Sp.Api.Shared;
-using Sp.Test.Helpers;
-using Xunit;
-using Xunit.Extensions;
-
-namespace Sp.Api.Customer.Acceptance
+﻿namespace Sp.Api.Customer.Acceptance
 {
+	using Ploeh.AutoFixture.Xunit;
+	using Ploeh.SemanticComparison.Fluent;
+	using Sp.Api.Shared;
+	using Sp.Test.Helpers;
+	using System;
+	using System.Net;
+	using Xunit;
+	using Xunit.Extensions;
+
 	public static class CustomerGet
 	{
 		/// <summary>
