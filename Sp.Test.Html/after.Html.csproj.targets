@@ -7,7 +7,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="_Verify">
 
   <Target Name="_Verify">
-    <Error Text="Should only include in Html test suites as this is not just a passive .targets file" Condition="!$(MSBuildProjectName.EndsWith('Html.Acceptance'))" />
+    <Error Text="Should only include in Html test suites as this is not just a passive .targets file" Condition="!$(MSBuildProjectName.EndsWith('Html.Acceptance')) AND !$(MSBuildProjectName.StartsWith('Slps.Scenarios'))" />
   </Target>
 
   <ItemGroup>
@@ -23,21 +23,18 @@
     </WebDriverDriver>
   </ItemGroup>
 
-  <PropertyGroup>
-    <CompileDependsOn>
-      $(CompileDependsOn);
-      BeforeCompileDownloadWebDriverDrivers
-    </CompileDependsOn>
+  <PropertyGroup Condition=" 'true' != '$(SlpsSkipDownloadSeleniumDrivers)' ">
     <BuildDependsOn>
       $(BuildDependsOn);
+      AfterBuildDownloadWebDriverDrivers;
       AfterBuildUnzipWebDriverDrivers
     </BuildDependsOn>
     <_PackageShimsPath>$(SolutionDir)packages\SeleniumDrivers</_PackageShimsPath>
   </PropertyGroup>
 
-  <Target 
-    Name="BeforeCompileDownloadWebDriverDrivers" 
-    Inputs="$(MSBuildThisFileFullPath)"
+  <Target
+    Name="AfterBuildDownloadWebDriverDrivers"
+    Inputs="@(WebDriverDriver->'$(_PackageShimsPath)\_%(Identity)Driver.zip')"
     Outputs="@(WebDriverDriver->'$(_PackageShimsPath)\_%(Identity)Driver.zip')">
     <MakeDir Directories="$(_PackageShimsPath)" Condition="!EXISTS('$(_PackageShimsPath)')" />
     <Exec IgnoreStandardErrorWarningFormat="true" Command="powershell -Version 3 -NoProfile ../Sp.Test.Html/Download-GoogleCodeDownload.ps1 $(_PackageShimsPath)\_%(Identity)Driver.zip %(WebDriverDriver.Prefix) %(WebDriverDriver.Url)" />
