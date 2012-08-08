@@ -20,8 +20,10 @@ namespace Sp.Test.Html
 		{
 			return new RemoteWebDriver[] 
 			{
+				#if !DEBUG
 				new InternetExplorerDriver(),
 				new ChromeDriver(),
+				#endif
 				new FirefoxDriver( GetSeleniumFirefoxProfile() )
 			};
 		}
