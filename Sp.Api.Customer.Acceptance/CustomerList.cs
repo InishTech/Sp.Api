@@ -60,13 +60,6 @@
 				Assert.NotNull(linkToVerify);
 				Assert.NotEmpty( linkToVerify.href );
 			}
-			
-			// For now, it's always false; When this becomes variable, this pinning test will be replaced with other more appropriate ones
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void ShouldHaveAnIsRegisteredField( RandomCustomerFromListFixture item )
-			{
-				Assert.False( item.Selected.IsRegistered );
-			}
 		}
 	}
 }
