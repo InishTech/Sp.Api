@@ -15,7 +15,9 @@
 		public static void ShouldYieldAcceptedWithALocationHref( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
 		{
 			var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
+			
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
+			
 			string result = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
 
 			Assert.NotEmpty( result );
@@ -47,6 +49,8 @@
 			{
 				Assert.False( customer.Data.IsRegistered );
 			}
+
+			// TODO Should have null last invite address
 
 			public class Fixture
 			{
