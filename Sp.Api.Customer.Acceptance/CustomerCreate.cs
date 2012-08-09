@@ -44,12 +44,6 @@
 				Assert.NotNull( customer.Data._links.sendInvite );
 			}
 
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void ShouldNotBeRegistered( Fixture customer )
-			{
-				Assert.False( customer.Data.IsRegistered );
-			}
-
 			// TODO Should have null last invite address
 
 			public class Fixture

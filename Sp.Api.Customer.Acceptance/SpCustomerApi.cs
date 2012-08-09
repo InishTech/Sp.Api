@@ -53,7 +53,6 @@ namespace Sp.Api.Customer.Acceptance
 		{
 			public string Name { get; set; }
 			public string Description { get; set; }
-			public bool IsRegistered { get; set; }
 
 			public Links _links { get; set; }
 
