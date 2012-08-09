@@ -69,7 +69,6 @@ namespace Sp.Api.Customer.Acceptance
 			public class Links
 			{
 				public Link self { get; set; }
-				public Link sendInvite { get; set; }
 			}
 		}
 
@@ -80,7 +79,7 @@ namespace Sp.Api.Customer.Acceptance
 
 		public class JsonSignature
 		{
-			public string Value { get; set; }
+			public string value { get; set; }
 		}
 	}
 }

@@ -38,37 +38,35 @@
 				} );
 			}
 
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void ShouldHaveSendInviteLink( Fixture customer )
-			{
-				Assert.NotNull( customer.Data._links.sendInvite );
-			}
+			//[Theory, AutoSoftwarePotentialApiData]
+			//public static void ShouldHaveSendInviteLink( Fixture customer )
+			//{
+			//	Assert.NotNull( customer.Data._links.sendInvite );
+			//}
 
-			// TODO Should have null last invite address
+			//public class Fixture
+			//{
+			//	readonly SpCustomerApi.CustomerSummary _data;
 
-			public class Fixture
-			{
-				readonly SpCustomerApi.CustomerSummary _data;
+			//	public Fixture( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
+			//	{
+			//		string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerDescription );
 
-				public Fixture( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
-				{
-					string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerDescription );
+			//		var data = default( SpCustomerApi.CustomerSummary );
+			//		Verify.EventuallyWithBackOff( () =>
+			//		{
+			//			var apiResult = api.GetCustomer( createdAtLocation );
+			//			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+			//			data = apiResult.Data;
+			//		} );
+			//		_data = data;
+			//	}
 
-					var data = default( SpCustomerApi.CustomerSummary );
-					Verify.EventuallyWithBackOff( () =>
-					{
-						var apiResult = api.GetCustomer( createdAtLocation );
-						Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-						data = apiResult.Data;
-					} );
-					_data = data;
-				}
-
-				internal SpCustomerApi.CustomerSummary Data
-				{
-					get { return _data; }
-				}
-			}
+			//	internal SpCustomerApi.CustomerSummary Data
+			//	{
+			//		get { return _data; }
+			//	}
+			//}
 
 			static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
 			{
