@@ -56,7 +56,9 @@
     <Compile Include="CustomerCreate.cs" />
     <Compile Include="CustomerGet.cs" />
     <Compile Include="CustomerList.cs" />
+    <Compile Include="Invite.cs" />
     <Compile Include="RandomCustomerFromListFixture.cs" />
+    <Compile Include="SpAuthApi.cs" />
     <Compile Include="SpCustomerApi.cs" />
   </ItemGroup>
   <ItemGroup>
