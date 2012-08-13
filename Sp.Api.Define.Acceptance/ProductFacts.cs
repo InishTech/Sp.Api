@@ -52,7 +52,7 @@ namespace Sp.Api.Define.Acceptance
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetProductFromListShouldYieldData( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 			{
-				Uri linkedAddress = product.SelectedProduct._links.self.AsRelativeUri();
+				var linkedAddress = product.SelectedProduct._links.self.href;
 				var apiResult = api.GetProduct( linkedAddress );
 				// It should always be possible to get the data
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
@@ -76,7 +76,7 @@ namespace Sp.Api.Define.Acceptance
 			public static void GetNonExistingProductShould404( [Frozen] SpDefineApi api, RandomProductFromListFixture product, Guid anonymousId )
 			{
 				string validHref = product.SelectedProduct._links.self.href;
-				Uri invalidHref = UriHelper.HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
+				string invalidHref = UriHelper.HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
 				var apiResult = api.GetProduct( invalidHref );
 				// We don't want to have landed on an error page that has a StatusCode of 200
 				Assert.Equal( HttpStatusCode.NotFound, apiResult.StatusCode );
@@ -93,11 +93,11 @@ namespace Sp.Api.Define.Acceptance
 				[Theory( Skip = "TODO - at the moment this request returns HTTP 500" ), AutoSoftwarePotentialApiData]
 				public static void GetNonGuidProductShould400( [Frozen] SpDefineApi api, RandomProductFromListFixture product )
 				{
-					Uri misformattedHackedUri = new Uri( product.SelectedProduct._links.self.href + "broken", UriKind.Relative );
-					var apiResult = api.GetProduct( misformattedHackedUri );
+					string misformattedHackedHref = product.SelectedProduct._links.self.href + "broken";
+					var apiResult = api.GetProduct( misformattedHackedHref );
 					// TODO move this after the next assert when this one starts passing
 					// Our final Location should match what we asked for (i.e., we don't want to have landed on an error page that has a StatusCode of 200)
-					Assert.Contains( misformattedHackedUri.ToString(), apiResult.ResponseUri.ToString() );
+					Assert.Contains( misformattedHackedHref, apiResult.ResponseUri.ToString() );
 					// We should know there's a problem
 					Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
 					// No data should be yielded
@@ -218,7 +218,7 @@ namespace Sp.Api.Define.Acceptance
 
 			public SpDefineApi.Product GetSelectedProductAgain()
 			{
-				Uri linkedAddress = SelectedProduct._links.self.AsRelativeUri();
+				var linkedAddress = SelectedProduct._links.self.href;
 				var apiResult = _api.GetProduct( linkedAddress );
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
 				return apiResult.Data;

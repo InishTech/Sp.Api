@@ -23,7 +23,7 @@ namespace Sp.Api.Define
 			return Execute<ProductsPage>( request );
 		}
 
-		internal IRestResponse<Product> GetProduct( Uri productHref )
+		internal IRestResponse<Product> GetProduct( string productHref )
 		{
 			var request = new RestRequest( productHref );
 			return Execute<Product>( request );
@@ -61,11 +61,6 @@ namespace Sp.Api.Define
 		public class Link
 		{
 			public string href { get; set; }
-
-			public Uri AsRelativeUri()
-			{
-				return new Uri( href, UriKind.Relative );
-			}
 		}
 	}
 }
