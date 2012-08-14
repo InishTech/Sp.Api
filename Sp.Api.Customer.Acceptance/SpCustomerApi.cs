@@ -79,7 +79,7 @@ namespace Sp.Api.Customer.Acceptance
 
 		public class JsonSignature
 		{
-			public string value { get; set; }
+			public string Value { get; set; }
 		}
 	}
 }

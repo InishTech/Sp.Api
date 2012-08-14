@@ -26,9 +26,9 @@ namespace Sp.Api.Issue
 			return Execute<LicensesSummaryPage>( request );
 		}
 
-		internal IRestResponse<LicenseSummary> GetLicense( Uri uri )
+		internal IRestResponse<LicenseSummary> GetLicense( string href )
 		{
-			var request = new RestRequest( uri );
+			var request = new RestRequest( href );
 			return Execute<LicenseSummary>( request );
 		}
 

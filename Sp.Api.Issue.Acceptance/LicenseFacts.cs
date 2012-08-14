@@ -111,7 +111,7 @@ namespace Sp.Api.Issue.Acceptance
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetLicenseShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture preSelectedLicense )
 			{
-				var linkedAddress = preSelectedLicense.Selected._links.self.AsRelativeUri();
+				var linkedAddress = preSelectedLicense.Selected._links.self.href;
 				//Now query the API for that specific license by following the link obtained in the previous step
 				var apiResult = api.GetLicense( linkedAddress );
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
@@ -133,12 +133,12 @@ namespace Sp.Api.Issue.Acceptance
 			public static void GetNonExistingLicenseShould404( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, Guid anonymousId )
 			{
 				string validHref = license.Selected._links.self.href;
-				Uri invalidHref = UriHelper.HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
+				var invalidHref = UriHelper.HackLinkReplacingGuidWithAlternateValue( anonymousId, validHref );
 				var apiResult = api.GetLicense( invalidHref );
 				// We don't want to have landed on an error page that has a StatusCode of 200
 				Assert.Equal( HttpStatusCode.NotFound, apiResult.StatusCode );
 				// Our final Location should match what we asked for
-				Assert.Contains( invalidHref.ToString(), apiResult.ResponseUri.ToString() );
+				Assert.Contains( invalidHref, apiResult.ResponseUri.ToString() );
 			}
 		}
 
@@ -155,11 +155,11 @@ namespace Sp.Api.Issue.Acceptance
 					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 					Verify.EventuallyWithBackOff( () =>
 					{
-						var updated = api.GetLicense( license.Selected._links.self.AsRelativeUri() );
+						var updated = api.GetLicense( license.Selected._links.self.href );
 						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
 						Assert.NotNull( updated.Data._links.customer );
 						var customerSelfLink = customer.Selected._links.self;
-						Assert.Equal( customerSelfLink.AsRelativeUri(), updated.Data._links.customer.AsRelativeUri() );
+						Assert.Equal( customerSelfLink.href, updated.Data._links.customer.href );
 					} );
 				}
 			}
@@ -182,7 +182,7 @@ namespace Sp.Api.Issue.Acceptance
 					Assert.Contains( apiResult.StatusCode, new[] { HttpStatusCode.NoContent, HttpStatusCode.NotFound } ); // TODO assert should be reversed
 					Verify.EventuallyWithBackOff( () =>
 					{
-						var updated = api.GetLicense( license.Selected._links.self.AsRelativeUri() );
+						var updated = api.GetLicense( license.Selected._links.self.href );
 						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
 						Assert.Null( updated.Data._links.customer );
 					} );
