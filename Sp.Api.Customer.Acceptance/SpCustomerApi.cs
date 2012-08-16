@@ -72,6 +72,14 @@ namespace Sp.Api.Customer.Acceptance
 			}
 		}
 
+
+		public class CustomerInvite
+		{
+			public CustomerSummary Customer { get; set; }
+			public string VendorName { get; set; }
+			public string EmailTo { get; set; }
+		}
+
 		public class Link
 		{
 			public string href { get; set; }
