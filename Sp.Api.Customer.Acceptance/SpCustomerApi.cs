@@ -78,6 +78,7 @@ namespace Sp.Api.Customer.Acceptance
 			public CustomerSummary Customer { get; set; }
 			public string VendorName { get; set; }
 			public string EmailTo { get; set; }
+			public Guid RequestId { get; set; }
 		}
 
 		public class Link

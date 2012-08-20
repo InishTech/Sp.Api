@@ -1,8 +1,9 @@
 
 namespace Sp.Api.Customer.Acceptance
 {
-	using RestSharp;
-	using Sp.Api.Shared.Wrappers;
+	using System;
+using RestSharp;
+using Sp.Api.Shared.Wrappers;
 
 	public class SpAuthApi : SpApi
 	{
