@@ -2,21 +2,27 @@
 {
 	using Sp.Api.Shared;
 	using Sp.Api.Shared.Wrappers;
+	using System;
 	using System.Net;
 	using Xunit;
 	using Xunit.Extensions;
-	using System;
 
 	public class Invite
 	{
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void PostCustomerInviteShouldYieldAccepted( SpAuthApi api, RandomCustomerFromListFixture customer, string anonymousVendorName )
 		{
-			//var customerInviteHref = license.Selected._links.customerAssignment.href;
-			var customerInvite = new SpCustomerApi.CustomerInvite() { Customer = customer.Selected, EmailTo = "test@inishtech.com", VendorName = anonymousVendorName, RequestId = Guid.NewGuid() };
-			var customerInviteHref = ApiPrefix.Auth + "/registration/invite/" + customer.Selected._embedded.Id + "/customer/";
+			var selectedCustomer = customer.Selected;
+			var customerInviteHref = selectedCustomer._links.inviteStatus.href;
+			var customerInvite = new SpCustomerApi.CustomerInvite
+			{
+				Customer = selectedCustomer,
+				EmailTo = "test@inishtech.com",
+				VendorName = anonymousVendorName,
+				RequestId = Guid.NewGuid()
+			};
 
-			var apiResult = api.InviteCustomer( customerInviteHref, customerInvite);
+			var apiResult = api.InviteCustomer( customerInviteHref, customerInvite );
 
 			Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 		}
@@ -24,11 +30,17 @@
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void DuplicatePostCustomerInviteShouldYieldConflict( SpAuthApi api, RandomCustomerFromListFixture customer, string anonymousVendorName )
 		{
-			//var customerInviteHref = license.Selected._links.customerAssignment.href;
-			var customerInvite = new SpCustomerApi.CustomerInvite() { Customer = customer.Selected, EmailTo = "test@inishtech.com", VendorName = anonymousVendorName, RequestId = Guid.NewGuid() };
-			var customerInviteHref = ApiPrefix.Auth + "/registration/invite/" + customer.Selected._embedded.Id + "/customer/";
-		
-			api.InviteCustomer( customerInviteHref, customerInvite);
+			var selectedCustomer = customer.Selected;
+			var customerInviteHref = selectedCustomer._links.inviteStatus.href;
+			var customerInvite = new SpCustomerApi.CustomerInvite
+			{
+				Customer = selectedCustomer,
+				EmailTo = "test@inishtech.com",
+				VendorName = anonymousVendorName,
+				RequestId = Guid.NewGuid()
+			};
+
+			api.InviteCustomer( customerInviteHref, customerInvite );
 
 			var apiResult = api.InviteCustomer( customerInviteHref, customerInvite );
 

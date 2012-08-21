@@ -69,6 +69,7 @@ namespace Sp.Api.Customer.Acceptance
 			public class Links
 			{
 				public Link self { get; set; }
+				public Link inviteStatus { get; set; }
 			}
 		}
 
