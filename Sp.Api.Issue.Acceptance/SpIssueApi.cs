@@ -32,18 +32,18 @@ namespace Sp.Api.Issue
 			return Execute<LicenseSummary>( request );
 		}
 
-		public IRestResponse PutLicenseCustomerAssignment( Uri licenseCustomerAssignmentUrl, SpCustomerApi.CustomerSummary customer )
+		public IRestResponse PutLicenseCustomerAssignment( string licenseCustomerAssignmentHref, SpCustomerApi.CustomerSummary customer )
 		{
-			var request = new RestRequest( licenseCustomerAssignmentUrl, Method.PUT );
+			var request = new RestRequest( licenseCustomerAssignmentHref, Method.PUT );
 			request.RequestFormat = DataFormat.Json;
 			request.AddBody( customer );
 
 			return Execute( request );
 		}
 
-		public IRestResponse DeleteLicenseCustomerAssignment( Uri licenseCustomerAssignmentUrl )
+		public IRestResponse DeleteLicenseCustomerAssignment( string licenseCustomerAssignmentHref )
 		{
-			var request = new RestRequest( licenseCustomerAssignmentUrl, Method.DELETE );
+			var request = new RestRequest( licenseCustomerAssignmentHref, Method.DELETE );
 
 			return Execute( request );
 		}
@@ -79,13 +79,7 @@ namespace Sp.Api.Issue
 			public class Link
 			{
 				public string href { get; set; }
-
-				public Uri AsRelativeUri()
-				{
-					return new Uri( href, UriKind.Relative );
-				}
 			}
 		}
 	}
-
 }

@@ -55,11 +55,6 @@ namespace Sp.Api.Shared.Wrappers
 		public class Link
 		{
 			public string href { get; set; }
-
-			public Uri AsRelativeUri()
-			{
-				return new Uri( href, UriKind.Relative );
-			}
 		}
 	}
 }

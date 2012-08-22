@@ -150,8 +150,8 @@ namespace Sp.Api.Issue.Acceptance
 				public static void ShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license,
 				                                             RandomCustomerFromListFixture customer )
 				{
-					var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
-					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentUrl, customer.Selected );
+					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
+					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer.Selected );
 					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 					Verify.EventuallyWithBackOff( () =>
 					{
@@ -177,8 +177,8 @@ namespace Sp.Api.Issue.Acceptance
 					Put.ShouldUpdateCustomerLink( api, license, customer );
 
 					//Unassign the customer
-					var licenseCustomerAssignmentUrl = license.Selected._links.customerAssignment.AsRelativeUri();
-					var apiResult = api.DeleteLicenseCustomerAssignment( licenseCustomerAssignmentUrl );
+					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
+					var apiResult = api.DeleteLicenseCustomerAssignment( licenseCustomerAssignmentHref );
 					Assert.Contains( apiResult.StatusCode, new[] { HttpStatusCode.NoContent, HttpStatusCode.NotFound } ); // TODO assert should be reversed
 					Verify.EventuallyWithBackOff( () =>
 					{
