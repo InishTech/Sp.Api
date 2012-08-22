@@ -63,13 +63,19 @@ namespace Sp.Api.Shared.Wrappers
 					throw new InvalidOperationException( "Request for " + _authClient.BaseUrl + " failed; " + loginPage.ToDiagnosticString() );
 				var stsLoginUri = loginPage.ResponseUri;
 
-				var wresultRequest = AuthenticateAndSignInWithSts( stsLoginUri );
-				// Now we've got WS-Federation wsignin message that we should POST back to the Web
+				var wresultRequest = AuthenticateAndSignInWithIpSts( stsLoginUri );
+				// Now we've got WS-Federation wsignin message from IP-STS that we should POST back to the FP-STS
+				var rpAuthResponse = _authClient.Execute( wresultRequest );
+				if ( rpAuthResponse.StatusCode != HttpStatusCode.OK )
+					throw new InvalidOperationException( "Login wasn't successful; " + loginPage.ToDiagnosticString() );
+
+				// Proceed with FP-STS - post wsignin message to the RP
+				var wresultRequest2 = PrepareFederationWSignInRequest( rpAuthResponse.ResponseUri.ToString(), rpAuthResponse.Content );
 				// NB - Restharp won't save cookies from the first response if there is a redirection, so we need to turn off FollowRedirects
 				_authClient.FollowRedirects = false;
-				var rpAuthResponse = _authClient.Execute( wresultRequest );
+				rpAuthResponse = _authClient.Execute( wresultRequest2 );
 				if ( rpAuthResponse.StatusCode != HttpStatusCode.Found || !rpAuthResponse.Cookies.Any( c => c.Name == "FedAuth" ) )
-					throw new InvalidOperationException( "Login wasn't successful; " + loginPage.ToDiagnosticString() );
+					throw new InvalidOperationException( "Login wasn't successful; " + rpAuthResponse.ToDiagnosticString() );
 
 				//Now we have FedAuth and FedAuth1 cookies stored in the cookie container
 				var restResponseCookies = rpAuthResponse.Cookies.Where( c => c.Name.StartsWith( "FedAuth" ) ).ToList();
@@ -84,7 +90,7 @@ namespace Sp.Api.Shared.Wrappers
 			/// Throws InvalidOperationException if the provided credentials are incorrect.
 			/// </summary>
 			/// <returns></returns>
-			RestRequest AuthenticateAndSignInWithSts( Uri stsLoginUri )
+			RestRequest AuthenticateAndSignInWithIpSts( Uri stsLoginUri )
 			{
 				// Passive STS authentication
 				RestRequest request = new RestRequest( stsLoginUri, Method.POST );
@@ -128,10 +134,10 @@ namespace Sp.Api.Shared.Wrappers
 
 	static class RestResponseExtensions
 	{
-		public static string ToDiagnosticString(this IRestResponse restResponse)
+		public static string ToDiagnosticString( this IRestResponse restResponse )
 		{
-				return string.Format( "Response url: {0}; Response status: {1}; HTTP status code: {2} ({3}); Error message: {4}; Content: {5}",
-					restResponse.ResponseUri, restResponse.ResponseStatus, restResponse.StatusCode, restResponse.StatusDescription, restResponse.ErrorMessage, restResponse.Content );
+			return string.Format( "Response url: {0}; Response status: {1}; HTTP status code: {2} ({3}); Error message: {4}; Content: {5}",
+				restResponse.ResponseUri, restResponse.ResponseStatus, restResponse.StatusCode, restResponse.StatusDescription, restResponse.ErrorMessage, restResponse.Content );
 		}
 	}
 }
