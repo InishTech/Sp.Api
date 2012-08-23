@@ -65,13 +65,15 @@
     <Compile Include="..\sp.api-shared\wrappers\SpApiConfiguration.cs">
       <Link>Inlined\Wrappers\SpApiConfiguration.cs</Link>
     </Compile>
+    <Compile Include="..\Sp.Api-Shared\Wrappers\WSFederationAuthenticator.cs">
+      <Link>Wrappers\WSFederationAuthenticator.cs</Link>
+    </Compile>
     <Compile Include="ItemManagementFacts.cs" />
     <Compile Include="LandingPageFacts.cs" />
     <Compile Include="PortalDataAttribute.cs" />
     <Compile Include="SoftwarePotentialPortalDataFixture.cs" />
     <Compile Include="SpPortalApiFacts.cs" />
     <Compile Include="Wrappers\SpPortalApi.cs" />
-    <Compile Include="Wrappers\WSFederationAuthenticator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
