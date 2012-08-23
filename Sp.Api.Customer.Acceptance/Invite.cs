@@ -56,9 +56,14 @@
 					Assert.Equal( false, result.IsRegistered );
 					Assert.Equal( true, result.IsInviteOpen );
 					Assert.True( result.LastInviteSentDateTime.HasValue );
-					Assert.Equal( DateTime.UtcNow, result.LastInviteSentDateTime.Value, new DateTimeEqualityTolerantComparer( TimeSpan.FromMinutes( 3 ) ) );
+					Assert.Equal( DateTime.UtcNow, result.LastInviteSentDateTime.Value, new DateTimeEqualityTolerantComparer( PermittedClientServerClockDrift ) );
 					Assert.True( DateTime.UtcNow < result.LastInviteExpiryDateTime );
 				} );
+			}
+
+			static TimeSpan PermittedClientServerClockDrift
+			{
+				get { return TimeSpan.FromMinutes( 3 ); }
 			}
 		}
 		
