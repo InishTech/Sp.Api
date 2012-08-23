@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="DateTimeEqualityTolerantComparer.cs" />
     <Compile Include="RelativePathAwareCustomRestClient.cs" />
     <Compile Include="RestResponseCookieExtensions.cs" />
     <Compile Include="UriHelper.cs" />

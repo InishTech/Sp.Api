@@ -73,7 +73,6 @@ namespace Sp.Api.Customer.Acceptance
 			}
 		}
 
-
 		public class CustomerInvite
 		{
 			public CustomerSummary Customer { get; set; }
