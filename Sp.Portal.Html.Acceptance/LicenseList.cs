@@ -26,7 +26,7 @@ namespace Sp.Portal.Html.Acceptance
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
 				wait.Until( d => d
 					.FindElement( By.Id( "license-list" ) )
-					.FindElements( By.TagName( "li" ) )
+					.FindElements( By.TagName( "tr" ) )
 					.Count > 0 );
 			}
 		}
