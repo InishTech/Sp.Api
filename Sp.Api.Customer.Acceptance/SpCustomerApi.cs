@@ -37,6 +37,14 @@ namespace Sp.Api.Customer.Acceptance
 			return Execute<CustomerSummary>( request );
 		}
 
+		public IRestResponse PutCustomer( string href, CustomerSummary customer )
+		{
+			var request = new RestRequest( href, Method.PUT );
+			request.RequestFormat = DataFormat.Json;
+			request.AddBody( customer );
+			return Execute( request );
+		}
+
 		public class CustomerSummaryPage
 		{
 			public List<CustomerSummary> Customers { get; set; }
@@ -54,6 +62,7 @@ namespace Sp.Api.Customer.Acceptance
 			public string Name { get; set; }
 			public string Description { get; set; }
 
+			public int _version { get; set; }
 			public Links _links { get; set; }
 
 			public JsonSignature _signature { get; set; }
