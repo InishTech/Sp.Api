@@ -13,6 +13,7 @@ namespace Sp.Api.Customer.Html.Acceptance
 	using System.Linq;
 	using Xunit;
 	using Xunit.Extensions;
+	using OpenQA.Selenium.Support.UI;
 
 	public class CustomerCreate
 	{
@@ -21,8 +22,10 @@ namespace Sp.Api.Customer.Html.Acceptance
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
-				navigator.NavigateWithAuthenticate( driver, "Sp.Web.CustomerManagement/customer/Create" );
+				navigator.NavigateWithAuthenticate( driver, "Sp.Web.CustomerManagement/Customer/Create" );
 
+				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
+				wait.Until( d => d.FindElement( By.Id( "create-view" ) ) );
 				IWebElement nameElement = driver.FindElement( By.Id( "name" ) );
 				string anonymousCustomerName = "anonymousName" + Guid.NewGuid();
 				nameElement.SendKeys( anonymousCustomerName );
@@ -33,8 +36,9 @@ namespace Sp.Api.Customer.Html.Acceptance
 				IWebElement createButton = driver.FindElement( By.Id( "add-customer" ) );
 				createButton.Click();
 
-				var names = driver.FindElementsByClassName( "customerName" );
-				Assert.True( names.Any( x => x.Text.Equals( anonymousCustomerName ) ) );
+				wait.Until( d => d
+					.FindElement( By.Id( "messages" ) )
+					.Text.Equals( "Customer created successfully" ) );
 			}
 		}
 	}
