@@ -11,9 +11,14 @@ namespace Sp.Api.Customer.Acceptance
 	using System.Net;
 	using Xunit;
 
+	/// <summary>
+	/// <para>Customers are normally located by obtaining a list and selecting from that, or by searching.</para>
+	/// <para>This Fixture Selects a random item from the set that the Test Suite's credentials grants us access to.</para>
+	/// </summary>
+	/// <remarks>It is assumed that there is at least one customer in the list on the service for the test Suite credentials.</remarks>
 	public class RandomCustomerFromListFixture
 	{
-		readonly SpCustomerApi.CustomerSummary _randomItem;
+		public SpCustomerApi.CustomerSummary Selected { get; private set; }
 
 		public RandomCustomerFromListFixture( SpCustomerApi api )
 		{
@@ -22,12 +27,7 @@ namespace Sp.Api.Customer.Acceptance
 			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
 			Assert.NotNull(apiResult.Data.Customers);
 			Assert.True( apiResult.Data.Customers.Any(), GetType().Name + " requires the target login to have at least one Customer" );
-			_randomItem = apiResult.Data.Customers.ElementAtRandom();
-		}
-
-		public SpCustomerApi.CustomerSummary Selected
-		{
-			get { return _randomItem; }
+			Selected = apiResult.Data.Customers.ElementAtRandom();
 		}
 	}
 }
