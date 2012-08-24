@@ -1,6 +1,10 @@
-﻿namespace Sp.Api.Customer.Acceptance
+﻿/* Copyright (c) 2012 Inish Technology Ventures Limited.  All rights reserved.
+ * 
+ * This code is licensed under the BSD 3-Clause License included with this source
+ * 
+ * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
+namespace Sp.Api.Customer.Acceptance
 {
-	using Ploeh.AutoFixture.Xunit;
 	using Sp.Api.Shared;
 	using Sp.Test.Helpers;
 	using System;
@@ -37,36 +41,6 @@
 					var resultData = apiResult.Data;
 				} );
 			}
-
-			//[Theory, AutoSoftwarePotentialApiData]
-			//public static void ShouldHaveSendInviteLink( Fixture customer )
-			//{
-			//	Assert.NotNull( customer.Data._links.sendInvite );
-			//}
-
-			//public class Fixture
-			//{
-			//	readonly SpCustomerApi.CustomerSummary _data;
-
-			//	public Fixture( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
-			//	{
-			//		string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerDescription );
-
-			//		var data = default( SpCustomerApi.CustomerSummary );
-			//		Verify.EventuallyWithBackOff( () =>
-			//		{
-			//			var apiResult = api.GetCustomer( createdAtLocation );
-			//			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-			//			data = apiResult.Data;
-			//		} );
-			//		_data = data;
-			//	}
-
-			//	internal SpCustomerApi.CustomerSummary Data
-			//	{
-			//		get { return _data; }
-			//	}
-			//}
 
 			static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
 			{
