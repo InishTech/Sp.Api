@@ -14,10 +14,16 @@ namespace Sp.Api.Shared
 	public class AutoSoftwarePotentialApiData : AutoDataAttribute
 	{
 		public AutoSoftwarePotentialApiData()
-			: base( new Fixture()
+			: this( new Fixture()
 				.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() )
 				.Customize( new SoftwarePotentialApiConfigurationFromAppSettingsCustomization() ) )
 		{
+		}
+
+		AutoSoftwarePotentialApiData(IFixture fixture)
+			: base( fixture )
+		{
+			fixture.Inject( fixture );	
 		}
 	}
 
