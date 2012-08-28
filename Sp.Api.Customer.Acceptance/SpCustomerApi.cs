@@ -59,6 +59,7 @@ namespace Sp.Api.Customer.Acceptance
 
 		public class CustomerSummary
 		{
+			public Guid RequestId { get; set; }
 			public string Name { get; set; }
 			public string Description { get; set; }
 
