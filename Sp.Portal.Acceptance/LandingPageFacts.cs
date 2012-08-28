@@ -47,7 +47,7 @@ namespace Sp.Portal.Acceptance
 
 			var result = portalApi.SignOff();
 			Assert.Equal( HttpStatusCode.OK, result.StatusCode );
-			Assert.Contains( "Sp.Auth.Web", result.ResponseUri.AbsolutePath );
+			Assert.Contains( "Sp.Auth.Sts", result.ResponseUri.AbsolutePath );
 		}
 	}
 }
