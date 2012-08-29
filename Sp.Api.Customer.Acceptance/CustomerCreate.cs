@@ -16,9 +16,9 @@ namespace Sp.Api.Customer.Acceptance
 	public class CustomerCreate
 	{
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void ShouldYieldAcceptedWithALocationHref( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
+		public static void ShouldYieldAcceptedWithALocationHref( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription, Guid anonymousRequestId )
 		{
-			var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
+			var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription, RequestId = anonymousRequestId } );
 			
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 			
@@ -30,9 +30,9 @@ namespace Sp.Api.Customer.Acceptance
 		public class Fresh
 		{
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void ShouldEventuallyBeGettable( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
+			public static void ShouldEventuallyBeGettable( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription, Guid anonymousRequestId )
 			{
-				string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerDescription );
+				string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerDescription, anonymousRequestId );
 
 				Verify.EventuallyWithBackOff( () =>
 				{
@@ -42,9 +42,9 @@ namespace Sp.Api.Customer.Acceptance
 				} );
 			}
 
-			static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription )
+			static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription, Guid anonymousRequestId )
 			{
-				var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription } );
+				var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription, RequestId = anonymousRequestId } );
 				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 				var createdAtLocation = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
 				return createdAtLocation;
