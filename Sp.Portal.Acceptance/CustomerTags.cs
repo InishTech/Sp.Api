@@ -94,8 +94,21 @@
 				}
 			}
 
+			public class Bad
+			{
+				[Theory, PortalData]
+				public static void MissingNameShouldYieldBadRequest( [Frozen]SpPortalApi api, ExistingTagFixture tag )
+				{
+					using ( tag )
+					{
+						var response = api.RenameTag( tag.Href, null );
+						Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
+					}
+				}
+			}
+
 			[Theory, PortalData]
-			public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagFixture tag, string newName )
+			public static void ShouldEventuallyBeEvident( [Frozen]SpPortalApi api, ExistingTagFixture tag, string newName )
 			{
 				using ( tag )
 				{
@@ -122,20 +135,17 @@
 			}
 
 			[Theory, PortalData]
-			public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagFixture tag )
+			public static void ShouldEventuallyBeRemoved( [Frozen]SpPortalApi api, ExistingTagFixture tag )
 			{
-				using ( tag )
-				{
-					var response = api.DeleteTag( tag.Href );
-					Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
+				var response = api.DeleteTag( tag.Href );
+				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 
-					Verify.EventuallyWithBackOff( () =>
-					{
-						var apiResult = api.GetTagCollection();
-						Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-						Assert.False( apiResult.Data.Tags.Any( x => tag.Href.Equals( x._links.self.href ) ) );
-					} );
-				}
+				Verify.EventuallyWithBackOff( () =>
+				{
+					var apiResult = api.GetTagCollection();
+					Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+					Assert.False( apiResult.Data.Tags.Any( x => tag.Href.Equals( x._links.self.href ) ) );
+				} );
 			}
 		}
 
