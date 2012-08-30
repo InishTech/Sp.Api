@@ -23,8 +23,8 @@ namespace Sp.Portal.Acceptance
 		{
 			var request = new RestRequest( "ItemManagement/" );
 			var response = portalApi.Execute<ItemsPage>( request );
-			Assert.Equal( ResponseStatus.Completed, response.ResponseStatus );
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
+			Assert.Equal( ResponseStatus.Completed, response.ResponseStatus );
 			Assert.NotNull( response.Data );
 			Assert.NotEmpty( response.Data.Items );
 			Assert.NotNull( response.Data.Items.First().Id );
