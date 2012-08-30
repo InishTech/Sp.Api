@@ -68,6 +68,7 @@
     <Compile Include="..\Sp.Api-Shared\Wrappers\WSFederationAuthenticator.cs">
       <Link>Wrappers\WSFederationAuthenticator.cs</Link>
     </Compile>
+    <Compile Include="CustomerTags.cs" />
     <Compile Include="ItemManagementFacts.cs" />
     <Compile Include="LandingPageFacts.cs" />
     <Compile Include="PortalDataAttribute.cs" />
