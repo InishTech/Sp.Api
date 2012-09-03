@@ -35,7 +35,7 @@ namespace Sp.Portal.Acceptance
 		public static void GetItemsWithoutCanSeeItemsClaimShouldReturnHttpStatusForbidden(  )
 		{
 			var autoFixture = new Fixture();
-			autoFixture.Customize( new SoftwarePotentialApiGuestCredentialsConfigurationCustomization() );
+			autoFixture.Customize( new SoftwarePotentialApiNonPrivilegedUserConfigurationCustomization() );
 			autoFixture.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() );
 			var portalApi = autoFixture.CreateAnonymous<SpPortalApi>();
 
@@ -55,13 +55,14 @@ namespace Sp.Portal.Acceptance
 			public string Label { get; set; }
 		}
 
-		public class SoftwarePotentialApiGuestCredentialsConfigurationCustomization : ICustomization
+		public class SoftwarePotentialApiNonPrivilegedUserConfigurationCustomization : ICustomization
 		{
+			const string PortalUserWithouthCanSeeItemsPermission = "customer2@inishtech.com";
+
 			void ICustomization.Customize( IFixture fixture )
 			{
-				// Use guest credentials - should authenticate, but not give CanSeeItems claim
 				fixture.Register( ( string username, string password ) => new SpApiConfiguration(
-					"guest",
+					PortalUserWithouthCanSeeItemsPermission,
 					ConfigurationManager.AppSettings[ "PortalPassword" ],
 					ConfigurationManager.AppSettings[ "PortalBaseUrl" ] ) );
 			}
