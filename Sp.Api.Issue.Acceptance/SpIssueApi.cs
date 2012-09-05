@@ -67,6 +67,8 @@ namespace Sp.Api.Issue
 			public bool IsEvaluation { get; set; }
 			public bool IsRenewable { get; set; }
 
+			public bool IsActivatable { get; set; }
+
 			public Links _links { get; set; }
 
 			public class Links
