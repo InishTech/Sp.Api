@@ -55,6 +55,25 @@ namespace Sp.Portal.Acceptance.Wrappers
 			return Execute( request );
 		}
 
+		public IRestResponse PutLicenseTags( string licenseTagsAssignmentHref, TagWithValueCollection tags )
+		{
+			var request = new RestRequest( licenseTagsAssignmentHref, Method.POST ) { RequestFormat = DataFormat.Json };
+			request.AddBody( tags );
+			return Execute( request );
+		}
+
+		public IRestResponse<LicensesSummaryPage> GetLicenseList()
+		{
+			var request = new RestRequest( "License" );
+			return Execute<LicensesSummaryPage>( request );
+		}
+
+		public IRestResponse<LicenseSummary> GetLicense( string href )
+		{
+			var request = new RestRequest( href );
+			return Execute<LicenseSummary>( request );
+		}
+
 		public class TagCollection
 		{
 			public List<Tag> Tags { get; set; }
@@ -69,6 +88,7 @@ namespace Sp.Portal.Acceptance.Wrappers
 
 		public class Tag
 		{
+			public Guid Id { get; set; }
 			public string Name { get; set; }
 
 			public Links _links { get; set; }
@@ -88,6 +108,49 @@ namespace Sp.Portal.Acceptance.Wrappers
 		public class Link
 		{
 			public string href { get; set; }
+		}
+
+		public class LicenseSummary
+		{
+			public string ActivationKey { get; set; }
+
+			public string ProductLabel { get; set; }
+			public string VersionLabel { get; set; }
+
+			public string IssueDate { get; set; }
+			public bool IsEvaluation { get; set; }
+			public bool IsRenewable { get; set; }
+			//public Guid? CustomerId { get; set; }
+			public bool IsActivatable { get; set; }
+			public string ActivatableMessage { get; set; }
+
+			public List<TagWithValue> Tags { get; set; }
+
+			public Links _links { get; set; }
+
+			public class Links
+			{
+				public Link self { get; set; }
+				public Link tags { get; set; }
+			}
+		}
+
+		public class TagWithValue
+		{
+			public Guid TagId { get; set; }
+			public string Name { get; set; }//Ignored in PUT request
+			public string Value { get; set; }
+		}
+
+		public class TagWithValueCollection
+		{
+			public List<TagWithValue> Tags { get; set; }
+		}
+
+
+		public class LicensesSummaryPage
+		{
+			public List<LicenseSummary> Licenses { get; set; }
 		}
 
 		#region Ignore
