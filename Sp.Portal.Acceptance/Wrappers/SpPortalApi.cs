@@ -57,7 +57,7 @@ namespace Sp.Portal.Acceptance.Wrappers
 
 		public IRestResponse PutLicenseTags( string licenseTagsAssignmentHref, TagWithValueCollection tags )
 		{
-			var request = new RestRequest( licenseTagsAssignmentHref, Method.POST ) { RequestFormat = DataFormat.Json };
+			var request = new RestRequest( licenseTagsAssignmentHref, Method.PUT ) { RequestFormat = DataFormat.Json };
 			request.AddBody( tags );
 			return Execute( request );
 		}

@@ -32,6 +32,14 @@
 					Assert.NotNull( response.Data._links.add );
 					Assert.NotEmpty( response.Data._links.add.href );
 				}
+
+				[Theory, PortalData]
+				public static void ShouldHaveNonEmptyIds( SpPortalApi api )
+				{
+					var response = api.GetTagCollection();
+					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
+					Assert.DoesNotContain( Guid.Empty, response.Data.Tags.Select( t => t.Id ) );
+				}
 			}
 
 			public class Post

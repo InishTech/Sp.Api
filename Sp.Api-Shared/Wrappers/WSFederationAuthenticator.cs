@@ -3,6 +3,9 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
+
+using System.Text;
+
 namespace Sp.Api.Shared.Wrappers
 {
 	using System;
@@ -60,7 +63,9 @@ namespace Sp.Api.Shared.Wrappers
 				var loginPage = _authClient.Execute( new RestRequest( string.Empty, Method.GET ) );
 
 				if ( loginPage.StatusCode != HttpStatusCode.OK )
+				{
 					throw new InvalidOperationException( "Request for " + _authClient.BaseUrl + " failed; " + loginPage.ToDiagnosticString() );
+				}
 				var stsLoginUri = loginPage.ResponseUri;
 
 				var wresultRequest = AuthenticateAndSignInWithIpSts( stsLoginUri );
@@ -134,10 +139,19 @@ namespace Sp.Api.Shared.Wrappers
 
 	static class RestResponseExtensions
 	{
-		public static string ToDiagnosticString( this IRestResponse restResponse )
+		public static string ToDiagnosticString( this IRestResponse that )
 		{
 			return string.Format( "Response url: {0}; Response status: {1}; HTTP status code: {2} ({3}); Error message: {4}; Content: {5}",
-				restResponse.ResponseUri, restResponse.ResponseStatus, restResponse.StatusCode, restResponse.StatusDescription, restResponse.ErrorMessage, restResponse.Content );
+				that.ResponseUri, that.ResponseStatus, that.StatusCode, that.StatusDescription, that.ErrorMessage, that.ContentWithEscapedCurlies() );
+		}
+
+		public static string  ContentWithEscapedCurlies( this IRestResponse that )
+		{
+			//NB - Xunit runner may choke if REST content is included in an error message without curlies being escaped properly
+			var builder = new StringBuilder(that.Content);
+			builder.Replace( "{", "{{" );
+			builder.Replace( "}", "}}" );
+			return builder.ToString();
 		}
 	}
 }

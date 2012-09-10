@@ -17,7 +17,7 @@ namespace Sp.Portal.Acceptance
 		{
 			public class Put
 			{
-				[Theory(Skip = "TP 1048"), PortalData]
+				[Theory, PortalData]
 				public void ShouldUpdateTags( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagCollectionFixture tags )
 				{
 					var fixture = new Fixture();
@@ -35,16 +35,21 @@ namespace Sp.Portal.Acceptance
 					Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
 					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 
-					//Retrieve the license again (or just the tags subresource)
-					//Verify that all the tags on the license match
-					var updatedLicense = portalApi.GetLicense( license.Selected._links.self.href );
-					Assert.NotNull( updatedLicense );
-					Assert.NotNull( updatedLicense.Data.Tags );
-					Assert.NotEmpty( updatedLicense.Data.Tags );
+					Verify.EventuallyWithBackOff( () =>
+					{
+						//Retrieve the license again (or just the tags subresource)
+						//Verify that all the tags on the license match
+						var updatedLicense = portalApi.GetLicense( license.Selected._links.self.href );
+						Assert.NotNull( updatedLicense );
+						Assert.NotNull( updatedLicense.Data.Tags );
+						Assert.NotEmpty( updatedLicense.Data.Tags );
 
-					//TODO TP 1048 - use Assert.Equal(IEnumerable...) from AssertExtensions (requires Xunit 1.9)
-					Assert.True( updatedLicense.Data.Tags.SequenceEqual( tagsToAddToLicense.Tags,
-						new AssertExtensions.FuncEqualityComparer<SpPortalApi.TagWithValue>( ( x, y ) => x.TagId == y.TagId && x.Value == y.Value ) ) );
+						//TODO TP 1048 - use Assert.Equal(IEnumerable...) from AssertExtensions (requires Xunit 1.9)
+						Assert.True( updatedLicense.Data.Tags.SequenceEqual( tagsToAddToLicense.Tags,
+						    new AssertExtensions.FuncEqualityComparer
+							    <SpPortalApi.TagWithValue>(
+							    ( x, y ) => x.TagId == y.TagId && x.Value == y.Value ) ) );
+					} );
 				}
 			}
 
@@ -64,7 +69,9 @@ namespace Sp.Portal.Acceptance
 						var newlyCreatedTagNames = tagsToCreate.Select( t => t.Name );
 						Assert.True( newlyCreatedTagNames.IsSubsetOf( tagNamesFromApi ) );
 
-						_tags = apiResult.Data.Tags.ToArray();
+						_tags = apiResult.Data.Tags
+							.Where( x => tagsToCreate.Any( y => y.Name == x.Name ) )
+							.ToArray();
 					} );
 				}
 
