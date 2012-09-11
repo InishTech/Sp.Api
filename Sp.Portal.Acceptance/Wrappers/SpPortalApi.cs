@@ -45,7 +45,7 @@ namespace Sp.Portal.Acceptance.Wrappers
 		{
 			var request = new RestRequest( tagHref, Method.PUT );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody( new Tag { Name = newName } );
+			request.AddBody( new TagUpdateModel { Name = newName } );
 			return Execute( request );
 		}
 
@@ -105,6 +105,11 @@ namespace Sp.Portal.Acceptance.Wrappers
 			public string Name { get; set; }
 		}
 
+		public class TagUpdateModel
+		{
+			public string Name { get; set; }
+		}
+
 		public class Link
 		{
 			public string href { get; set; }
@@ -124,7 +129,7 @@ namespace Sp.Portal.Acceptance.Wrappers
 			public bool IsActivatable { get; set; }
 			public string ActivatableMessage { get; set; }
 
-			public List<TagWithValue> Tags { get; set; }
+			public Dictionary<string,string> Tags { get; set; }
 
 			public Links _links { get; set; }
 
@@ -135,22 +140,14 @@ namespace Sp.Portal.Acceptance.Wrappers
 			}
 		}
 
-		public class TagWithValue
+		public class LicensesSummaryPage
 		{
-			public Guid TagId { get; set; }
-			public string Name { get; set; }//Ignored in PUT request
-			public string Value { get; set; }
+			public List<LicenseSummary> Licenses { get; set; }
 		}
 
 		public class TagWithValueCollection
 		{
-			public List<TagWithValue> Tags { get; set; }
-		}
-
-
-		public class LicensesSummaryPage
-		{
-			public List<LicenseSummary> Licenses { get; set; }
+			public Dictionary<string, string> Tags { get; set; }
 		}
 
 		#region Ignore

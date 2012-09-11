@@ -21,16 +21,13 @@ namespace Sp.Portal.Acceptance
 				public void ShouldUpdateTags( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagCollectionFixture tags )
 				{
 					var fixture = new Fixture();
-					//Generate random tag values. Reset tag names (they're irrelevant here)
-					var tagsWithValues = tags.Tags.Select(
-						x => new SpPortalApi.TagWithValue { TagId = x.Id, Name = string.Empty, Value = fixture.CreateAnonymous<string>() } ).ToArray();
-
+					var tagsWithValues = GenerateAnonymousValuesForKnownTags( tags.Tags );
 
 					//Pick a random license and get license tags assignment href
 					var licenseTagsAssignmentHref = license.Selected._links.tags.href;
 
 					//Put new license tag collection
-					var tagsToAddToLicense = new SpPortalApi.TagWithValueCollection { Tags = tagsWithValues.ToList() };
+					var tagsToAddToLicense = new SpPortalApi.TagWithValueCollection { Tags = tagsWithValues };
 					var apiResult = portalApi.PutLicenseTags( licenseTagsAssignmentHref, tagsToAddToLicense );
 					Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
 					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
@@ -45,11 +42,14 @@ namespace Sp.Portal.Acceptance
 						Assert.NotEmpty( updatedLicense.Data.Tags );
 
 						//TODO TP 1048 - use Assert.Equal(IEnumerable...) from AssertExtensions (requires Xunit 1.9)
-						Assert.True( updatedLicense.Data.Tags.SequenceEqual( tagsToAddToLicense.Tags,
-						    new AssertExtensions.FuncEqualityComparer
-							    <SpPortalApi.TagWithValue>(
-							    ( x, y ) => x.TagId == y.TagId && x.Value == y.Value ) ) );
+						Assert.True( updatedLicense.Data.Tags.SequenceEqual( tagsToAddToLicense.Tags ) );
 					} );
+				}
+
+				static Dictionary<string, string> GenerateAnonymousValuesForKnownTags(IEnumerable<SpPortalApi.Tag> tags)
+				{
+					var fixture = new Fixture();
+					return tags.ToDictionary( x => x.Id.ToString(), x => fixture.CreateAnonymous<string>() );
 				}
 			}
 
@@ -81,24 +81,6 @@ namespace Sp.Portal.Acceptance
 					get { return _tags; }
 				}
 			}
-
-			//public class ExistingTagWithValueCollectionFixture : ExistingTagCollectionFixture
-			//{
-			//	readonly SpPortalApi.TagWithValue[] _tagsWithValues;
-
-			//	public ExistingTagWithValueCollectionFixture( SpPortalApi api, CustomerTags.ExistingTagFixture[] tagsToCreate, Fixture fixture )
-			//		: base( api, tagsToCreate )
-			//	{
-
-			//		_tagsWithValues = Tags.Select(
-			//				x => new SpPortalApi.TagWithValue { TagId = x.Id, Name = x.Name, Value = fixture.CreateAnonymous<string>() } ).ToArray();
-			//	}
-
-			//	public SpPortalApi.TagWithValue[] TagsWithValuesWithValues
-			//	{
-			//		get { return _tagsWithValues; }
-			//	}
-			//}
 		}
 	}
 
