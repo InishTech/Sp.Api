@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Ploeh.AutoFixture;
+using Ploeh.AutoFixture.Kernel;
 using Ploeh.AutoFixture.Xunit;
 using RestSharp;
 using Sp.Portal.Acceptance.Wrappers;
@@ -20,7 +21,6 @@ namespace Sp.Portal.Acceptance
 				[Theory, PortalData]
 				public void ShouldUpdateTags( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagCollectionFixture tags )
 				{
-					var fixture = new Fixture();
 					var tagsWithValues = GenerateAnonymousValuesForKnownTags( tags.Tags );
 
 					//Pick a random license and get license tags assignment href
@@ -46,10 +46,35 @@ namespace Sp.Portal.Acceptance
 					} );
 				}
 
-				static Dictionary<string, string> GenerateAnonymousValuesForKnownTags(IEnumerable<SpPortalApi.Tag> tags)
+				static Dictionary<string, string> GenerateAnonymousValuesForKnownTags( IEnumerable<SpPortalApi.Tag> tags )
 				{
 					var fixture = new Fixture();
 					return tags.ToDictionary( x => x.Id.ToString(), x => fixture.CreateAnonymous<string>() );
+				}
+
+				[Theory, PortalData]
+				public void TooLongValuesShouldBeRejected( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagCollectionFixture tags )
+				{
+					var tagsWithValues = GenerateInsanelyLongAnonymousValuesForKnownTags( tags.Tags );
+
+					//Pick a random license and get license tags assignment href
+					var licenseTagsAssignmentHref = license.Selected._links.tags.href;
+
+					//Put new license tag collection
+					var tagsToAddToLicense = new SpPortalApi.TagWithValueCollection { Tags = tagsWithValues };
+					var apiResult = portalApi.PutLicenseTags( licenseTagsAssignmentHref, tagsToAddToLicense );
+					Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
+					Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
+				}
+
+				static Dictionary<string, string> GenerateInsanelyLongAnonymousValuesForKnownTags( IEnumerable<SpPortalApi.Tag> tags )
+				{
+					const int insanelyLongValueLength = 500;
+					var fixture = new Fixture();
+					return tags.ToDictionary( 
+						x => x.Id.ToString(),
+						x => new string( fixture.CreateMany<char>( insanelyLongValueLength ).ToArray() )
+					);
 				}
 			}
 
