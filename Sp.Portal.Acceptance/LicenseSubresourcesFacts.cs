@@ -41,7 +41,7 @@ namespace Sp.Portal.Acceptance
 						Assert.NotNull( updatedLicense.Data.Tags );
 						Assert.NotEmpty( updatedLicense.Data.Tags );
 
-						//TODO TP 1048 - use Assert.Equal(IEnumerable...) from AssertExtensions (requires Xunit 1.9)
+						//TODO - use Assert.Equal(IEnumerable...) from AssertExtensions (requires Xunit 1.9)
 						Assert.True( updatedLicense.Data.Tags.SequenceEqual( tagsToAddToLicense.Tags ) );
 					} );
 				}
@@ -69,11 +69,11 @@ namespace Sp.Portal.Acceptance
 
 				static Dictionary<string, string> GenerateInsanelyLongAnonymousValuesForKnownTags( IEnumerable<SpPortalApi.Tag> tags )
 				{
-					const int insanelyLongValueLength = 500;
+					const int insaneStringLength = 101;
 					var fixture = new Fixture();
 					return tags.ToDictionary(
 						x => x.Id.ToString(),
-						x => ConstrainedStringGenerator.CreateAnonymous(insanelyLongValueLength, insanelyLongValueLength, fixture)
+						x => ConstrainedStringGenerator.CreateAnonymous( insaneStringLength, insaneStringLength, fixture )
 					);
 				}
 
