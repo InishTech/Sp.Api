@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using Ploeh.AutoFixture;
-using Ploeh.AutoFixture.Kernel;
 using Ploeh.AutoFixture.Xunit;
 using RestSharp;
 using Sp.Portal.Acceptance.Wrappers;
@@ -71,10 +71,31 @@ namespace Sp.Portal.Acceptance
 				{
 					const int insanelyLongValueLength = 500;
 					var fixture = new Fixture();
-					return tags.ToDictionary( 
+					return tags.ToDictionary(
 						x => x.Id.ToString(),
-						x => new string( fixture.CreateMany<char>( insanelyLongValueLength ).ToArray() )
+						x => ConstrainedStringGenerator.CreateAnonymous(insanelyLongValueLength, insanelyLongValueLength, fixture)
 					);
+				}
+
+				static class ConstrainedStringGenerator
+				{
+					public static string CreateAnonymous( int minimumLength, int maximumLength, IFixture fixture )
+					{
+						var sb = new StringBuilder();
+
+						do
+						{
+							sb.Append( fixture.CreateAnonymous<string>() );
+						}
+						while ( sb.Length < minimumLength );
+
+						if ( sb.Length > maximumLength )
+						{
+							return sb.ToString().Substring( 0, maximumLength );
+						}
+
+						return sb.ToString();
+					}
 				}
 			}
 
