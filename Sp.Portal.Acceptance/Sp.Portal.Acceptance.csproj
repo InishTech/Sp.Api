@@ -72,8 +72,8 @@
     <Compile Include="CustomerTags.cs" />
     <Compile Include="ItemManagementFacts.cs" />
     <Compile Include="LandingPageFacts.cs" />
-    <Compile Include="LicenseFacts.cs" />
-    <Compile Include="LicenseSubresourcesFacts.cs" />
+    <Compile Include="Licenses.cs" />
+    <Compile Include="LicenseCustomerTags.cs" />
     <Compile Include="PortalDataAttribute.cs" />
     <Compile Include="RandomLicenseFromListFixture.cs" />
     <Compile Include="SoftwarePotentialPortalDataFixture.cs" />

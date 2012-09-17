@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using Sp.Portal.Acceptance.Wrappers;
 using Xunit;
 using Xunit.Extensions;
@@ -45,7 +44,6 @@ namespace Sp.Portal.Acceptance
 				// There should always be valid Activation Key
 				Assert.NotNull( license.Selected.Tags );
 			}
-
 
 			[Theory, PortalData]
 			public void ShouldIncludeSelfLink( RandomLicenseFromListFixture license )
