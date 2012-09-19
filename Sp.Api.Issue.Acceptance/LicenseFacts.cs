@@ -60,7 +60,8 @@ namespace Sp.Api.Issue.Acceptance
 					// There should always be a Version Label
 					Assert.NotEmpty( license.Selected.VersionLabel );
 					// There is always an IssueDate
-					Assert.NotEqual( default( DateTime ), license.Selected.IssueDate );
+					Assert.NotNull( license.Selected.IssueDate );
+					Assert.NotEmpty( license.Selected.IssueDate );
 				}
 
 				[Theory, AutoSoftwarePotentialApiData]
@@ -118,7 +119,7 @@ namespace Sp.Api.Issue.Acceptance
 
 				//The license obtained as a separete resource should be identical to the license previously selected from the list
 				apiResult.Data.AsSource().OfLikeness<SpIssueApi.LicenseSummary>()
-					.Without(p => p._links)
+					.Without( p => p._links )
 					.ShouldEqual( preSelectedLicense.Selected );
 			}
 
@@ -147,8 +148,7 @@ namespace Sp.Api.Issue.Acceptance
 			public static class Put
 			{
 				[Theory, AutoSoftwarePotentialApiData]
-				public static void ShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license,
-				                                             RandomCustomerFromListFixture customer )
+				public static void ShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
 				{
 					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
 					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer.Selected );
@@ -167,10 +167,10 @@ namespace Sp.Api.Issue.Acceptance
 			public static class Delete
 			{
 				[Theory, AutoSoftwarePotentialApiData]
-				public static void ShouldResetCustomerLink( 
+				public static void ShouldResetCustomerLink(
 					[Frozen] SpIssueApi api,
-				    RandomLicenseFromListFixture license,
-				    RandomCustomerFromListFixture customer )
+					RandomLicenseFromListFixture license,
+					RandomCustomerFromListFixture customer )
 				{
 					//Assign a customer first
 					// (This is not strictly necessary, we just want to observe a real user actually seeing the change take place in the License list itself

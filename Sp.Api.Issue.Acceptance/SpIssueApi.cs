@@ -63,7 +63,7 @@ namespace Sp.Api.Issue
 			// Name of Version this is a license for at the time of issue (underlying stable VersionReferenceId as used on Activated License may be different)
 			public string VersionLabel { get; set; }
 
-			public DateTime IssueDate { get; set; }
+			public string IssueDate { get; set; }
 			public bool IsEvaluation { get; set; }
 			public bool IsRenewable { get; set; }
 
