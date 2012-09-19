@@ -39,8 +39,7 @@ namespace Sp.Portal.Acceptance
 					Assert.NotNull( updatedLicense.Data.Tags );
 					Assert.NotEmpty( updatedLicense.Data.Tags );
 
-					//TODO - use Assert.Equal(IEnumerable...) from AssertExtensions (requires Xunit 1.9)
-					Assert.True( updatedLicense.Data.Tags.SequenceEqual( tagsToAddToLicense.Tags ) );
+					AssertExtensions.SequenceEqual( updatedLicense.Data.Tags, tagsToAddToLicense.Tags, x => x.Key );
 				} );
 			}
 
