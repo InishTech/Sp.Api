@@ -9,129 +9,131 @@ using Sp.Portal.Acceptance.Wrappers;
 using Sp.Test.Helpers;
 using Xunit;
 using Xunit.Extensions;
+using System;
 
 namespace Sp.Portal.Acceptance
 {
-	public class LicenseCustomerTags
-	{
-		public class Put
-		{
-			[Theory, PortalData]
-			public void ShouldUpdateTags( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagCollectionFixture tags )
-			{
-				var tagsWithValues = GenerateAnonymousValuesForKnownTags( tags.Tags );
+    public class LicenseCustomerTags
+    {
+        public class Put
+        {
+            [Theory, PortalData]
+            public void ShouldUpdateTags( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagCollectionFixture tags )
+            {
+                var tagsWithValues = GenerateAnonymousValuesForKnownTags( tags.Tags );
 
-				//Pick a random license and get license tags assignment href
-				var licenseTagsAssignmentHref = license.Selected._links.tags.href;
+                //Pick a random license and get license tags assignment href
+                var licenseTagsAssignmentHref = license.Selected._links.tags.href;
 
-				//Put new license tag collection
-				var tagsToAddToLicense = new SpPortalApi.TagWithValueCollection { Tags = tagsWithValues };
-				var apiResult = portalApi.PutLicenseTags( licenseTagsAssignmentHref, tagsToAddToLicense );
-				Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
-				Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
+                //Put new license tag collection
+                var tagsToAddToLicense = new SpPortalApi.TagWithValueCollection { Tags = tagsWithValues };
 
-				Verify.EventuallyWithBackOff( () =>
-				{
-					//Retrieve the license again (or just the tags subresource)
-					//Verify that all the tags on the license match
-					var updatedLicense = portalApi.GetLicense( license.Selected._links.self.href );
-					Assert.NotNull( updatedLicense );
-					Assert.NotNull( updatedLicense.Data.Tags );
-					Assert.NotEmpty( updatedLicense.Data.Tags );
+                var apiResult = portalApi.PutLicenseTags( licenseTagsAssignmentHref, tagsToAddToLicense );
+                Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
+                Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 
-					//TODO - use Assert.Equal(IEnumerable...) from AssertExtensions (requires Xunit 1.9)
-					Assert.True( updatedLicense.Data.Tags.SequenceEqual( tagsToAddToLicense.Tags ) );
-				} );
-			}
+                Verify.EventuallyWithBackOff( () =>
+                {
+                    //Retrieve the license again (or just the tags subresource)
+                    //Verify that all the tags on the license match
+                    var updatedLicense = portalApi.GetLicense( license.Selected._links.self.href );
+                    Assert.NotNull( updatedLicense );
+                    
+                    var updatedTags = updatedLicense.Data.Tags;
 
-			static Dictionary<string, string> GenerateAnonymousValuesForKnownTags( IEnumerable<SpPortalApi.Tag> tags )
-			{
-				var fixture = new Fixture();
-				return tags.ToDictionary( x => x.Id.ToString(), x => fixture.CreateAnonymous<string>() );
-			}
+                    AssertExtensions.SortedSequenceEqual( updatedTags, tagsToAddToLicense.Tags, x => x.Key );
+                } );
+            }
 
-			[Theory, PortalData]
-			public void TooLongValuesShouldBeRejected( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagCollectionFixture tags )
-			{
-				var tagsWithValues = GenerateInsanelyLongAnonymousValuesForKnownTags( tags.Tags );
+            static Dictionary<string, string> GenerateAnonymousValuesForKnownTags( IEnumerable<SpPortalApi.Tag> tags )
+            {
+                var fixture = new Fixture();
 
-				//Pick a random license and get license tags assignment href
-				var licenseTagsAssignmentHref = license.Selected._links.tags.href;
+                return tags.ToDictionary( x => x.Id.ToString(), x => fixture.CreateAnonymous<string>( "value" ) );
+            }
 
-				//Put new license tag collection
-				var tagsToAddToLicense = new SpPortalApi.TagWithValueCollection { Tags = tagsWithValues };
-				var apiResult = portalApi.PutLicenseTags( licenseTagsAssignmentHref, tagsToAddToLicense );
-				Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
-				Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
-			}
+            [Theory, PortalData]
+            public void TooLongValuesShouldBeRejected( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagCollectionFixture tags )
+            {
+                var tagsWithValues = GenerateInsanelyLongAnonymousValuesForKnownTags( tags.Tags );
 
-			static Dictionary<string, string> GenerateInsanelyLongAnonymousValuesForKnownTags( IEnumerable<SpPortalApi.Tag> tags )
-			{
-				const int insaneStringLength = 101;
-				var fixture = new Fixture();
-				return tags.ToDictionary(
-					x => x.Id.ToString(),
-					x => ConstrainedStringGenerator.CreateAnonymous( insaneStringLength, insaneStringLength, fixture )
-				);
-			}
+                //Pick a random license and get license tags assignment href
+                var licenseTagsAssignmentHref = license.Selected._links.tags.href;
 
-			static class ConstrainedStringGenerator
-			{
-				public static string CreateAnonymous( int minimumLength, int maximumLength, IFixture fixture )
-				{
-					var sb = new StringBuilder();
+                //Put new license tag collection
+                var tagsToAddToLicense = new SpPortalApi.TagWithValueCollection { Tags = tagsWithValues };
+                var apiResult = portalApi.PutLicenseTags( licenseTagsAssignmentHref, tagsToAddToLicense );
+                Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
+                Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
+            }
 
-					do
-					{
-						sb.Append( fixture.CreateAnonymous<string>() );
-					}
-					while ( sb.Length < minimumLength );
+            static Dictionary<string, string> GenerateInsanelyLongAnonymousValuesForKnownTags( IEnumerable<SpPortalApi.Tag> tags )
+            {
+                const int insaneStringLength = 101;
+                var fixture = new Fixture();
+                return tags.ToDictionary(
+                    x => x.Id.ToString(),
+                    x => ConstrainedStringGenerator.CreateAnonymous( insaneStringLength, insaneStringLength, fixture )
+                );
+            }
 
-					if ( sb.Length > maximumLength )
-					{
-						return sb.ToString().Substring( 0, maximumLength );
-					}
+            static class ConstrainedStringGenerator
+            {
+                public static string CreateAnonymous( int minimumLength, int maximumLength, IFixture fixture )
+                {
+                    var sb = new StringBuilder();
 
-					return sb.ToString();
-				}
-			}
-		}
+                    do
+                    {
+                        sb.Append( fixture.CreateAnonymous<string>() );
+                    }
+                    while (sb.Length < minimumLength);
 
-		public class ExistingTagCollectionFixture
-		{
-			SpPortalApi.Tag[] _tags;
+                    if (sb.Length > maximumLength)
+                    {
+                        return sb.ToString().Substring( 0, maximumLength );
+                    }
 
-			public ExistingTagCollectionFixture( SpPortalApi api, CustomerTags.ExistingTagFixture[] tagsToCreate )
-			{
-				Verify.EventuallyWithBackOff( () =>
-				{
-					//Wait until all new customer tags are created
-					var apiResult = api.GetTagCollection();
-					Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-					Assert.NotNull( apiResult.Data.Tags );
-					var tagNamesFromApi = apiResult.Data.Tags.Select( t => t.Name );
-					var newlyCreatedTagNames = tagsToCreate.Select( t => t.Name );
-					Assert.True( newlyCreatedTagNames.IsSubsetOf( tagNamesFromApi ) );
+                    return sb.ToString();
+                }
+            }
+        }
+
+        public class ExistingTagCollectionFixture
+        {
+            SpPortalApi.Tag[] _tags;
+
+            public ExistingTagCollectionFixture( SpPortalApi api, CustomerTags.ExistingTagFixture[] tagsToCreate )
+            {
+                Verify.EventuallyWithBackOff( () =>
+                {
+                    //Wait until all new customer tags are created
+                    var apiResult = api.GetTagCollection();
+                    Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+                    Assert.NotNull( apiResult.Data.Tags );
+                    var tagNamesFromApi = apiResult.Data.Tags.Select( t => t.Name );
+                    var newlyCreatedTagNames = tagsToCreate.Select( t => t.Name );
+                    Assert.True( newlyCreatedTagNames.IsSubsetOf( tagNamesFromApi ) );
 
 					_tags = apiResult.Data.Tags
 						.Where( x => tagsToCreate.Any( y => y.Name == x.Name ) )
 						.ToArray();
-				} );
-			}
+                } );
+            }
 
 
-			public SpPortalApi.Tag[] Tags
-			{
-				get { return _tags; }
-			}
-		}
-	}
+            public SpPortalApi.Tag[] Tags
+            {
+                get { return _tags; }
+            }
+        }
+    }
 
-	static class EnumerableSubsetExtensions
-	{
-		public static bool IsSubsetOf<T>( this IEnumerable<T> thats, IEnumerable<T> otherCollection )
-		{
-			return new HashSet<T>( thats ).IsSubsetOf( otherCollection );
-		}
-	}
+    static class EnumerableSubsetExtensions
+    {
+        public static bool IsSubsetOf<T>( this IEnumerable<T> thats, IEnumerable<T> otherCollection )
+        {
+            return new HashSet<T>( thats ).IsSubsetOf( otherCollection );
+        }
+    }
 }

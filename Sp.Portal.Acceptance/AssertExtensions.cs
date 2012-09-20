@@ -12,15 +12,15 @@ namespace Sp.Portal.Acceptance
 		//	Assert.Equal( left.OrderBy( keySelector ), right.OrderBy( keySelector ), new FuncEqualityComparer<T>( comparer ) );
 		//}
 
-		//public static void SequenceEqual<T>( IEnumerable<T> left, IEnumerable<T> right )
-		//{
-		//	Assert.Equal( left.OrderBy( x => x ), right.OrderBy( x => x ) );
-		//}
+		public static void SortedSequenceEqual<T, T2>( IEnumerable<T> left, IEnumerable<T> right, Func<T, T2> keySelector )
+		{
+			Assert.Equal( left.OrderBy( keySelector ), right.OrderBy( keySelector ) );
+		}
 
-		//public static void Contains<T>( T expected, IEnumerable<T> collection, Func<T, T, bool> comparer )
-		//{
-		//	Assert.Contains( expected, collection, new FuncEqualityComparer<T>( comparer ) );
-		//}
+		public static void Contains<T>( T expected, IEnumerable<T> collection, Func<T, T, bool> comparer )
+		{
+			Assert.Contains( expected, collection, new FuncEqualityComparer<T>( comparer ) );
+		}
 
 		// http://stackoverflow.com/a/3719617
 		public class FuncEqualityComparer<T> : IEqualityComparer<T>

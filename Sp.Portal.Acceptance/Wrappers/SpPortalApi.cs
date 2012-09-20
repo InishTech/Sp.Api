@@ -64,11 +64,16 @@ namespace Sp.Portal.Acceptance.Wrappers
 
 		public IRestResponse<LicensesSummaryPage> GetLicenseList()
 		{
-			var request = new RestRequest( "License" );
-			return Execute<LicensesSummaryPage>( request );
+            return GetLicenseList( "" );
 		}
 
-		public IRestResponse<LicenseSummary> GetLicense( string href )
+        public IRestResponse<LicensesSummaryPage>  GetLicenseList( string queryParameters )
+        {
+            var request = new RestRequest( "License/?" + queryParameters );
+            return Execute<LicensesSummaryPage>( request );
+        }
+
+        public IRestResponse<LicenseSummary> GetLicense( string href )
 		{
 			var request = new RestRequest( href );
 			return Execute<LicenseSummary>( request );
@@ -125,18 +130,17 @@ namespace Sp.Portal.Acceptance.Wrappers
 			public string IssueDate { get; set; }
 			public bool IsEvaluation { get; set; }
 			public bool IsRenewable { get; set; }
-			//public Guid? CustomerId { get; set; }
 			public bool IsActivatable { get; set; }
 			public string ActivatableMessage { get; set; }
 
-			public Dictionary<string,string> Tags { get; set; }
+            public Dictionary<string, string> Tags { get; set; }
 
 			public Links _links { get; set; }
-
+            
 			public class Links
 			{
 				public Link self { get; set; }
-				public Link tags { get; set; }
+                public Link tags { get; set; }
 			}
 		}
 
