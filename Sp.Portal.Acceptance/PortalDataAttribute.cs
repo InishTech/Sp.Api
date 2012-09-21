@@ -17,6 +17,7 @@ namespace Sp.Portal.Acceptance
 			: base( new SoftwarePotentialPortalDataFixture()
 				.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() ) )
 		{
+			Fixture.Inject<IFixture>( Fixture );
 		}
 	}
 

@@ -10,6 +10,7 @@ namespace Sp.Portal.Acceptance.Wrappers
 	using Sp.Test.Helpers;
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	public class SpPortalApi
 	{
@@ -33,25 +34,11 @@ namespace Sp.Portal.Acceptance.Wrappers
 			return Execute<TagCollection>( request );
 		}
 
-		public IRestResponse AddTag( string addLinkHref, Guid requestId, string name )
+		public IRestResponse PutTagCollection( IEnumerable<SpPortalApi.Tag> tags )
 		{
-			var request = new RestRequest( addLinkHref, Method.POST );
+			var request = new RestRequest( "tag", Method.PUT );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody( new TagCreateRequest { RequestId = requestId, Name = name } );
-			return Execute( request );
-		}
-
-		public IRestResponse RenameTag( string tagHref, string newName )
-		{
-			var request = new RestRequest( tagHref, Method.PUT );
-			request.RequestFormat = DataFormat.Json;
-			request.AddBody( new TagUpdateModel { Name = newName } );
-			return Execute( request );
-		}
-
-		public IRestResponse DeleteTag( string tagHref )
-		{
-			var request = new RestRequest( tagHref, Method.DELETE );
+			request.AddBody( new TagCollection { Tags = tags.ToList() } );
 			return Execute( request );
 		}
 
@@ -64,16 +51,11 @@ namespace Sp.Portal.Acceptance.Wrappers
 
 		public IRestResponse<LicensesSummaryPage> GetLicenseList()
 		{
-            return GetLicenseList( "" );
+			var request = new RestRequest( "License" );
+			return Execute<LicensesSummaryPage>( request );
 		}
 
-        public IRestResponse<LicensesSummaryPage>  GetLicenseList( string queryParameters )
-        {
-            var request = new RestRequest( "License/?" + queryParameters );
-            return Execute<LicensesSummaryPage>( request );
-        }
-
-        public IRestResponse<LicenseSummary> GetLicense( string href )
+		public IRestResponse<LicenseSummary> GetLicense( string href )
 		{
 			var request = new RestRequest( href );
 			return Execute<LicenseSummary>( request );
@@ -82,36 +64,11 @@ namespace Sp.Portal.Acceptance.Wrappers
 		public class TagCollection
 		{
 			public List<Tag> Tags { get; set; }
-
-			public Links _links { get; set; }
-
-			public class Links
-			{
-				public Link add { get; set; }
-			}
 		}
 
 		public class Tag
 		{
 			public Guid Id { get; set; }
-			public string Name { get; set; }
-
-			public Links _links { get; set; }
-
-			public class Links
-			{
-				public Link self { get; set; }
-			}
-		}
-
-		public class TagCreateRequest
-		{
-			public Guid RequestId { get; set; }
-			public string Name { get; set; }
-		}
-
-		public class TagUpdateModel
-		{
 			public string Name { get; set; }
 		}
 
@@ -130,17 +87,18 @@ namespace Sp.Portal.Acceptance.Wrappers
 			public string IssueDate { get; set; }
 			public bool IsEvaluation { get; set; }
 			public bool IsRenewable { get; set; }
+			//public Guid? CustomerId { get; set; }
 			public bool IsActivatable { get; set; }
 			public string ActivatableMessage { get; set; }
 
-            public Dictionary<string, string> Tags { get; set; }
+			public Dictionary<string, string> Tags { get; set; }
 
 			public Links _links { get; set; }
-            
+
 			public class Links
 			{
 				public Link self { get; set; }
-                public Link tags { get; set; }
+				public Link tags { get; set; }
 			}
 		}
 
@@ -154,7 +112,6 @@ namespace Sp.Portal.Acceptance.Wrappers
 			public Dictionary<string, string> Tags { get; set; }
 		}
 
-		#region Ignore
 		public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
 		{
 			return _client.Execute<T>( request );
@@ -170,6 +127,5 @@ namespace Sp.Portal.Acceptance.Wrappers
 			var signOffRequest = new RestRequest( "Authentication/LogOff", Method.GET );
 			return _client.Execute( signOffRequest );
 		}
-		#endregion
 	}
 }

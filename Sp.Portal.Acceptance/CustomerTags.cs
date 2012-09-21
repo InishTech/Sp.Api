@@ -1,9 +1,12 @@
 ﻿namespace Sp.Portal.Acceptance
 {
+	using Ploeh.AutoFixture;
 	using Ploeh.AutoFixture.Xunit;
+	using Ploeh.SemanticComparison.Fluent;
 	using Sp.Portal.Acceptance.Wrappers;
 	using Sp.Test.Helpers;
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Net;
 	using Xunit;
@@ -11,9 +14,9 @@
 
 	public class CustomerTags
 	{
-		public class Index
+		public static class Index
 		{
-			public class Get
+			public static class Get
 			{
 				[Theory, PortalData]
 				public static void ShouldAlwaysBeAvailable( SpPortalApi api )
@@ -23,172 +26,126 @@
 				}
 
 				[Theory, PortalData]
-				public static void ShouldHaveAddLink( SpPortalApi api )
-				{
-					var response = api.GetTagCollection();
-					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
-
-					Assert.NotNull( response.Data._links );
-					Assert.NotNull( response.Data._links.add );
-					Assert.NotEmpty( response.Data._links.add.href );
-				}
-
-				[Theory, PortalData]
 				public static void ShouldHaveNonEmptyIds( SpPortalApi api )
 				{
 					var response = api.GetTagCollection();
 					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 					Assert.DoesNotContain( Guid.Empty, response.Data.Tags.Select( t => t.Id ) );
 				}
+
+				[Theory, PortalData]
+				public static void ShouldHaveNonEmptyNames( SpPortalApi api )
+				{
+					var response = api.GetTagCollection();
+					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
+					Assert.False( response.Data.Tags.Any( t => string.IsNullOrEmpty( t.Name ) ) );
+				}
 			}
 
-			public class Post
+			public static class Put
 			{
 				[Theory, PortalData]
-				public static void ShouldYieldAccepted( [Frozen]SpPortalApi api, AddLinkFixture addLink, Guid id, string name )
+				public static void ShouldYieldAccepted( [Frozen]SpPortalApi api, SpPortalApi.Tag[] tags )
 				{
-					var apiResponse = api.AddTag( addLink.Href, id, name );
+					var apiResponse = api.PutTagCollection( tags );
 					Assert.Equal( HttpStatusCode.Accepted, apiResponse.StatusCode );
 				}
 
 				[Theory, PortalData]
-				public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagFixture tag )
+				public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
+				{
+					VerifyCollectionEventuallyGetsUpdatedTo( tags.Tags, api );
+				}
+
+				public class Reorder
+				{
+					[Theory, PortalData]
+					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
+					{
+						var updated = tags.Tags.Reverse();
+						VerifyPutEventuallyGetsApplied( updated, api );
+					}
+				}
+
+				public class Rename
+				{
+					[Theory, PortalData]
+					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
+					{
+						var updated = tags.Tags.Select( x => new SpPortalApi.Tag { Id = x.Id, Name = x.Name + "renamed" } );
+						VerifyPutEventuallyGetsApplied( updated, api );
+					}
+				}
+
+				public class Delete
+				{
+					[Theory, PortalData]
+					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
+					{
+						var updated = tags.Tags.Where( ( x, index ) => index != 1 );
+						VerifyPutEventuallyGetsApplied( updated, api );
+					}
+				}
+
+				static void VerifyPutEventuallyGetsApplied( IEnumerable<SpPortalApi.Tag> expected, SpPortalApi api )
+				{
+					var apiResponse = api.PutTagCollection( expected );
+					Assert.Equal( HttpStatusCode.Accepted, apiResponse.StatusCode );
+					VerifyCollectionEventuallyGetsUpdatedTo( expected, api );
+				}
+
+				static void VerifyCollectionEventuallyGetsUpdatedTo( IEnumerable<SpPortalApi.Tag> expected, SpPortalApi api )
 				{
 					Verify.EventuallyWithBackOff( () =>
 					{
 						var apiResult = api.GetTagCollection();
 						Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-						Assert.True( apiResult.Data.Tags.Any( x => x.Name == tag.Name && tag.Href.Equals( x._links.self.href ) ) );
+						Assert.Equal( expected.Select( x => Tuple.Create( x.Id, x.Name ) ).ToArray(), apiResult.Data.Tags.Select( x => Tuple.Create( x.Id, x.Name ) ).ToArray() );
 					} );
 				}
 
-				[Theory, PortalData]
-				public static void DoubleShouldYieldConflict( [Frozen]SpPortalApi api, AddLinkFixture addLink, Guid id, string name )
-				{
-					var initialResponse = api.AddTag( addLink.Href, id, name );
-					Assert.Equal( HttpStatusCode.Accepted, initialResponse.StatusCode );
-					var response = api.AddTag( addLink.Href, id, name );
-					Assert.Equal( HttpStatusCode.Conflict, response.StatusCode );
-				}
-
-				public class Bad
+				public static class Bad
 				{
 					[Theory, PortalData]
-					public static void MissingNameShouldYieldBadRequest( [Frozen]SpPortalApi api, AddLinkFixture addLink, Guid id )
+					public static void NameMissingShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
 					{
-						var response = api.AddTag( addLink.Href, id, null );
+						var badTag = fixture.Build<SpPortalApi.Tag>().With( x => x.Name, null ).CreateAnonymous();
+
+						var response = api.PutTagCollection( new[] { badTag } );
+
 						Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 					}
 
 					[Theory( Skip = "Currently 500 instead due to choice of Serializer" ), PortalData]
-					public static void EmptyIdShouldYieldBadRequest( [Frozen]SpPortalApi api, AddLinkFixture addLink, string name )
+					public static void IdEmptyShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
 					{
-						var response = api.AddTag( addLink.Href, Guid.Empty, name );
+						var badTag = fixture.Build<SpPortalApi.Tag>().With( x => x.Id, Guid.Empty ).CreateAnonymous();
+
+						var response = api.PutTagCollection( new[] { badTag } );
+
 						Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 					}
 				}
 			}
 		}
+	}
+	public class ExistingTagsFixture : IDisposable
+	{
+		readonly SpPortalApi _api;
 
-		public class Put
+		public SpPortalApi.Tag[] Tags { get; private set; }
+
+		public ExistingTagsFixture( SpPortalApi api, SpPortalApi.Tag[] tags )
 		{
-			[Theory, PortalData]
-			public void ShouldYieldAccepted( [Frozen]SpPortalApi api, ExistingTagFixture tag, string newName )
-			{
-				using ( tag )
-				{
-					var response = api.RenameTag( tag.Href, newName );
-					Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
-				}
-			}
-
-			public class Bad
-			{
-				[Theory, PortalData]
-				public static void MissingNameShouldYieldBadRequest( [Frozen]SpPortalApi api, ExistingTagFixture tag )
-				{
-					using ( tag )
-					{
-						var response = api.RenameTag( tag.Href, null );
-						Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
-					}
-				}
-			}
-
-			[Theory, PortalData]
-			public static void ShouldEventuallyBeEvident( [Frozen]SpPortalApi api, ExistingTagFixture tag, string newName )
-			{
-				using ( tag )
-				{
-					var response = api.RenameTag( tag.Href, newName );
-					Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
-
-					Verify.EventuallyWithBackOff( () =>
-					{
-						var apiResult = api.GetTagCollection();
-						Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-						Assert.True( apiResult.Data.Tags.Any( x => x.Name == newName && tag.Href.Equals( x._links.self.href ) ) );
-					} );
-				}
-			}
+			Tags = tags;
+			_api = api;
+			var response = api.PutTagCollection( tags );
+			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 		}
 
-		public class Delete
+		void IDisposable.Dispose()
 		{
-			[Theory, PortalData]
-			public void ShouldYieldAccepted( [Frozen]SpPortalApi api, ExistingTagFixture tag )
-			{
-				var response = api.DeleteTag( tag.Href );
-				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
-			}
-
-			[Theory, PortalData]
-			public static void ShouldEventuallyBeRemoved( [Frozen]SpPortalApi api, ExistingTagFixture tag )
-			{
-				var response = api.DeleteTag( tag.Href );
-				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
-
-				Verify.EventuallyWithBackOff( () =>
-				{
-					var apiResult = api.GetTagCollection();
-					Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-					Assert.False( apiResult.Data.Tags.Any( x => tag.Href.Equals( x._links.self.href ) ) );
-				} );
-			}
-		}
-
-		public class ExistingTagFixture : IDisposable
-		{
-			readonly SpPortalApi _api;
-			public string Href { get; private set; }
-			public string Name { get; private set; }
-
-			public ExistingTagFixture( AddLinkFixture addLink, SpPortalApi api, Guid id, string name )
-			{
-				Name = name;
-				_api = api;
-				var response = api.AddTag( addLink.Href, id, name );
-				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
-				Href = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
-			}
-
-			void IDisposable.Dispose()
-			{
-				_api.DeleteTag( Href );
-			}
-		}
-
-		public class AddLinkFixture
-		{
-			public string Href { get; private set; }
-
-			public AddLinkFixture( SpPortalApi api )
-			{
-				var response = api.GetTagCollection();
-				Assert.Equal( HttpStatusCode.OK, response.StatusCode );
-				Href = response.Data._links.add.href;
-				Assert.NotEmpty( Href );
-			}
+			_api.PutTagCollection( Enumerable.Empty<SpPortalApi.Tag>() );
 		}
 	}
 }
