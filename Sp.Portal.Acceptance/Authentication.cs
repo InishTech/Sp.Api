@@ -13,10 +13,10 @@ namespace Sp.Portal.Acceptance
 	using Xunit;
 	using Sp.Api.Shared.Wrappers;
 
-	public static class SpPortalApiFacts
+	public static class Authentication
 	{
 		[Fact]
-		public static void AuthenticationWithIncorrectCredentialsShouldThrow()
+		public static void WithIncorrectCredentialsShouldThrow()
 		{
 			var autoFixture = new Fixture();
 			autoFixture.Customize( new SoftwarePotentialApiIncorrectCredentialsConfigurationCustomization() );

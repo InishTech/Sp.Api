@@ -12,9 +12,9 @@ namespace Sp.Portal.Acceptance
 	using Xunit;
 	using Xunit.Extensions;
 
-	public static class LandingPageFacts
+	public static class LandingPage
 	{
-		[Theory, PortalData]
+		[Theory, AutoPortalDataAttribute]
 		public static void LandingPageShouldReturnHtml( SpPortalApi portalApi)
 		{
 			var request = new RestRequest( string.Empty );
@@ -24,7 +24,7 @@ namespace Sp.Portal.Acceptance
 			Assert.True( response.ContentType.StartsWith( "text/html" ) );
 		}
 
-		[Theory, PortalData]
+		[Theory, AutoPortalDataAttribute]
 		public static void LandingPageShouldContainSignedInCustomerId( SpPortalApi portalApi )
 		{
 			var request = new RestRequest( string.Empty );
@@ -40,7 +40,7 @@ namespace Sp.Portal.Acceptance
 			Assert.Contains( "18840545-4947-49e3-9639-dd13d9dbd615", node.InnerText );
 		}
 
-		[Theory, PortalData]
+		[Theory, AutoPortalDataAttribute]
 		public static void SignoffShouldRedirectBackToSts( SpPortalApi portalApi )
 		{
 			LandingPageShouldReturnHtml( portalApi );

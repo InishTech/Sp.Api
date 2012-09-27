@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
-
+﻿/* Copyright (c) 2012 Inish Technology Ventures Limited.  All rights reserved.
+ * 
+ * This code is licensed under the BSD 3-Clause License included with this source
+ * 
+ * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Portal.Acceptance
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using Xunit;
+
 	static class AssertExtensions
 	{
 		//public static void SequenceEqual<T, T2>( IEnumerable<T> left, IEnumerable<T> right, Func<T, T2> keySelector, Func<T, T, bool> comparer )

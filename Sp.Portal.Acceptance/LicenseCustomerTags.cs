@@ -1,21 +1,26 @@
-using Ploeh.AutoFixture;
-using Ploeh.AutoFixture.Xunit;
-using RestSharp;
-using Sp.Portal.Acceptance.Wrappers;
-using Sp.Test.Helpers;
-using System;
-using System.Linq;
-using System.Net;
-using Xunit;
-using Xunit.Extensions;
-
+/* Copyright (c) 2012 Inish Technology Ventures Limited.  All rights reserved.
+ * 
+ * This code is licensed under the BSD 3-Clause License included with this source
+ * 
+ * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Portal.Acceptance
 {
+	using Ploeh.AutoFixture;
+	using Ploeh.AutoFixture.Xunit;
+	using RestSharp;
+	using Sp.Portal.Acceptance.Wrappers;
+	using Sp.Test.Helpers;
+	using System;
+	using System.Linq;
+	using System.Net;
+	using Xunit;
+	using Xunit.Extensions;
+
 	public static class LicenseCustomerTags
 	{
 		public static class Put
 		{
-			[Theory, PortalData]
+			[Theory, AutoPortalDataAttribute]
 			public static void ShouldUpdateTags( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
 			{
 				var valuesForEachDefinedTag = tags.Tags
@@ -45,7 +50,7 @@ namespace Sp.Portal.Acceptance
 
 			public static class Bad
 			{
-				[Theory, PortalData]
+				[Theory, AutoPortalDataAttribute]
 				public static void EmptyValuesShouldBeRejected( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags )
 				{
 					var validTagWithValueThatIsEmpty = GenerateLicenseTag( String.Empty, tags );
@@ -56,7 +61,7 @@ namespace Sp.Portal.Acceptance
 					Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
 				}
 
-				[Theory, PortalData]
+				[Theory, AutoPortalDataAttribute]
 				public static void TooLongValuesShouldBeRejected( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
 				{
 					var validTagWithValueThatIsTooLong = GenerateLicenseTag( new String( 'a', 101 ), tags );
@@ -78,7 +83,7 @@ namespace Sp.Portal.Acceptance
 						.ToArray();
 				}
 
-				[Theory, PortalData]
+				[Theory, AutoPortalDataAttribute]
 				public static void DuplicateValuesShouldBeRejected( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
 				{
 					var validTagValue = tags.Tags

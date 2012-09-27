@@ -16,9 +16,9 @@ namespace Sp.Portal.Acceptance
 	using Xunit.Extensions;
 	using Sp.Api.Shared.Wrappers;
 
-	public static class ItemManagementFacts
+	public static class ItemManagement
 	{
-		[Theory, PortalData]
+		[Theory, AutoPortalDataAttribute]
 		public static void GetItemsShouldYieldData( SpPortalApi portalApi )
 		{
 			var request = new RestRequest( "ItemManagement/" );

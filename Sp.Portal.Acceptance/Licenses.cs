@@ -1,18 +1,23 @@
-﻿using Sp.Portal.Acceptance.Wrappers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Xunit;
-using Xunit.Extensions;
-using RestSharp;
-
+﻿/* Copyright (c) 2012 Inish Technology Ventures Limited.  All rights reserved.
+ * 
+ * This code is licensed under the BSD 3-Clause License included with this source
+ * 
+ * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Portal.Acceptance
 {
-	public static class LicenseFacts
+	using Sp.Portal.Acceptance.Wrappers;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Net;
+	using Xunit;
+	using Xunit.Extensions;
+	using RestSharp;
+
+	public static class Licenses
 	{
 		public static class IndexGet
 		{
-			[Theory, PortalData]
+			[Theory, AutoPortalDataAttribute]
 			public static void ShouldYieldResults( SpPortalApi api )
 			{
 				var apiResult = api.GetLicenses();
@@ -20,7 +25,7 @@ namespace Sp.Portal.Acceptance
 				VerifyResponse( apiResult );
 			}
 
-			[Theory, PortalData]
+			[Theory, AutoPortalDataAttribute]
 			public static void ShouldAllowPaging( SpPortalApi api )
 			{
 				var firstQuery = api.GetLicenses( "$skip=0&$top=1" );
@@ -34,7 +39,7 @@ namespace Sp.Portal.Acceptance
 				Assert.NotEqual( first._links.self, second._links.self );
 			}
 
-			[Theory, PortalData]
+			[Theory, AutoPortalDataAttribute]
 			public static void ShouldRespondToUnsupportedQueriesWithBadRequestAndStatusDescription( SpPortalApi api )
 			{
 				var expectedFailures = new Dictionary<string, string>()
@@ -69,7 +74,7 @@ namespace Sp.Portal.Acceptance
 
 		public static class Get
 		{
-			[Theory, PortalData]
+			[Theory, AutoPortalDataAttribute]
 			public static void ShouldContainData( RandomLicenseFromListFixture license )
 			{
 				// There should always be valid Activation Key
@@ -86,14 +91,14 @@ namespace Sp.Portal.Acceptance
 				Assert.NotNull( license.Selected._embedded.Tags );
 			}
 
-			[Theory, PortalData]
+			[Theory, AutoPortalDataAttribute]
 			public static void ShouldIncludeSelfLink( RandomLicenseFromListFixture license )
 			{
 				Assert.NotNull( license.Selected._links.self );
 				Assert.NotEmpty( license.Selected._links.self.href );
 			}
 
-			[Theory, PortalData]
+			[Theory, AutoPortalDataAttribute]
 			public static void ShouldIncludeLicenseTagsAssignmentLink( RandomLicenseFromListFixture license )
 			{
 				Assert.NotNull( license.Selected._links.tags );

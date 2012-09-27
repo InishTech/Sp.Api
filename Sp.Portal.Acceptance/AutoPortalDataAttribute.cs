@@ -11,9 +11,9 @@ namespace Sp.Portal.Acceptance
 	using System.Configuration;
 	using System.Net;
 
-	class PortalDataAttribute : AutoDataAttribute
+	class AutoPortalDataAttribute : AutoDataAttribute
 	{
-		public PortalDataAttribute()
+		public AutoPortalDataAttribute()
 			: base( new SoftwarePotentialPortalDataFixture()
 				.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() ) )
 		{

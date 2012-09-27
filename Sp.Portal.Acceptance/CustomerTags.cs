@@ -1,4 +1,9 @@
-﻿namespace Sp.Portal.Acceptance
+﻿/* Copyright (c) 2012 Inish Technology Ventures Limited.  All rights reserved.
+ * 
+ * This code is licensed under the BSD 3-Clause License included with this source
+ * 
+ * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
+namespace Sp.Portal.Acceptance
 {
 	using Ploeh.AutoFixture;
 	using Ploeh.AutoFixture.Xunit;
@@ -17,14 +22,14 @@
 		{
 			public static class Get
 			{
-				[Theory, PortalData]
+				[Theory, AutoPortalDataAttribute]
 				public static void ShouldAlwaysBeAvailable( SpPortalApi api )
 				{
 					var response = api.GetTagCollection();
 					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 				}
 
-				[Theory, PortalData]
+				[Theory, AutoPortalDataAttribute]
 				public static void ShouldHaveNonEmptyIds( SpPortalApi api )
 				{
 					var response = api.GetTagCollection();
@@ -32,7 +37,7 @@
 					Assert.DoesNotContain( Guid.Empty, response.Data.Tags.Select( t => t.Id ) );
 				}
 
-				[Theory, PortalData]
+				[Theory, AutoPortalDataAttribute]
 				public static void ShouldHaveNonEmptyNames( SpPortalApi api )
 				{
 					var response = api.GetTagCollection();
@@ -43,14 +48,14 @@
 
 			public static class Put
 			{
-				[Theory, PortalData]
+				[Theory, AutoPortalDataAttribute]
 				public static void ShouldYieldAccepted( [Frozen]SpPortalApi api, SpPortalApi.CustomerTag[] tags )
 				{
 					var apiResponse = api.PutCustomerTags( tags );
 					Assert.Equal( HttpStatusCode.Accepted, apiResponse.StatusCode );
 				}
 
-				[Theory, PortalData]
+				[Theory, AutoPortalDataAttribute]
 				public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
 				{
 					VerifyCollectionEventuallyGetsUpdatedTo( tags.Tags, api );
@@ -58,7 +63,7 @@
 
 				public class Reorder
 				{
-					[Theory, PortalData]
+					[Theory, AutoPortalDataAttribute]
 					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
 					{
 						var updated = tags.Tags.Reverse();
@@ -68,7 +73,7 @@
 
 				public class Rename
 				{
-					[Theory, PortalData]
+					[Theory, AutoPortalDataAttribute]
 					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
 					{
 						var updated = tags.Tags.Select( x => new SpPortalApi.CustomerTag { Id = x.Id, Name = x.Name + "renamed" } );
@@ -78,7 +83,7 @@
 
 				public class Delete
 				{
-					[Theory, PortalData]
+					[Theory, AutoPortalDataAttribute]
 					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
 					{
 						var updated = tags.Tags.Where( ( x, index ) => index != 1 );
@@ -105,7 +110,7 @@
 
 				public static class Bad
 				{
-					[Theory, PortalData]
+					[Theory, AutoPortalDataAttribute]
 					public static void NameMissingShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
 					{
 						var badTag = fixture.Build<SpPortalApi.CustomerTag>().With( x => x.Name, null ).CreateAnonymous();
@@ -115,7 +120,7 @@
 						Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 					}
 
-					[Theory, PortalData]
+					[Theory, AutoPortalDataAttribute]
 					public static void TooLongShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
 					{
 						var badTag = fixture.Build<SpPortalApi.CustomerTag>().With( x => x.Name, new String( 'a', 101 ) ).CreateAnonymous();
@@ -125,7 +130,7 @@
 						Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 					}
 
-					[Theory( Skip = "Currently 500 instead due to choice of Serializer" ), PortalData]
+					[Theory( Skip = "Currently 500 instead due to choice of Serializer" ), AutoPortalDataAttribute]
 					public static void IdEmptyShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
 					{
 						var badTag = fixture.Build<SpPortalApi.CustomerTag>().With( x => x.Id, Guid.Empty ).CreateAnonymous();
