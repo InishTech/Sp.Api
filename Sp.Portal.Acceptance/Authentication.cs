@@ -18,9 +18,9 @@ namespace Sp.Portal.Acceptance
 		[Fact]
 		public static void WithIncorrectCredentialsShouldThrow()
 		{
-			var autoFixture = new Fixture();
-			autoFixture.Customize( new SoftwarePotentialApiIncorrectCredentialsConfigurationCustomization() );
-			autoFixture.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() );
+			var autoFixture = new Fixture()
+				.Customize( new SoftwarePotentialApiIncorrectCredentialsConfigurationCustomization() )
+				.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() );
 			var portalApi = autoFixture.CreateAnonymous<SpPortalApi>();
 
 			var request = new RestRequest( string.Empty );
@@ -30,7 +30,7 @@ namespace Sp.Portal.Acceptance
 				portalApi.Execute( request ) );
 		}
 
-		public class SoftwarePotentialApiIncorrectCredentialsConfigurationCustomization : ICustomization
+		class SoftwarePotentialApiIncorrectCredentialsConfigurationCustomization : ICustomization
 		{
 			void ICustomization.Customize( IFixture fixture )
 			{

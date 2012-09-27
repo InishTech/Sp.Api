@@ -76,7 +76,6 @@
     <Compile Include="LicenseCustomerTags.cs" />
     <Compile Include="AutoPortalDataAttribute.cs" />
     <Compile Include="RandomLicenseFromListFixture.cs" />
-    <Compile Include="SoftwarePotentialPortalDataFixture.cs" />
     <Compile Include="Authentication.cs" />
     <Compile Include="Wrappers\SpPortalApi.cs" />
   </ItemGroup>
