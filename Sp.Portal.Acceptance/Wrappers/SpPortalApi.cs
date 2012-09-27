@@ -34,7 +34,7 @@ namespace Sp.Portal.Acceptance.Wrappers
 			return Execute<TagCollection>( request );
 		}
 
-		public IRestResponse PutTagCollection( IEnumerable<SpPortalApi.Tag> tags )
+		public IRestResponse PutCustomerTags( IEnumerable<CustomerTag> tags )
 		{
 			var request = new RestRequest( "tag", Method.PUT );
 			request.RequestFormat = DataFormat.Json;
@@ -42,31 +42,38 @@ namespace Sp.Portal.Acceptance.Wrappers
 			return Execute( request );
 		}
 
-		public IRestResponse PutLicenseTags( string licenseTagsAssignmentHref, TagWithValueCollection tags )
+		public IRestResponse PutLicenseTags( string licenseTagsAssignmentHref, IEnumerable<LicenseTag> tags )
 		{
-			var request = new RestRequest( licenseTagsAssignmentHref, Method.PUT ) { RequestFormat = DataFormat.Json };
+			var request = new RestRequest( licenseTagsAssignmentHref, Method.PUT );
+			request.RequestFormat = DataFormat.Json;
 			request.AddBody( tags );
 			return Execute( request );
 		}
 
-		public IRestResponse<LicensesSummaryPage> GetLicenseList()
+		public IRestResponse<LicenseCollection> GetLicenses()
 		{
 			var request = new RestRequest( "License" );
-			return Execute<LicensesSummaryPage>( request );
+			return Execute<LicenseCollection>( request );
 		}
 
-		public IRestResponse<LicenseSummary> GetLicense( string href )
+		public IRestResponse<LicenseCollection> GetLicenses( string queryParameters )
+		{
+			var request = new RestRequest( "License/?" + queryParameters );
+			return Execute<LicenseCollection>( request );
+		}
+
+		public IRestResponse<License> GetLicense( string href )
 		{
 			var request = new RestRequest( href );
-			return Execute<LicenseSummary>( request );
+			return Execute<License>( request );
 		}
 
 		public class TagCollection
 		{
-			public List<Tag> Tags { get; set; }
+			public List<CustomerTag> Tags { get; set; }
 		}
 
-		public class Tag
+		public class CustomerTag
 		{
 			public Guid Id { get; set; }
 			public string Name { get; set; }
@@ -77,7 +84,7 @@ namespace Sp.Portal.Acceptance.Wrappers
 			public string href { get; set; }
 		}
 
-		public class LicenseSummary
+		public class License
 		{
 			public string ActivationKey { get; set; }
 
@@ -91,9 +98,13 @@ namespace Sp.Portal.Acceptance.Wrappers
 			public bool IsActivatable { get; set; }
 			public string ActivatableMessage { get; set; }
 
-			public Dictionary<string, string> Tags { get; set; }
-
+			public Embedded _embedded { get; set; }
 			public Links _links { get; set; }
+
+			public class Embedded
+			{
+				public List<LicenseTag> Tags { get; set; }
+			}
 
 			public class Links
 			{
@@ -102,14 +113,15 @@ namespace Sp.Portal.Acceptance.Wrappers
 			}
 		}
 
-		public class LicensesSummaryPage
+		public class LicenseTag
 		{
-			public List<LicenseSummary> Licenses { get; set; }
+			public Guid Id { get; set; }
+			public string Value { get; set; }
 		}
 
-		public class TagWithValueCollection
+		public class LicenseCollection
 		{
-			public Dictionary<string, string> Tags { get; set; }
+			public List<License> Licenses { get; set; }
 		}
 
 		public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
