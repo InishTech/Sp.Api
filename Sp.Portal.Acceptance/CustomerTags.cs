@@ -2,7 +2,6 @@
 {
 	using Ploeh.AutoFixture;
 	using Ploeh.AutoFixture.Xunit;
-	using Ploeh.SemanticComparison.Fluent;
 	using Sp.Portal.Acceptance.Wrappers;
 	using Sp.Test.Helpers;
 	using System;
@@ -45,9 +44,9 @@
 			public static class Put
 			{
 				[Theory, PortalData]
-				public static void ShouldYieldAccepted( [Frozen]SpPortalApi api, SpPortalApi.Tag[] tags )
+				public static void ShouldYieldAccepted( [Frozen]SpPortalApi api, SpPortalApi.CustomerTag[] tags )
 				{
-					var apiResponse = api.PutTagCollection( tags );
+					var apiResponse = api.PutCustomerTags( tags );
 					Assert.Equal( HttpStatusCode.Accepted, apiResponse.StatusCode );
 				}
 
@@ -72,7 +71,7 @@
 					[Theory, PortalData]
 					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
 					{
-						var updated = tags.Tags.Select( x => new SpPortalApi.Tag { Id = x.Id, Name = x.Name + "renamed" } );
+						var updated = tags.Tags.Select( x => new SpPortalApi.CustomerTag { Id = x.Id, Name = x.Name + "renamed" } );
 						VerifyPutEventuallyGetsApplied( updated, api );
 					}
 				}
@@ -87,14 +86,14 @@
 					}
 				}
 
-				static void VerifyPutEventuallyGetsApplied( IEnumerable<SpPortalApi.Tag> expected, SpPortalApi api )
+				static void VerifyPutEventuallyGetsApplied( IEnumerable<SpPortalApi.CustomerTag> expected, SpPortalApi api )
 				{
-					var apiResponse = api.PutTagCollection( expected );
+					var apiResponse = api.PutCustomerTags( expected );
 					Assert.Equal( HttpStatusCode.Accepted, apiResponse.StatusCode );
 					VerifyCollectionEventuallyGetsUpdatedTo( expected, api );
 				}
 
-				static void VerifyCollectionEventuallyGetsUpdatedTo( IEnumerable<SpPortalApi.Tag> expected, SpPortalApi api )
+				static void VerifyCollectionEventuallyGetsUpdatedTo( IEnumerable<SpPortalApi.CustomerTag> expected, SpPortalApi api )
 				{
 					Verify.EventuallyWithBackOff( () =>
 					{
@@ -109,9 +108,19 @@
 					[Theory, PortalData]
 					public static void NameMissingShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
 					{
-						var badTag = fixture.Build<SpPortalApi.Tag>().With( x => x.Name, null ).CreateAnonymous();
+						var badTag = fixture.Build<SpPortalApi.CustomerTag>().With( x => x.Name, null ).CreateAnonymous();
 
-						var response = api.PutTagCollection( new[] { badTag } );
+						var response = api.PutCustomerTags( new[] { badTag } );
+
+						Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
+					}
+
+					[Theory, PortalData]
+					public static void TooLongShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
+					{
+						var badTag = fixture.Build<SpPortalApi.CustomerTag>().With( x => x.Name, new String( 'a', 101 ) ).CreateAnonymous();
+
+						var response = api.PutCustomerTags( new[] { badTag } );
 
 						Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 					}
@@ -119,9 +128,9 @@
 					[Theory( Skip = "Currently 500 instead due to choice of Serializer" ), PortalData]
 					public static void IdEmptyShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
 					{
-						var badTag = fixture.Build<SpPortalApi.Tag>().With( x => x.Id, Guid.Empty ).CreateAnonymous();
+						var badTag = fixture.Build<SpPortalApi.CustomerTag>().With( x => x.Id, Guid.Empty ).CreateAnonymous();
 
-						var response = api.PutTagCollection( new[] { badTag } );
+						var response = api.PutCustomerTags( new[] { badTag } );
 
 						Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 					}
@@ -133,19 +142,19 @@
 	{
 		readonly SpPortalApi _api;
 
-		public SpPortalApi.Tag[] Tags { get; private set; }
+		public SpPortalApi.CustomerTag[] Tags { get; private set; }
 
-		public ExistingTagsFixture( SpPortalApi api, SpPortalApi.Tag[] tags )
+		public ExistingTagsFixture( SpPortalApi api, SpPortalApi.CustomerTag[] tags )
 		{
 			Tags = tags;
 			_api = api;
-			var response = api.PutTagCollection( tags );
+			var response = api.PutCustomerTags( tags );
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 		}
 
 		void IDisposable.Dispose()
 		{
-			_api.PutTagCollection( Enumerable.Empty<SpPortalApi.Tag>() );
+			_api.PutCustomerTags( Enumerable.Empty<SpPortalApi.CustomerTag>() );
 		}
 	}
 }
