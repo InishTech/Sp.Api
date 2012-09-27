@@ -29,7 +29,7 @@ namespace Sp.Portal.Acceptance
 
 	/// <summary>
 	/// Wires up SpApiConfiguration instances to be provisioned with Url and Credentials from the config file.
-	/// The config file gets the settings injected into it via cusotm tasks, see build.ps1
+	/// The config file gets the settings injected into it via custom Build Tasks, see build.ps1
 	/// </summary>
 	public class SoftwarePotentialPortalDataFixture : Fixture
 	{
@@ -51,7 +51,7 @@ namespace Sp.Portal.Acceptance
 	}
 
 	/// <summary>
-	/// We Skip Cert validation in our non-production environments (on an opt-in basis).
+	/// We stub out Cert validation in our non-production environments [on an opt-in basis].
 	/// </summary>
 	class SkipSSlCertificateValidationIfRequestedCustomization : ICustomization
 	{
