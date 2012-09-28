@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="AdminTags.cs" />
     <Compile Include="LicenseList.cs" />
+    <Compile Include="LicenseTags.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -87,6 +88,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Sp.Test.Helpers\Sp.Test.Helpers.csproj">
+      <Project>{456eab19-b94d-43b9-acdf-a9bb2f19e8a7}</Project>
+      <Name>Sp.Test.Helpers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sp.Test.Html\Sp.Test.Html.csproj">
       <Project>{052A210C-1890-4731-BE07-DD78A045811D}</Project>
       <Name>Sp.Test.Html</Name>

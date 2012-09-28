@@ -21,11 +21,8 @@ namespace Sp.Portal.Html.Acceptance
 			{
 				navigator.NavigateWithAuthenticate( driver, "tag" );
 
-				// If we cannot respond in 5 seconds for any reason, a human will seriously distrust the software, no excuses
-				new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( d => d
-					.FindElement( By.Id( "tags" ) )
-					.FindElements( By.TagName( "li" ) )
-					.Count > 0 );
+				// We don't enable the Add button until we have loaded
+				new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ).Until( d => driver.FindElementById( "add_new_tag" ).Enabled );
 
 				// Delete all except the first (if there is one)
 				foreach ( IWebElement item in driver.FindElementsById( "delete_tag" ).Skip( 1 ) )
@@ -39,37 +36,29 @@ namespace Sp.Portal.Html.Acceptance
 				var newTagName = new Fixture().CreateAnonymous<string>();
 				newTagInputElement.SendKeys( newTagName );
 
-				// Save
-				driver.FindElementById( "save_tags" ).Click();
-				var tagsAsSubmitted = driver.FindElementsById( "tag_name" ).Select( tagNameEl => tagNameEl.GetAttribute( "value" ).Trim() ).ToArray();
+				string[] tagsAsSubmitted = SaveAndRecordSubmittedTags( driver );
 
-				// Wait for the success report
-				new WebDriverWait( driver, TimeSpan.FromSeconds( 3 ) ).Until( d =>
-				{
-					var messagesElement = d.FindElement( By.Id( "messages" ) );
-					return messagesElement.Displayed && -1 != messagesElement.Text.IndexOf( "saved successfully", StringComparison.InvariantCultureIgnoreCase );
-				} );
-
-				// Wait for the headings to show, potentially re-clicking home to attempt a reload/refresh if they are not what we expect (as a user might)
-				new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 3 ) ).Until( d =>
-				{
-					driver.FindElementById( "logo_link" ).FindElement( By.TagName( "a" ) ).Click();
-					return new WebDriverWait( driver, TimeSpan.FromSeconds(1) ).Until( d2 =>
-					{
-						var tagHeadings = d2.FindElements( By.ClassName( "tag_header" ) ).Select( heading => heading.Text ).ToArray();
-						return  tagsAsSubmitted.OrderBy( x => x ).SequenceEqual( tagHeadings.OrderBy( x => x ) );
-					} );
-				} );
+				// TODO verify the save by refreshing this page instead
+				LicenseTags.AwaitSyncingOfSubmittedTags( tagsAsSubmitted, driver );
 			}
 		}
 
-		class WebDriverWaitIgnoringNestedTimeouts : WebDriverWait
+		public static string[] SaveAndRecordSubmittedTags( RemoteWebDriver driver )
 		{
-			public WebDriverWaitIgnoringNestedTimeouts( IWebDriver driver, TimeSpan timeout )
-				: base( driver, timeout )
+			// Save
+			driver.FindElementById( "save_tags" ).Click();
+
+			// Stash the values we entered
+			var tagsAsSubmitted = driver.FindElementsById( "tag_name" ).Select( tagNameEl => tagNameEl.GetAttribute( "value" ).Trim() ).ToArray();
+
+			// Wait for the success report
+			new WebDriverWait( driver, TimeSpan.FromSeconds( 3 ) ).Until( d =>
 			{
-				IgnoreExceptionTypes( typeof( TimeoutException ) );
-			}
+				var messagesElement = driver.FindElementById( "messages" );
+				return messagesElement.Displayed && -1 != messagesElement.Text.IndexOf( "saved successfully", StringComparison.InvariantCultureIgnoreCase );
+			} );
+
+			return tagsAsSubmitted;
 		}
 	}
 }
