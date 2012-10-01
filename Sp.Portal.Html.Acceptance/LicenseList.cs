@@ -5,7 +5,6 @@
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Portal.Html.Acceptance
 {
-	using OpenQA.Selenium;
 	using OpenQA.Selenium.Remote;
 	using OpenQA.Selenium.Support.UI;
 	using Sp.Api.Shared;
@@ -22,12 +21,10 @@ namespace Sp.Portal.Html.Acceptance
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
 				navigator.NavigateWithAuthenticate( driver, "license" );
-				// If we cannot respond in 5 seconds for any reason, a human will seriously distrust the software, no excuses
+				
+				// Even when cold, 5 seconds is a long time to wait
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
-				wait.Until( d => d
-					.FindElement( By.Id( "license-list" ) )
-					.FindElements( By.TagName( "tr" ) )
-					.Count > 0 );
+				wait.Until( d => driver.FindElementsByCssSelector( "#license-list tr" ).Count > 0 );
 			}
 		}
 	}

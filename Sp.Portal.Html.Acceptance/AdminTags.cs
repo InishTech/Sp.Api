@@ -22,7 +22,8 @@ namespace Sp.Portal.Html.Acceptance
 				navigator.NavigateWithAuthenticate( driver, "tag" );
 
 				// We don't enable the Add button until we have loaded
-				new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ).Until( d => driver.FindElementById( "add_new_tag" ).Enabled );
+				WebDriverWait shortWait = new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) );
+				shortWait.Until( d => driver.FindElementById( "add_new_tag" ).Enabled );
 
 				// Delete all except the first (if there is one)
 				foreach ( IWebElement item in driver.FindElementsById( "delete_tag" ).Skip( 1 ) )
@@ -38,8 +39,11 @@ namespace Sp.Portal.Html.Acceptance
 
 				string[] tagsAsSubmitted = SaveAndRecordSubmittedTags( driver );
 
-				// TODO verify the save by refreshing this page instead
-				LicenseTags.AwaitSyncingOfSubmittedTags( tagsAsSubmitted, driver );
+				// Verify reloading the page shows the same tags pretty quickly
+				driver.Navigate().Refresh();
+				shortWait.Until( d =>
+					driver.FindElementById( "add_new_tag" ).Enabled
+					&& tagsAsSubmitted.SequenceEqual( driver.FindElementsById( "tag_name" ).Select( tagNameEl => tagNameEl.GetAttribute( "value" ).Trim() ) ) );
 			}
 		}
 

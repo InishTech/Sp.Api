@@ -23,7 +23,7 @@ namespace Sp.Portal.Html.Acceptance
 			{
 				navigator.NavigateWithAuthenticate( driver, "tag" );
 
-				var tagNames = EnsureWeHaveTagsDefined( driver );
+				var tagNames = EnsureWeHaveSomeTagsDefined( driver );
 
 				// wait for any updates to propagate to the licenses page
 				AwaitSyncingOfSubmittedTags( tagNames, driver );
@@ -71,7 +71,7 @@ namespace Sp.Portal.Html.Acceptance
 					return new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ).Until( d2 =>
 					{
 						var editedRow = findLicenseRowEditedOrDefault();
-						if (editedRow == null)
+						if ( editedRow == null )
 							return false;
 						var valuesAsFound = string.Join( "|", editedRow.FindElements( By.TagName( "td" ) ).Select( x => x.Text ) );
 						return -1 != valuesAsFound.IndexOf( valuesExpected );
@@ -80,7 +80,7 @@ namespace Sp.Portal.Html.Acceptance
 			}
 		}
 
-		static string[] EnsureWeHaveTagsDefined( RemoteWebDriver driver )
+		static string[] EnsureWeHaveSomeTagsDefined( RemoteWebDriver driver )
 		{
 			// The page doesn't enable the Add button until we have loaded
 			new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ).Until( d => d.FindElement( By.Id( "add_new_tag" ) ).Enabled );
@@ -104,7 +104,7 @@ namespace Sp.Portal.Html.Acceptance
 			return AdminTags.SaveAndRecordSubmittedTags( driver );
 		}
 
-		public static void AwaitSyncingOfSubmittedTags( string[] tagsAsSubmitted, RemoteWebDriver driver )
+		static void AwaitSyncingOfSubmittedTags( string[] tagsAsSubmitted, RemoteWebDriver driver )
 		{
 			// Wait for the headings to show, potentially re-clicking home to attempt a reload/refresh if they are not what we expect (as a user might)
 			new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 3 ) ).Until( d =>
