@@ -25,26 +25,30 @@ namespace Sp.Portal.Html.Acceptance
 
 				var tagNames = EnsureWeHaveSomeTagsDefined( driver );
 
-				// wait for any updates to propagate to the licenses page
+				// wait for any updates to propagate to the licenses page - the column headings at the top need to have synced up
 				AwaitSyncingOfSubmittedTags( tagNames, driver );
 
-				// Pop up the editor for a random one
+				// Wait for page to populate and then click edit to pop up the editor for a random license row
 				Func<ReadOnlyCollection<IWebElement>> findLicenseRows = () => driver.FindElementsByCssSelector( "#license-list tr" );
-				var licenseRowToEdit = findLicenseRows().ElementAtRandom();
+				IWebElement licenseRowToEdit = (new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ).Until( d2 =>
+				{
+					ReadOnlyCollection<IWebElement> loadedRows = findLicenseRows();
+					if ( loadedRows.Count == 0 ) // Not loaded yet
+						return null;
+					return loadedRows.ElementAtRandom();
+				} ));
 				var randomTagEditButton = licenseRowToEdit.FindElement( By.ClassName( "tag_editor_dialog_launcher" ) );
-				var editedLicenseKey = randomTagEditButton.GetAttribute( "data-key" );
-				Func<IWebElement> findLicenseRowEditedOrDefault = () => findLicenseRows().SingleOrDefault( x => -1 != x.Text.IndexOf( editedLicenseKey ) );
+				var editedLicenseActivationKey = randomTagEditButton.GetAttribute( "data-key" );
+				Func<IWebElement> findLicenseRowEditedOrDefault = () => findLicenseRows().SingleOrDefault( x => -1 != x.Text.IndexOf( editedLicenseActivationKey ) );
 				randomTagEditButton.Click();
 
 				var tagEditorEl = driver.FindElementById( "tag_editor" );
 
-				// Check the tag names are as we just set them up
-				var tagLabelsOnDialog = tagEditorEl.FindElements( By.TagName( "label" ) )
-					.Where( x => x.GetAttribute( "for" ) == "tag" )
-					.Select( x => x.Text.TrimEnd( ':' ) );
-				Assert.Equal( string.Join( "|", tagNames ), string.Join( "|", tagLabelsOnDialog ) );
+				// Check the tag names in the popup are as we just set them up (i.e. same as we entered (and also same as column headings on license list))
+				var tagLabelsOnDialog = tagEditorEl.FindElements( By.CssSelector( "label[for='tag']" ) ).Select( x => x.Text.TrimEnd( ':' ) ).ToArray();
+				Assert.Equal( tagNames, tagLabelsOnDialog );
 
-				// Lash in some values
+				// Lash in some values and hit Save
 				var tagTextInputs = tagEditorEl.FindElements( By.Name( "tag" ) );
 				foreach ( var tagTextInputEl in tagTextInputs )
 				{
@@ -52,17 +56,10 @@ namespace Sp.Portal.Html.Acceptance
 					tagTextInputEl.SendKeys( new Fixture().CreateAnonymous<string>( "value" ) );
 				}
 				var valuesInputted = tagEditorEl.FindElements( By.Name( "tag" ) ).Select( x => x.GetAttribute( "value" ).Trim() ).ToArray();
-				var valuesExpected = string.Join( "|", valuesInputted );
-
-				// Save
 				driver.FindElementById( "save_tags" ).Click();
 
 				// Verify inputted values show on page without any refreshes
-				new WebDriverWait( driver, TimeSpan.FromSeconds( 3 ) ).Until( d2 =>
-				{
-					var valuesAsFound = string.Join( "|", findLicenseRowEditedOrDefault().FindElements( By.TagName( "td" ) ).Select( x => x.Text ) );
-					return -1 != valuesAsFound.IndexOf( valuesExpected );
-				} );
+				new WebDriverWait( driver, TimeSpan.FromSeconds( 3 ) ).Until( d2 => ContainsSequenceOfColumnsContaining( valuesInputted, findLicenseRowEditedOrDefault() ) );
 
 				// Verify everything can show when we get everything fresh from the server
 				new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 4 ) ).Until( d =>
@@ -71,13 +68,18 @@ namespace Sp.Portal.Html.Acceptance
 					return new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ).Until( d2 =>
 					{
 						var editedRow = findLicenseRowEditedOrDefault();
-						if ( editedRow == null )
+						if ( editedRow == null ) // rows not loaded yet
 							return false;
-						var valuesAsFound = string.Join( "|", editedRow.FindElements( By.TagName( "td" ) ).Select( x => x.Text ) );
-						return -1 != valuesAsFound.IndexOf( valuesExpected );
+						return ContainsSequenceOfColumnsContaining( valuesInputted, editedRow );
 					} );
 				} );
 			}
+		}
+
+		static bool ContainsSequenceOfColumnsContaining( String[] expected, IWebElement rowEl )
+		{
+			var valuesAsFound = string.Join( "|", rowEl.FindElements( By.TagName( "td" ) ).Select( x => x.Text ) );
+			return -1 != valuesAsFound.IndexOf( string.Join( "|", expected ) );
 		}
 
 		static string[] EnsureWeHaveSomeTagsDefined( RemoteWebDriver driver )

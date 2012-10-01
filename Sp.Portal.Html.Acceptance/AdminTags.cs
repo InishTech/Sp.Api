@@ -15,7 +15,7 @@ namespace Sp.Portal.Html.Acceptance
 	public class AdminTags
 	{
 		[Theory, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
-		public static void ShouldPropagateDeletesAndAddsToMainScreen( RemoteWebDriver driver, AuthenticatingNavigator navigator )
+		public static void DeletesAndAddsShouldBeEvidentOnRefresh( RemoteWebDriver driver, AuthenticatingNavigator navigator )
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
