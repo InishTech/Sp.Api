@@ -18,12 +18,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D177EBF0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0E569842-3DB9-4DE1-8485-295EF7560A14}"
 	ProjectSection(SolutionItems) = preProject
-		Sp.Portal.Acceptance.xunit = Sp.Portal.Acceptance.xunit
+		Sp.Api.Portal.Acceptance.xunit = Sp.Api.Portal.Acceptance.xunit
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Portal.Acceptance", "Sp.Portal.Acceptance\Sp.Portal.Acceptance.csproj", "{1B7FBCA3-45B4-438D-AE18-743FA70CEDB1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Api.Portal.Acceptance", "Sp.Api.Portal.Acceptance\Sp.Api.Portal.Acceptance.csproj", "{1B7FBCA3-45B4-438D-AE18-743FA70CEDB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Portal.Html.Acceptance", "Sp.Portal.Html.Acceptance\Sp.Portal.Html.Acceptance.csproj", "{C717F07C-6169-4203-914A-5743F834B2B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Api.Portal.Html.Acceptance", "Sp.Api.Portal.Html.Acceptance\Sp.Api.Portal.Html.Acceptance.csproj", "{C717F07C-6169-4203-914A-5743F834B2B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Test.Helpers", "Sp.Test.Helpers\Sp.Test.Helpers.csproj", "{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}"
 EndProject
