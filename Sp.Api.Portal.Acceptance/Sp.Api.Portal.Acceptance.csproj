@@ -8,7 +8,7 @@
     <ProjectGuid>{1B7FBCA3-45B4-438D-AE18-743FA70CEDB1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sp.Portal.Acceptance</RootNamespace>
+    <RootNamespace>Sp.Api.Portal.Acceptance</RootNamespace>
     <AssemblyName>Sp.Api.Portal.Acceptance</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

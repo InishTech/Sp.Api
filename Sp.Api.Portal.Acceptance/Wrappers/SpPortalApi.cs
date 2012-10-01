@@ -3,7 +3,7 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
-namespace Sp.Portal.Acceptance.Wrappers
+namespace Sp.Api.Portal.Acceptance.Wrappers
 {
 	using RestSharp;
 	using Sp.Api.Shared.Wrappers;

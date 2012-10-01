@@ -3,10 +3,10 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
-namespace Sp.Portal.Acceptance
+namespace Sp.Api.Portal.Acceptance
 {
 	using RestSharp;
-	using Sp.Portal.Acceptance.Wrappers;
+	using Sp.Api.Portal.Acceptance.Wrappers;
 	using Sp.Test.Helpers;
 	using System.Linq;
 	using System.Net;

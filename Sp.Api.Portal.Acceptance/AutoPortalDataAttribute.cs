@@ -3,7 +3,7 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
-namespace Sp.Portal.Acceptance
+namespace Sp.Api.Portal.Acceptance
 {
 	using Ploeh.AutoFixture;
 	using Ploeh.AutoFixture.Xunit;

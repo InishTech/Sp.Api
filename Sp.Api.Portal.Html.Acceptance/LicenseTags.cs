@@ -1,11 +1,11 @@
-namespace Sp.Portal.Html.Acceptance
+namespace Sp.Api.Portal.Html.Acceptance
 {
 	using OpenQA.Selenium;
 	using OpenQA.Selenium.Remote;
 	using OpenQA.Selenium.Support.UI;
 	using Ploeh.AutoFixture;
 	using Sp.Api.Shared;
-	using Sp.Portal.Acceptance;
+	using Sp.Api.Portal.Acceptance;
 	using Sp.Test.Helpers;
 	using Sp.Test.Html;
 	using System;

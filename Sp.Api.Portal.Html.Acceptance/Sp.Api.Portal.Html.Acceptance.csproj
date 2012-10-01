@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C717F07C-6169-4203-914A-5743F834B2B1}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Sp.Portal.Html.Acceptance</RootNamespace>
+    <RootNamespace>Sp.Api.Portal.Html.Acceptance</RootNamespace>
     <AssemblyName>Sp.Api.Portal.Html.Acceptance</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
