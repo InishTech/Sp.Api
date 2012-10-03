@@ -21,8 +21,8 @@ namespace Sp.Api.Portal.Acceptance
 			var apiResult = api.GetLicenses();
 			Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
 			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-			Assert.True( apiResult.Data.Licenses.Any(), GetType().Name + " requires the target login to have at least one License" );
-			_randomItem = apiResult.Data.Licenses.ElementAtRandom();
+			Assert.True( apiResult.Data.results.Any(), GetType().Name + " requires the target login to have at least one License" );
+			_randomItem = apiResult.Data.results.ElementAtRandom();
 		}
 
 		public SpPortalApi.License Selected

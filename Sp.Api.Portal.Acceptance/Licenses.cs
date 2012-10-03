@@ -40,6 +40,16 @@ namespace Sp.Api.Portal.Acceptance
 			}
 
 			[Theory, AutoPortalDataAttribute]
+			public static void ShouldAllowCounting( SpPortalApi api )
+			{
+				var apiResult = api.GetLicenses( "$inlinecount=allpages&$top=1" );
+
+				VerifyResponse( apiResult, shouldHaveCount: true );
+				Assert.True( apiResult.Data.__count > 1 );
+				Assert.Equal( 1, apiResult.Data.results.Count );
+			}
+
+			[Theory, AutoPortalDataAttribute]
 			public static void ShouldRespondToUnsupportedQueriesWithBadRequestAndStatusDescription( SpPortalApi api )
 			{
 				var expectedFailures = new Dictionary<string, string>()
@@ -58,7 +68,7 @@ namespace Sp.Api.Portal.Acceptance
 				}
 			}
 
-			static SpPortalApi.License[] VerifyResponse( IRestResponse<SpPortalApi.LicenseCollection> apiResult )
+			static SpPortalApi.License[] VerifyResponse( IRestResponse<SpPortalApi.Licenses> apiResult, bool shouldHaveCount = false )
 			{
 				// It should always be possible to get the list
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
@@ -66,9 +76,11 @@ namespace Sp.Api.Portal.Acceptance
 				Assert.NotNull( apiResult.Data );
 				//-- Portal consumer expects Issue date, activation key, product, version, eval, renewal
 				// An empty list is always represented as an empty collection, not null
-				Assert.NotNull( apiResult.Data.Licenses );
+				Assert.NotNull( apiResult.Data.results );
 
-				return apiResult.Data.Licenses.ToArray();
+				Assert.Equal( shouldHaveCount, apiResult.Data.__count.HasValue );
+
+				return apiResult.Data.results.ToArray();
 			}
 		}
 

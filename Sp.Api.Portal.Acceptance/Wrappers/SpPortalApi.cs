@@ -50,16 +50,16 @@ namespace Sp.Api.Portal.Acceptance.Wrappers
 			return Execute( request );
 		}
 
-		public IRestResponse<LicenseCollection> GetLicenses()
+		public IRestResponse<Licenses> GetLicenses()
 		{
 			var request = new RestRequest( "License" );
-			return Execute<LicenseCollection>( request );
+			return Execute<Licenses>( request );
 		}
 
-		public IRestResponse<LicenseCollection> GetLicenses( string queryParameters )
+		public IRestResponse<Licenses> GetLicenses( string queryParameters )
 		{
 			var request = new RestRequest( "License/?" + queryParameters );
-			return Execute<LicenseCollection>( request );
+			return Execute<Licenses>( request );
 		}
 
 		public IRestResponse<License> GetLicense( string href )
@@ -119,9 +119,10 @@ namespace Sp.Api.Portal.Acceptance.Wrappers
 			public string Value { get; set; }
 		}
 
-		public class LicenseCollection
+		public class Licenses
 		{
-			public List<License> Licenses { get; set; }
+			public int? __count { get; set; }
+			public List<License> results { get; set; }
 		}
 
 		public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
