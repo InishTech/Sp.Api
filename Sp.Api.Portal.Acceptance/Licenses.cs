@@ -12,6 +12,7 @@ namespace Sp.Api.Portal.Acceptance
 	using Xunit;
 	using Xunit.Extensions;
 	using RestSharp;
+	using System;
 
 	public static class Licenses
 	{
@@ -49,6 +50,19 @@ namespace Sp.Api.Portal.Acceptance
 				Assert.Equal( 1, apiResult.Data.results.Count );
 			}
 
+			[Theory, AutoPortalData]
+			public static void ShouldOrderByIssueDateDescending( SpPortalApi api )
+			{
+				var apiResult = api.GetLicenses();
+
+				var data = VerifyResponse( apiResult );
+
+				Assert.NotEmpty( data );
+				var ordered = data.OrderByDescending( x => DateTime.Parse( x.IssueDate, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat ) ).ToArray();
+
+				Assert.Equal(ordered.AsEnumerable(), data.AsEnumerable() );
+			}
+
 			[Theory, AutoPortalDataAttribute]
 			public static void ShouldRespondToUnsupportedQueriesWithBadRequestAndStatusDescription( SpPortalApi api )
 			{
@@ -60,7 +74,7 @@ namespace Sp.Api.Portal.Acceptance
 				    {"$orderby=","The OrderBy field is required."}  // a specified query field must be provided
 				};
 
-				foreach ( var expectedFailure in expectedFailures )
+				foreach (var expectedFailure in expectedFailures)
 				{
 					var invalidQueryResult = api.GetLicenses( expectedFailure.Key );
 					Assert.Equal( HttpStatusCode.BadRequest, invalidQueryResult.StatusCode );
