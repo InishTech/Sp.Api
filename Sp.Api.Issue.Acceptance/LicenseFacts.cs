@@ -49,55 +49,21 @@ namespace Sp.Api.Issue.Acceptance
 			{
 				var apiResult = api.GetLicenseList( "$expand=Customer" );
 
-				// It should always be possible to get the list
-				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-				// If the request is OK, there should always be some Data
-				Assert.NotNull( apiResult.Data );
-				// never null, may be empty
-				var licenseData = apiResult.Data.results;
-
-				Assert.NotNull( licenseData );
+				var licenseData = VerifyResponse( apiResult );
 
 				// TODO: Ruben, how are we going to test this properly
 				Assert.True( licenseData.All( x => x._embedded != null ) ); ; // every  returned entry has an _embedded field
 				Assert.True( licenseData.Any( x => x._embedded.Customer != null ) );
 				Assert.True( licenseData.Any( x => x._embedded.Customer == null ) );
 			}
-			
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void EmbeddedCustomersShouldHaveLinks( SpIssueApi api )
-			{
-				var apiResult = api.GetLicenseList( "$expand=Customer" );
-
-				// It should always be possible to get the list
-				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-				// If the request is OK, there should always be some Data
-				Assert.NotNull( apiResult.Data );
-				// never null, may be empty
-				var licenseData = apiResult.Data.results;
-
-				Assert.NotNull( licenseData );
-
-				// TODO: Ruben, how are we going to test this properly
-				Assert.True( licenseData.All( x => x._embedded != null ) ); ; // every  returned entry has an _embedded field
-				Assert.True( licenseData.Any( x => x._embedded.Customer != null ) );
-				Assert.True( licenseData.Any( x => x._embedded.Customer == null ) );
-			}
-
+	
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetListShouldBePageable( SpIssueApi api )
 			{
 				var apiResult = api.GetLicenseList( "$skip=1&$top=1" );
 
-				// It should always be possible to get the list
-				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-				// If the request is OK, there should always be some Data
-				Assert.NotNull( apiResult.Data );
+				var licenseData = VerifyResponse( apiResult );
 
-				// never null, may be empty
-				var licenseData = apiResult.Data.results;
-
-				Assert.NotNull( licenseData );
 				// TODO: Ruben, how are we going to test this properly
 				Assert.Equal( 1, licenseData.Count );
 			}
@@ -107,6 +73,35 @@ namespace Sp.Api.Issue.Acceptance
 			{
 				var apiResult = api.GetLicenseList( "$orderby=IssueDate desc" );
 
+				var licenseData = VerifyResponse( apiResult );
+
+				var resorted = licenseData.OrderByDescending( x => DateTime.Parse(x.IssueDate, CultureInfo.InvariantCulture) ).ToArray();
+
+				Assert.True( Enumerable.SequenceEqual( resorted, licenseData ) );
+			}
+
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void GetListShouldBeFilterableForUnassignedLicenses( SpIssueApi api )
+			{
+				var apiResult = api.GetLicenseList( "$filter=Customer eq null" );
+
+				var licenseData = VerifyResponse( apiResult );
+
+				Assert.True( licenseData.All( x => x._embedded.Customer == null ) );
+			}
+
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void GetListShouldBeFilterableForAssignedLicenses( SpIssueApi api )
+			{
+				var apiResult = api.GetLicenseList( "$filter=not (Customer eq null)" );
+
+				var licenseData = VerifyResponse( apiResult );
+
+				Assert.True( licenseData.All( x => x._embedded.Customer != null ) );
+			}
+
+			private static List<SpIssueApi.License> VerifyResponse( RestSharp.IRestResponse<SpIssueApi.Licenses> apiResult )
+			{
 				// It should always be possible to get the list
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
 				// If the request is OK, there should always be some Data
@@ -115,11 +110,8 @@ namespace Sp.Api.Issue.Acceptance
 				// never null, may be empty
 				var licenseData = apiResult.Data.results;
 				Assert.NotNull( licenseData );
-
-				var resorted = licenseData.OrderByDescending( x => DateTime.Parse(x.IssueDate, CultureInfo.InvariantCulture) ).ToArray();
-
-				Assert.True( Enumerable.SequenceEqual( resorted, licenseData ) );
-				//Assert.Equal<IEnumerable<SpIssueApi.License>>( resorted, licenseData);
+				
+				return licenseData;
 			}
 
 			[Theory, AutoSoftwarePotentialApiData]
