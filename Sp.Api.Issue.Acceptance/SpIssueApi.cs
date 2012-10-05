@@ -20,16 +20,21 @@ namespace Sp.Api.Issue
 		{
 		}
 
-		internal IRestResponse<LicensesSummaryPage> GetLicenseList()
+		internal IRestResponse<Licenses> GetLicenseList()
 		{
-			var request = new RestRequest( ApiPrefix.Issue + "/License" );
-			return Execute<LicensesSummaryPage>( request );
+			return GetLicenseList( "" );
 		}
 
-		internal IRestResponse<LicenseSummary> GetLicense( string href )
+		internal IRestResponse<Licenses> GetLicenseList(string query)
+		{
+			var request = new RestRequest( ApiPrefix.Issue + "/License?"+query );
+			return Execute<Licenses>( request );
+		}
+
+		internal IRestResponse<License> GetLicense( string href )
 		{
 			var request = new RestRequest( href );
-			return Execute<LicenseSummary>( request );
+			return Execute<License>( request );
 		}
 
 		public IRestResponse PutLicenseCustomerAssignment( string licenseCustomerAssignmentHref, SpCustomerApi.CustomerSummary customer )
@@ -48,12 +53,13 @@ namespace Sp.Api.Issue
 			return Execute( request );
 		}
 
-		public class LicensesSummaryPage
+		public class Licenses
 		{
-			public List<LicenseSummary> Licenses { get; set; }
+			public int? __count { get; set; }
+			public List<License> results { get; set; }
 		}
-
-		public class LicenseSummary
+		
+		public class License
 		{
 			// External identifier as used in activation
 			public string ActivationKey { get; set; }
@@ -70,6 +76,7 @@ namespace Sp.Api.Issue
 			public bool IsActivatable { get; set; }
 
 			public Links _links { get; set; }
+			public Embedded _embedded { get; set; }
 
 			public class Links
 			{
@@ -82,6 +89,19 @@ namespace Sp.Api.Issue
 			{
 				public string href { get; set; }
 			}
+
+			public class Embedded
+			{
+				// TODO
+				public Customer Customer { get; set; }
+			}
+
+		}
+
+		public class Customer
+		{
+			public string Name { get; set; }
+			public string Description { get; set; }
 		}
 	}
 }

@@ -4,6 +4,7 @@ obj
 *.suo
 *resharper*
 *.user
+*.dat
 *.cache
 packages
 TestResults
