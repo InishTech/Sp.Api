@@ -56,16 +56,30 @@ namespace Sp.Api.Issue.Acceptance
 				Assert.True( licenseData.Any( x => x._embedded.Customer != null ) );
 				Assert.True( licenseData.Any( x => x._embedded.Customer == null ) );
 			}
-	
+
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetListShouldBePageable( SpIssueApi api )
 			{
-				var apiResult = api.GetLicenseList( "$skip=1&$top=1" );
+				var firstRequest = api.GetLicenseList( "$skip=0&$top=1" );
+				var secondRequest = api.GetLicenseList( "$skip=1&$top=1" );
 
-				var licenseData = VerifyResponse( apiResult );
+				var first = VerifyResponse( firstRequest ).Single();
+				var second = VerifyResponse( secondRequest ).Single();
 
-				// TODO: Ruben, how are we going to test this properly
-				Assert.Equal( 1, licenseData.Count );
+				// Comparing objects for equality is best done by comparing the always present self links
+				Assert.NotNull(first );
+				Assert.NotNull(second );
+				Assert.NotEqual( first._links.self.href, second._links.self.href );
+			}
+
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void ShouldAllowCounting( SpIssueApi api )
+			{
+				var apiResult = api.GetLicenseList( "$inlinecount=allpages&$top=1" );
+
+				VerifyResponse( apiResult, shouldHaveCount: true );
+				Assert.True( apiResult.Data.__count > 1 );
+				Assert.Equal( 1, apiResult.Data.results.Count );
 			}
 
 			[Theory, AutoSoftwarePotentialApiData]
@@ -75,7 +89,7 @@ namespace Sp.Api.Issue.Acceptance
 
 				var licenseData = VerifyResponse( apiResult );
 
-				var resorted = licenseData.OrderByDescending( x => DateTime.Parse(x.IssueDate, CultureInfo.InvariantCulture) ).ToArray();
+				var resorted = licenseData.OrderByDescending( x => DateTime.Parse( x.IssueDate, CultureInfo.InvariantCulture ) ).ToArray();
 
 				Assert.True( Enumerable.SequenceEqual( resorted, licenseData ) );
 			}
@@ -100,7 +114,7 @@ namespace Sp.Api.Issue.Acceptance
 				Assert.True( licenseData.All( x => x._embedded.Customer != null ) );
 			}
 
-			private static List<SpIssueApi.License> VerifyResponse( RestSharp.IRestResponse<SpIssueApi.Licenses> apiResult )
+			private static List<SpIssueApi.License> VerifyResponse( RestSharp.IRestResponse<SpIssueApi.Licenses> apiResult, bool shouldHaveCount = false )
 			{
 				// It should always be possible to get the list
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
@@ -110,7 +124,9 @@ namespace Sp.Api.Issue.Acceptance
 				// never null, may be empty
 				var licenseData = apiResult.Data.results;
 				Assert.NotNull( licenseData );
-				
+
+				Assert.Equal( shouldHaveCount, apiResult.Data.__count.HasValue );
+
 				return licenseData;
 			}
 

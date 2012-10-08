@@ -37,7 +37,7 @@ namespace Sp.Api.Portal.Acceptance
 
 				Assert.NotNull( first );
 				Assert.NotNull( second );
-				Assert.NotEqual( first._links.self, second._links.self );
+				Assert.NotEqual( first._links.self.href, second._links.self.href );
 			}
 
 			[Theory, AutoPortalDataAttribute]
