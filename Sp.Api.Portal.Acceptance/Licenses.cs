@@ -68,8 +68,8 @@ namespace Sp.Api.Portal.Acceptance
 			{
 				var expectedFailures = new Dictionary<string, string>()
 				{
-				    {"$top=101","The field Top must be between 1 and 100."},
-				    {"$top=NaN","The field Top must be between 1 and 100."},
+				    {"$top=1001","The field Top must be between 1 and 1000."},
+				    {"$top=NaN","The field Top must be between 1 and 1000."},
 				    {"$top=","The Top field is required."},         // a specified query field must be provided
 				    {"$orderby=","The OrderBy field is required."}  // a specified query field must be provided
 				};
