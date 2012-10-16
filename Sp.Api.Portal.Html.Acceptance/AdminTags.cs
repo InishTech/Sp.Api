@@ -56,7 +56,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 			var tagsAsSubmitted = driver.FindElementsById( "tag_name" ).Select( tagNameEl => tagNameEl.GetAttribute( "value" ).Trim() ).ToArray();
 
 			// Wait for the success report
-			new WebDriverWait( driver, TimeSpan.FromSeconds( 3 ) ).Until( d =>
+			new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( d =>
 			{
 				var messagesElement = driver.FindElementById( "messages" );
 				return messagesElement.Displayed && -1 != messagesElement.Text.IndexOf( "saved successfully", StringComparison.InvariantCultureIgnoreCase );
