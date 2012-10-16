@@ -3,35 +3,34 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
-using System.Collections.Generic;
-
 namespace Sp.Api.Issue.Acceptance
 {
-	using System;
-	using System.Linq;
-	using System.Net;
 	using Ploeh.AutoFixture.Xunit;
-	using Sp.Api.Shared;
-	using Sp.Test.Helpers;
-	using Xunit;
-	using Xunit.Extensions;
 	using Ploeh.SemanticComparison.Fluent;
 	using Sp.Api.Customer.Acceptance;
+	using Sp.Api.Shared;
+	using Sp.Test.Helpers;
+	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
+	using System.Net;
+	using Xunit;
+	using Xunit.Extensions;
 
 	public static class LicenseFacts
 	{
-		public static class Collection
+		public static class GetList
 		{
 			/// <summary>
-			/// The master license list yields a JSON response object which contains the License List collection in a 'Licenses' value.
+			/// The master license list yields a JSON response object which contains the License List collection in a 'results' property.
 			/// </summary>
 			/// <remarks>
 			/// There are no standard failure conditions for this request - even an empty list returns a well formed result, just with the 'Licenses' collection empty.
 			/// </remarks>
 			/// <param name="api">Api wrapper.</param>
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void GetListShouldYieldData( SpIssueApi api )
+			public static void ShouldYieldData( SpIssueApi api )
 			{
 				var apiResult = api.GetLicenseList();
 				// It should always be possible to get the list
@@ -45,20 +44,7 @@ namespace Sp.Api.Issue.Acceptance
 			}
 
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void GetListShouldYieldDataWithEmbeddedCustomer( SpIssueApi api )
-			{
-				var apiResult = api.GetLicenseList( "$expand=Customer" );
-
-				var licenseData = VerifyResponse( apiResult );
-
-				// TODO: Ruben, how are we going to test this properly
-				Assert.True( licenseData.All( x => x._embedded != null ) ); ; // every  returned entry has an _embedded field
-				Assert.True( licenseData.Any( x => x._embedded.Customer != null ) );
-				Assert.True( licenseData.Any( x => x._embedded.Customer == null ) );
-			}
-
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void GetListShouldBePageable( SpIssueApi api )
+			public static void ShouldBePageable( SpIssueApi api )
 			{
 				var firstRequest = api.GetLicenseList( "$skip=0&$top=1" );
 				var secondRequest = api.GetLicenseList( "$skip=1&$top=1" );
@@ -66,9 +52,9 @@ namespace Sp.Api.Issue.Acceptance
 				var first = VerifyResponse( firstRequest ).Single();
 				var second = VerifyResponse( secondRequest ).Single();
 
-				// Comparing objects for equality is best done by comparing the always present self links
-				Assert.NotNull(first );
-				Assert.NotNull(second );
+				// Comparing objects for equality is best done by comparing the always-present self links
+				Assert.NotNull( first );
+				Assert.NotNull( second );
 				Assert.NotEqual( first._links.self.href, second._links.self.href );
 			}
 
@@ -83,7 +69,7 @@ namespace Sp.Api.Issue.Acceptance
 			}
 
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void GetListShouldBeSortable( SpIssueApi api )
+			public static void ShouldBeSortable( SpIssueApi api )
 			{
 				var apiResult = api.GetLicenseList( "$orderby=IssueDate desc" );
 
@@ -92,62 +78,6 @@ namespace Sp.Api.Issue.Acceptance
 				var resorted = licenseData.OrderByDescending( x => DateTime.Parse( x.IssueDate, CultureInfo.InvariantCulture ) ).ToArray();
 
 				Assert.True( Enumerable.SequenceEqual( resorted, licenseData ) );
-			}
-
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void GetListShouldBeFilterableForUnassignedLicenses( SpIssueApi api )
-			{
-				var apiResult = api.GetLicenseList( "$filter=Customer eq null" );
-
-				var licenseData = VerifyResponse( apiResult );
-
-				Assert.True( licenseData.All( x => x._embedded.Customer == null ) );
-			}
-
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void GetListShouldBeFilterableForAssignedLicenses( SpIssueApi api )
-			{
-				var apiResult = api.GetLicenseList( "$filter=not (Customer eq null)" );
-
-				var licenseData = VerifyResponse( apiResult );
-
-				Assert.True( licenseData.All( x => x._embedded.Customer != null ) );
-			}
-
-			private static List<SpIssueApi.License> VerifyResponse( RestSharp.IRestResponse<SpIssueApi.Licenses> apiResult, bool shouldHaveCount = false )
-			{
-				// It should always be possible to get the list
-				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-				// If the request is OK, there should always be some Data
-				Assert.NotNull( apiResult.Data );
-
-				// never null, may be empty
-				var licenseData = apiResult.Data.results;
-				Assert.NotNull( licenseData );
-
-				Assert.Equal( shouldHaveCount, apiResult.Data.__count.HasValue );
-
-				return licenseData;
-			}
-
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void GetListShouldRejectQueriesWithSelect( SpIssueApi api )
-			{
-				var apiResult = api.GetLicenseList( "$select=ActivationKey" );
-
-				// It should always be possible to get the list
-				Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
-				Assert.Equal( "Unsupported Parameter: $select", apiResult.StatusDescription );
-			}
-
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void GetListShouldRejectQueriesWithUnsupportedOrderFields( SpIssueApi api )
-			{
-				var apiResult = api.GetLicenseList( "$orderby=ProductLabel" );
-
-				// It should always be possible to get the list
-				Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
-				Assert.Contains( "The field OrderBy must match", apiResult.StatusDescription );
 			}
 
 			public static class ElementFromList
@@ -202,13 +132,136 @@ namespace Sp.Api.Issue.Acceptance
 					// TODO these are here so the properties are referenced. TODO: Add roundtrip test which verifies that true and false values can propagate
 					// There is always a flag indicating the evaluation status
 					var dummy2 = license.Selected.IsRenewable;
-					// For a later test
-					var dummy3 = license.Selected._links.customer;
 				}
 			}
 		}
 
-		public static class Item
+		public static class CustomerAssignment
+		{
+			public static class Put
+			{
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void ShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
+				{
+					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
+					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer.Selected );
+					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
+
+					Verify.EventuallyWithBackOff( () =>
+					{
+						var updated = api.GetLicense( license.Selected._links.self.href );
+						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
+						Assert.NotNull( updated.Data._links.customer );
+						var customerSelfLink = customer.Selected._links.self;
+						Assert.Equal( customerSelfLink.href, updated.Data._links.customer.href );
+					} );
+				}
+
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void ShouldShowInAssignedLicenseListing( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
+				{
+					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
+					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer.Selected );
+					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
+
+					Verify.EventuallyWithBackOff( () =>
+					{
+						var unassignedLicenses = api.GetLicenseList( "$filter=not (Customer eq null)&$expand=Customer" );
+
+						var licenseData = VerifyResponse( unassignedLicenses );
+
+						// The assigned license should now appear in the assigned list
+						Assert.Single( licenseData.Where( x => x._links.self.href == license.Selected._links.self.href ) );
+
+						// All licenses within this filtered set should show a customer link
+						Assert.True( licenseData.All( x => x._links.customer.href != null ) );
+						// All licenses within this filtered set should have had their Customer data expanded
+						Assert.True( licenseData.All( x => x._embedded.Customer != null ) );
+					} );
+				}
+			}
+
+			public static class Delete
+			{
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void ShouldResetCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
+				{
+					//Assign a customer first
+					// (This is not strictly necessary, we just want to observe a real user actually seeing the change take place in the License list itself
+					Put.ShouldUpdateCustomerLink( api, license, customer );
+
+					// Unassign the customer
+					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
+					var apiResult = api.DeleteLicenseCustomerAssignment( licenseCustomerAssignmentHref );
+					Assert.Contains( apiResult.StatusCode, new[] { HttpStatusCode.NoContent, HttpStatusCode.NotFound } ); // TODO assert order in xUnit.net should be reversed
+					Verify.EventuallyWithBackOff( () =>
+					{
+						var updated = api.GetLicense( license.Selected._links.self.href );
+						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
+						Assert.Null( updated.Data._links.customer );
+					} );
+				}
+
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void ShouldAppearInUnassignedLicensesListing( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
+				{
+					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
+					var apiResult = api.DeleteLicenseCustomerAssignment( licenseCustomerAssignmentHref );
+					Assert.Contains( apiResult.StatusCode, new[] { HttpStatusCode.NoContent, HttpStatusCode.NotFound } ); // TODO assert order in xUnit.net should be reversed
+
+					Verify.EventuallyWithBackOff( () =>
+					{
+						var updated = api.GetLicenseList( "$filter=Customer eq null&$expand=Customer" );
+
+						var licenseData = VerifyResponse( updated );
+
+						// No licenses within this filtered set should show a customer link
+						Assert.True( licenseData.All( x => x._links.customer == null ) );
+						// Despite asking for Customer data to be expanded, no licenses within this filtered set should have a customer property included
+						Assert.True( licenseData.All( x => x._embedded.Customer == null ) );
+					} );
+				}
+			}
+		}
+
+		static List<SpIssueApi.License> VerifyResponse( RestSharp.IRestResponse<SpIssueApi.Licenses> apiResult, bool shouldHaveCount = false )
+		{
+			// It should always be possible to get the list
+			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+			// If the request is OK, there should always be some Data
+			Assert.NotNull( apiResult.Data );
+
+			// never null, may be empty
+			var licenseData = apiResult.Data.results;
+			Assert.NotNull( licenseData );
+
+			Assert.Equal( shouldHaveCount, apiResult.Data.__count.HasValue );
+
+			return licenseData;
+		}
+
+		public static class UnsupportedOperations
+		{
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void GetListShouldRejectQueriesWithSelect( SpIssueApi api )
+			{
+				var apiResult = api.GetLicenseList( "$select=ActivationKey" );
+
+				Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
+				Assert.Equal( "Unsupported Parameter: $select", apiResult.StatusDescription );
+			}
+
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void GetListShouldRejectQueriesWithUnsupportedOrderFields( SpIssueApi api )
+			{
+				var apiResult = api.GetLicenseList( "$orderby=ProductLabel" );
+
+				Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
+				Assert.Contains( "The field OrderBy must match", apiResult.StatusDescription );
+			}
+		}
+
+		public static class GetItem
 		{
 			/// <summary>
 			/// /// The master list presents a set of linked child entities. Here we select an arbitrary one from the list and follow its _links.self to get that resource's 			/// </summary>
@@ -252,54 +305,6 @@ namespace Sp.Api.Issue.Acceptance
 			}
 		}
 
-		public static class CustomerAssignment
-		{
-			public static class Put
-			{
-				[Theory, AutoSoftwarePotentialApiData]
-				public static void ShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license,
-															 RandomCustomerFromListFixture customer )
-				{
-					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
-					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer.Selected );
-					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
-					Verify.EventuallyWithBackOff( () =>
-					{
-						var updated = api.GetLicense( license.Selected._links.self.href );
-						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
-						Assert.NotNull( updated.Data._links.customer );
-						var customerSelfLink = customer.Selected._links.self;
-						Assert.Equal( customerSelfLink.href, updated.Data._links.customer.href );
-					} );
-				}
-			}
-
-			public static class Delete
-			{
-				[Theory, AutoSoftwarePotentialApiData]
-				public static void ShouldResetCustomerLink(
-					[Frozen] SpIssueApi api,
-					RandomLicenseFromListFixture license,
-					RandomCustomerFromListFixture customer )
-				{
-					//Assign a customer first
-					// (This is not strictly necessary, we just want to observe a real user actually seeing the change take place in the License list itself
-					Put.ShouldUpdateCustomerLink( api, license, customer );
-
-					//Unassign the customer
-					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
-					var apiResult = api.DeleteLicenseCustomerAssignment( licenseCustomerAssignmentHref );
-					Assert.Contains( apiResult.StatusCode, new[] { HttpStatusCode.NoContent, HttpStatusCode.NotFound } ); // TODO assert should be reversed
-					Verify.EventuallyWithBackOff( () =>
-					{
-						var updated = api.GetLicense( license.Selected._links.self.href );
-						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
-						Assert.Null( updated.Data._links.customer );
-					} );
-				}
-			}
-		}
-
 		// TODO when we support creating licenses via the REST API, this fixture should create one on the fly
 		public class RandomLicenseFromListFixture
 		{
@@ -309,8 +314,9 @@ namespace Sp.Api.Issue.Acceptance
 			{
 				var apiResult = api.GetLicenseList();
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-				Assert.True( apiResult.Data.results.Any(), GetType().Name + " requires the target login to have at least one License" );
-				_randomItem = apiResult.Data.results.ElementAtRandom();
+				var results = apiResult.Data.results;
+				Assert.True( results.Any(), GetType().Name + " requires the target login to have at least one License" );
+				_randomItem = results.ElementAtRandom();
 			}
 
 			public SpIssueApi.License Selected

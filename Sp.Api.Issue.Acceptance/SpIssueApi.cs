@@ -3,14 +3,11 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
-
-using Sp.Api.Customer.Acceptance;
-
 namespace Sp.Api.Issue
 {
 	using RestSharp;
+	using Sp.Api.Customer.Acceptance;
 	using Sp.Api.Shared.Wrappers;
-	using System;
 	using System.Collections.Generic;
 
 	public class SpIssueApi : SpApi
@@ -92,10 +89,8 @@ namespace Sp.Api.Issue
 
 			public class Embedded
 			{
-				// TODO
 				public Customer Customer { get; set; }
 			}
-
 		}
 
 		public class Customer
