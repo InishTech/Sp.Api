@@ -28,17 +28,17 @@ namespace Sp.Api.Portal.Acceptance.Wrappers
 			_client.Authenticator = new WSFederationAuthenticator( _username, _password );
 		}
 
-		internal IRestResponse<TagCollection> GetTagCollection()
+		internal IRestResponse<CustomerTags> GetCustomerTags()
 		{
 			var request = new RestRequest( "tag" );
-			return Execute<TagCollection>( request );
+			return Execute<CustomerTags>( request );
 		}
 
 		public IRestResponse PutCustomerTags( IEnumerable<CustomerTag> tags )
 		{
 			var request = new RestRequest( "tag", Method.PUT );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody( new TagCollection { Tags = tags.ToList() } );
+			request.AddBody( tags.ToList() );
 			return Execute( request );
 		}
 
@@ -68,9 +68,9 @@ namespace Sp.Api.Portal.Acceptance.Wrappers
 			return Execute<License>( request );
 		}
 
-		public class TagCollection
+		public class CustomerTags
 		{
-			public List<CustomerTag> Tags { get; set; }
+			public List<CustomerTag> results { get; set; }
 		}
 
 		public class CustomerTag
@@ -103,13 +103,24 @@ namespace Sp.Api.Portal.Acceptance.Wrappers
 
 			public class Embedded
 			{
-				public List<LicenseTag> Tags { get; set; }
+				public LicenseTags CustomerTags { get; set; }
 			}
 
 			public class Links
 			{
 				public Link self { get; set; }
-				public Link tags { get; set; }
+			}
+		}
+
+		public class LicenseTags
+		{
+			public List<LicenseTag> results { get; set; }
+	
+			public Links _links { get; set; }
+			
+			public class Links
+			{
+				public Link self { get; set; }
 			}
 		}
 

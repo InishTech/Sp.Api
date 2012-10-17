@@ -25,24 +25,24 @@ namespace Sp.Api.Portal.Acceptance
 				[Theory, AutoPortalDataAttribute]
 				public static void ShouldAlwaysBeAvailable( SpPortalApi api )
 				{
-					var response = api.GetTagCollection();
+					var response = api.GetCustomerTags();
 					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 				}
 
 				[Theory, AutoPortalDataAttribute]
 				public static void ShouldHaveNonEmptyIds( SpPortalApi api )
 				{
-					var response = api.GetTagCollection();
+					var response = api.GetCustomerTags();
 					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
-					Assert.DoesNotContain( Guid.Empty, response.Data.Tags.Select( t => t.Id ) );
+					Assert.DoesNotContain( Guid.Empty, response.Data.results.Select( t => t.Id ) );
 				}
 
 				[Theory, AutoPortalDataAttribute]
 				public static void ShouldHaveNonEmptyNames( SpPortalApi api )
 				{
-					var response = api.GetTagCollection();
+					var response = api.GetCustomerTags();
 					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
-					Assert.False( response.Data.Tags.Any( t => string.IsNullOrEmpty( t.Name ) ) );
+					Assert.False( response.Data.results.Any( t => string.IsNullOrEmpty( t.Name ) ) );
 				}
 			}
 
@@ -102,9 +102,9 @@ namespace Sp.Api.Portal.Acceptance
 				{
 					Verify.EventuallyWithBackOff( () =>
 					{
-						var apiResult = api.GetTagCollection();
+						var apiResult = api.GetCustomerTags();
 						Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-						Assert.Equal( expected.Select( x => Tuple.Create( x.Id, x.Name ) ).ToArray(), apiResult.Data.Tags.Select( x => Tuple.Create( x.Id, x.Name ) ).ToArray() );
+						Assert.Equal( expected.Select( x => Tuple.Create( x.Id, x.Name ) ).ToArray(), apiResult.Data.results.Select( x => Tuple.Create( x.Id, x.Name ) ).ToArray() );
 					} );
 				}
 

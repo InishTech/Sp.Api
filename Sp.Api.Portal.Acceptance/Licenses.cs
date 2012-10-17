@@ -60,7 +60,7 @@ namespace Sp.Api.Portal.Acceptance
 				Assert.NotEmpty( data );
 				var ordered = data.OrderByDescending( x => DateTime.Parse( x.IssueDate, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat ) ).ToArray();
 
-				Assert.Equal(ordered.AsEnumerable(), data.AsEnumerable() );
+				Assert.Equal( ordered.AsEnumerable(), data.AsEnumerable() );
 			}
 
 			[Theory, AutoPortalDataAttribute]
@@ -74,7 +74,7 @@ namespace Sp.Api.Portal.Acceptance
 				    {"$orderby=","The OrderBy field is required."}  // a specified query field must be provided
 				};
 
-				foreach (var expectedFailure in expectedFailures)
+				foreach ( var expectedFailure in expectedFailures )
 				{
 					var invalidQueryResult = api.GetLicenses( expectedFailure.Key );
 					Assert.Equal( HttpStatusCode.BadRequest, invalidQueryResult.StatusCode );
@@ -96,40 +96,41 @@ namespace Sp.Api.Portal.Acceptance
 
 				return apiResult.Data.results.ToArray();
 			}
-		}
 
-		public static class Get
-		{
-			[Theory, AutoPortalDataAttribute]
-			public static void ShouldContainData( RandomLicenseFromListFixture license )
+			public static class Items
 			{
-				// There should always be valid Activation Key
-				Assert.NotEmpty( license.Selected.ActivationKey );
-				// There should always be a Product Label
-				Assert.NotEmpty( license.Selected.ProductLabel );
-				// There should always be a Version Label
-				Assert.NotEmpty( license.Selected.VersionLabel );
-				// There is always an IssueDate
-				Assert.NotEmpty( license.Selected.IssueDate );
-				// There are always embedded elements (even if no explicit $expand is specified)
-				Assert.NotNull( license.Selected._embedded.Tags );
-				// There are always tags - they might be empty though
-				Assert.NotNull( license.Selected._embedded.Tags );
+				[Theory, AutoPortalDataAttribute]
+				public static void ShouldContainData( RandomLicenseFromListFixture license )
+				{
+					// There should always be valid Activation Key
+					Assert.NotEmpty( license.Selected.ActivationKey );
+					// There should always be a Product Label
+					Assert.NotEmpty( license.Selected.ProductLabel );
+					// There should always be a Version Label
+					Assert.NotEmpty( license.Selected.VersionLabel );
+					// There is always an IssueDate
+					Assert.NotEmpty( license.Selected.IssueDate );
+					// There are always embedded CustomerTags (even if no explicit $expand is specified)
+					Assert.NotNull( license.Selected._embedded.CustomerTags );
+					// There is always a list - it might be empty though
+					Assert.NotNull( license.Selected._embedded.CustomerTags.results );
+				}
+
+				[Theory, AutoPortalDataAttribute]
+				public static void ShouldIncludeSelfLink( RandomLicenseFromListFixture license )
+				{
+					Assert.NotNull( license.Selected._links.self );
+					Assert.NotEmpty( license.Selected._links.self.href );
+				}
+
+				[Theory, AutoPortalDataAttribute]
+				public static void ShouldIncludeLicenseTagsAssignmentLink( RandomLicenseFromListFixture license )
+				{
+					Assert.NotNull( license.Selected._embedded.CustomerTags._links.self );
+					Assert.NotEmpty( license.Selected._embedded.CustomerTags._links.self.href );
+				}
 			}
 
-			[Theory, AutoPortalDataAttribute]
-			public static void ShouldIncludeSelfLink( RandomLicenseFromListFixture license )
-			{
-				Assert.NotNull( license.Selected._links.self );
-				Assert.NotEmpty( license.Selected._links.self.href );
-			}
-
-			[Theory, AutoPortalDataAttribute]
-			public static void ShouldIncludeLicenseTagsAssignmentLink( RandomLicenseFromListFixture license )
-			{
-				Assert.NotNull( license.Selected._links.tags );
-				Assert.NotEmpty( license.Selected._links.tags.href );
-			}
 		}
 	}
 }

@@ -27,23 +27,23 @@ namespace Sp.Api.Portal.Acceptance
 					.Select( ct => fixture.Build<SpPortalApi.LicenseTag>().With( x => x.Id, ct.Id ).CreateAnonymous() )
 					.ToList();
 
-				var licenseTagsAssignmentHref = license.Selected._links.tags.href;
+				var licenseTagsAssignmentHref = license.Selected._embedded.CustomerTags._links.self.href;
 				var apiResult = portalApi.PutLicenseTags( licenseTagsAssignmentHref, valuesForEachDefinedTag );
 				Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
 				Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 
 				Verify.EventuallyWithBackOff( () =>
 				{
-					//Retrieve the license again (it it was supported, just GETting the tags subresource would be sufficient to prove the point)
+					//Retrieve the license again (if it was supported, just GETting the tags subresource would be sufficient to prove the point)
 					var updatedLicense = portalApi.GetLicense( license.Selected._links.self.href );
 
 					//Verify that all the tags on the license match
 					Assert.Equal( ResponseStatus.Completed, updatedLicense.ResponseStatus );
-					Assert.NotNull( updatedLicense.Data._embedded.Tags );
-					Assert.NotEmpty( updatedLicense.Data._embedded.Tags );
+					Assert.NotNull( updatedLicense.Data._embedded.CustomerTags.results );
+					Assert.NotEmpty( updatedLicense.Data._embedded.CustomerTags.results );
 					// TOOD use xUnit 1.9 and/or Ploeh.semanticComparison to make this cleaner
-					Assert.Equal( 
-						updatedLicense.Data._embedded.Tags.OrderBy( x => x.Id ).Select( x => Tuple.Create( x.Id, x.Value ) ).ToArray(), 
+					Assert.Equal(
+						updatedLicense.Data._embedded.CustomerTags.results.OrderBy( x => x.Id ).Select( x => Tuple.Create( x.Id, x.Value ) ).ToArray(),
 						valuesForEachDefinedTag.OrderBy( x => x.Id ).Select( x => Tuple.Create( x.Id, x.Value ) ).ToArray() );
 				} );
 			}
@@ -55,7 +55,7 @@ namespace Sp.Api.Portal.Acceptance
 				{
 					var validTagWithValueThatIsEmpty = GenerateLicenseTag( String.Empty, tags );
 
-					var licenseTagsAssignmentHref = license.Selected._links.tags.href;
+					var licenseTagsAssignmentHref = license.Selected._embedded.CustomerTags._links.self.href;
 					var apiResult = portalApi.PutLicenseTags( licenseTagsAssignmentHref, validTagWithValueThatIsEmpty );
 					Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
 					Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
@@ -66,7 +66,7 @@ namespace Sp.Api.Portal.Acceptance
 				{
 					var validTagWithValueThatIsTooLong = GenerateLicenseTag( new String( 'a', 101 ), tags );
 
-					var licenseTagsAssignmentHref = license.Selected._links.tags.href;
+					var licenseTagsAssignmentHref = license.Selected._embedded.CustomerTags._links.self.href;
 					var apiResult = portalApi.PutLicenseTags( licenseTagsAssignmentHref, validTagWithValueThatIsTooLong );
 					Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
 					Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
@@ -95,7 +95,7 @@ namespace Sp.Api.Portal.Acceptance
 
 					var theSameValueTwice = validTagValue.Concat( validTagValue ).ToArray();
 
-					var licenseTagsAssignmentHref = license.Selected._links.tags.href;
+					var licenseTagsAssignmentHref = license.Selected._embedded.CustomerTags._links.self.href;
 					var apiResult = portalApi.PutLicenseTags( licenseTagsAssignmentHref, theSameValueTwice );
 					Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
 					Assert.Equal( HttpStatusCode.InternalServerError, apiResult.StatusCode );
