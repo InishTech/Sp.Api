@@ -3,6 +3,7 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
+
 namespace Sp.Api.Customer.Acceptance
 {
 	using Sp.Api.Shared;
@@ -18,10 +19,9 @@ namespace Sp.Api.Customer.Acceptance
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldYieldAcceptedWithALocationHref( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription, Guid anonymousRequestId )
 		{
-			var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription, RequestId = anonymousRequestId } );
+			var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary { Name = anonymousCustomerName, Description = anonymousCustomerDescription, RequestId = anonymousRequestId } );
 			
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
-			
 			string result = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
 
 			Assert.NotEmpty( result );
@@ -44,7 +44,7 @@ namespace Sp.Api.Customer.Acceptance
 
 			static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription, Guid anonymousRequestId )
 			{
-				var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription, RequestId = anonymousRequestId } );
+				var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary { Name = anonymousCustomerName, Description = anonymousCustomerDescription, RequestId = anonymousRequestId } );
 				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 				var createdAtLocation = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
 				return createdAtLocation;
@@ -63,21 +63,21 @@ namespace Sp.Api.Customer.Acceptance
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void PutNullShouldReject( SpCustomerApi api, string anonymousDescription )
 				{
-					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = null, Description = anonymousDescription } );
+					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary { Name = null, Description = anonymousDescription } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void PutEmptyShouldReject( SpCustomerApi api, string anonymousDescription )
 				{
-					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = string.Empty, Description = anonymousDescription } );
+					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary { Name = string.Empty, Description = anonymousDescription } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void PutExcessivelyLongShouldReject( SpCustomerApi api, string anonymousDescription )
 				{
-					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = new String( 'a', 101 ), Description = anonymousDescription } );
+					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary { Name = new String( 'a', 101 ), Description = anonymousDescription } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 			}
@@ -87,7 +87,7 @@ namespace Sp.Api.Customer.Acceptance
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void PutExcessivelyLongShouldReject( SpCustomerApi api, string anonymousName )
 				{
-					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary() { Name = anonymousName, Description = new String( 'a', 101 ) } );
+					var response = api.CreateCustomer( CustomerAddHref( api ), new SpCustomerApi.CustomerSummary { Name = anonymousName, Description = new String( 'a', 101 ) } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 			}

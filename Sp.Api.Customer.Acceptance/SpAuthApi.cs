@@ -16,7 +16,7 @@ namespace Sp.Api.Customer.Acceptance
 		{
 		}
 
-		internal IRestResponse InviteCustomer( string inviteLink, SpCustomerApi.CustomerInvite invite )
+		internal IRestResponse InviteCustomer( string inviteLink, CustomerInvite invite )
 		{
 			var request = new RestRequest( inviteLink, Method.POST );
 			request.RequestFormat = DataFormat.Json;
@@ -31,13 +31,26 @@ namespace Sp.Api.Customer.Acceptance
 			return Execute<InviteStatus>( request );
 		}
 
+		public class CustomerInvite
+		{
+			public string SiteVendorName { get; set; }
+			public string EmailTo { get; set; }
+			public Guid RequestId { get; set; }
+		}
+
 		public class InviteStatus
 		{
-			public bool IsRegistered { get; set; }
-			public bool IsInviteOpen { get; set; }
 			public string LastInviteSentTo { get; set; }
-			public DateTime? LastInviteSentDateTime { get; set; }
-			public DateTime? LastInviteExpiryDateTime { get; set; }
+			//NB - this should be of enum type InviteState, but RestSharp deserializer seems to have problems with that
+			public int State { get; set; }
+		}
+
+		public enum InviteState
+		{
+			NotInvited,
+			OpenInvitation,
+			ExpiredInvitation,
+			Redeemed
 		}
 	}
 }

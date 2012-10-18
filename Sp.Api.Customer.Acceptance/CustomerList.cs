@@ -57,9 +57,18 @@
 				var linksSet = item.Selected._links;
 				Assert.NotNull( linksSet );
 				var linkToVerify = linkSelector( linksSet );
-				Assert.NotNull(linkToVerify);
-				Assert.NotEmpty( linkToVerify.href );
+				VerifyLink.LinkWellFormed( linkToVerify );
 			}
+		}
+	}
+
+	static class VerifyLink
+	{
+		public static void LinkWellFormed( SpCustomerApi.Link link )
+		{
+			Assert.NotNull( link );
+			Assert.NotNull( link.href );
+			Assert.NotEmpty( link.href );
 		}
 	}
 }

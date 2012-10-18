@@ -58,6 +58,7 @@
     <Compile Include="CustomerGet.cs" />
     <Compile Include="CustomerList.cs" />
     <Compile Include="Invite.cs" />
+    <Compile Include="OrganizationCreate.cs" />
     <Compile Include="RandomCustomerFromListFixture.cs" />
     <Compile Include="SpAuthApi.cs" />
     <Compile Include="SpCustomerApi.cs" />

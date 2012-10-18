@@ -57,5 +57,16 @@ namespace Sp.Api.Customer.Acceptance
 			// Our final Location should match what we asked for
 			Assert.Contains( invalidHref.ToString(), apiResult.ResponseUri.ToString() );
 		}
+
+		[Theory, AutoSoftwarePotentialApiData]
+		public static void ShouldHaveAnOrganizationLink( [Frozen] SpCustomerApi api, RandomCustomerFromListFixture preSelectedCustomer )
+		{
+			var linkedAddress = preSelectedCustomer.Selected._links.self;
+			//Now query the API for that specific customer by following the link obtained in the previous step
+			var apiResult = api.GetCustomer( linkedAddress.href );
+			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+			var customer = apiResult.Data;
+			VerifyLink.LinkWellFormed( customer._links.organizationAdd );
+		}
 	}
 }
