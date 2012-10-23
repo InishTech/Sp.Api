@@ -33,11 +33,8 @@ namespace Sp.Api.Customer.Acceptance
 
 		public class InviteStatus
 		{
-			public bool IsRegistered { get; set; }
-			public bool IsInviteOpen { get; set; }
+			public string State { get; set; }
 			public string LastInviteSentTo { get; set; }
-			public DateTime? LastInviteSentDateTime { get; set; }
-			public DateTime? LastInviteExpiryDateTime { get; set; }
 		}
 	}
 }

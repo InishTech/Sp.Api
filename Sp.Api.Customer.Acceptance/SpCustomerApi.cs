@@ -23,9 +23,9 @@ namespace Sp.Api.Customer.Acceptance
 			return Execute<CustomerSummaryPage>( request );
 		}
 
-		internal IRestResponse CreateCustomer( string addLink, CustomerSummary customer )
+		internal IRestResponse CreateCustomer( CustomerSummary customer )
 		{
-			var request = new RestRequest( addLink, Method.POST );
+			var request = new RestRequest( ApiPrefix.Customer + "/customer", Method.POST );
 			request.RequestFormat = DataFormat.Json;
 			request.AddBody( customer );
 			return Execute( request );
@@ -47,14 +47,7 @@ namespace Sp.Api.Customer.Acceptance
 
 		public class CustomerSummaryPage
 		{
-			public List<CustomerSummary> Customers { get; set; }
-
-			public Links _links { get; set; }
-
-			public class Links
-			{
-				public Link add { get; set; }
-			}
+			public List<CustomerSummary> results { get; set; }
 		}
 
 		public class CustomerSummary
@@ -74,6 +67,7 @@ namespace Sp.Api.Customer.Acceptance
 			{
 				public Guid Id { get; set; }
 				public Guid VendorId { get; set; }
+				public CustomerInvite Organization { get; set; }
 			}
 
 			public class Links
@@ -89,6 +83,13 @@ namespace Sp.Api.Customer.Acceptance
 			public string VendorName { get; set; }
 			public string EmailTo { get; set; }
 			public Guid RequestId { get; set; }
+
+			public class Links
+			{
+				public Link self { get; set; }
+			}
+
+			public Links _links { get; set; }
 		}
 
 		public class Link

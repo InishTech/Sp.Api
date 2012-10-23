@@ -16,20 +16,11 @@
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void ShouldHaveALinkForAdd( SpCustomerApi api )
-		{
-			var response = api.GetCustomerList();
-			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
-			Assert.NotNull( response.Data._links );
-			Assert.NotEmpty( response.Data._links.add.href );
-		}
-
-		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldHaveAtLeastOneItem( SpCustomerApi api )
 		{
 			var response = api.GetCustomerList();
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
-			Assert.NotEmpty( response.Data.Customers );
+			Assert.NotEmpty( response.Data.results );
 		}
 
 		public static class RandomItem

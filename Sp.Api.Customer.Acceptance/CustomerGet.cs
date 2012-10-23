@@ -34,9 +34,9 @@ namespace Sp.Api.Customer.Acceptance
 			//The customer obtained as a separate resource should be identical to the customer previously selected from the list
 			apiResult.Data.AsSource().OfLikeness<SpCustomerApi.CustomerSummary>()
 				.Without( p => p._links )
-				.With( x => x._embedded )
-					.EqualsWhen( ( x, y ) => x._embedded.AsSource().OfLikeness<SpCustomerApi.CustomerSummary._Embedded>().Equals( y._embedded ) )
 				.Without( p => p._signature )
+				.With( x => x._embedded )
+					.EqualsWhen( ( x, y ) => x._embedded.Organization == null )
 				.ShouldEqual( preSelectedCustomer.Selected );
 		}
 

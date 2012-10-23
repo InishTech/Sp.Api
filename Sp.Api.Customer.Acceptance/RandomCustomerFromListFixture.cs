@@ -25,9 +25,9 @@ namespace Sp.Api.Customer.Acceptance
 			var apiResult = api.GetCustomerList();
 			Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
 			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-			Assert.NotNull(apiResult.Data.Customers);
-			Assert.True( apiResult.Data.Customers.Any(), GetType().Name + " requires the target login to have at least one Customer" );
-			Selected = apiResult.Data.Customers.ElementAtRandom();
+			Assert.NotNull( apiResult.Data.results );
+			Assert.True( apiResult.Data.results.Any(), GetType().Name + " requires the target login to have at least one Customer" );
+			Selected = apiResult.Data.results.ElementAtRandom();
 		}
 	}
 }
