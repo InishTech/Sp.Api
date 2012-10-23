@@ -36,7 +36,7 @@ namespace Sp.Api.Customer.Acceptance
 				.Without( p => p._links )
 				.Without( p => p._signature )
 				.With( x => x._embedded )
-					.EqualsWhen( ( x, y ) => x._embedded.Organization == null )
+					.EqualsWhen( ( x, y ) => x._embedded.Invitation == null )
 				.ShouldEqual( preSelectedCustomer.Selected );
 		}
 
@@ -56,6 +56,17 @@ namespace Sp.Api.Customer.Acceptance
 			Assert.Equal( HttpStatusCode.NotFound, apiResult.StatusCode );
 			// Our final Location should match what we asked for
 			Assert.Contains( invalidHref.ToString(), apiResult.ResponseUri.ToString() );
+		}
+
+		[Theory, AutoSoftwarePotentialApiData]
+		public static void ShouldHaveAnOrganizationLink( [Frozen] SpCustomerApi api, RandomCustomerFromListFixture preSelectedCustomer )
+		{
+			var linkedAddress = preSelectedCustomer.Selected._links.self;
+			//Now query the API for that specific customer by following the link obtained in the previous step
+			var apiResult = api.GetCustomer( linkedAddress.href );
+			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+			var customer = apiResult.Data;
+			VerifyLink.LinkWellFormed( customer._links.organizationAdd );
 		}
 	}
 }

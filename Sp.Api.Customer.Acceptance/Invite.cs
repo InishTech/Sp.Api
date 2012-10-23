@@ -3,6 +3,7 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
+
 namespace Sp.Api.Customer.Acceptance
 {
 	using Ploeh.AutoFixture.Xunit;
@@ -19,14 +20,13 @@ namespace Sp.Api.Customer.Acceptance
 		public static class PostCustomerInvite
 		{
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void ShouldYieldAccepted( [Frozen] SpAuthApi api, SignedCustomerFixture signedCustomer, string anonymousVendorName )
+			public static void ShouldYieldAccepted( [Frozen] SpAuthApi api, NewlyCreatedOrganizationFixture organization, string anonymousVendorName )
 			{
-				var customerInviteHref = signedCustomer.Data._links.inviteStatus.href;
-				var customerInvite = new SpCustomerApi.CustomerInvite
+				var customerInviteHref = organization.InviteStatusLink;
+				var customerInvite = new SpAuthApi.CustomerInvite
 				{
-					Customer = signedCustomer.Data,
 					EmailTo = "test@inishtech.com",
-					VendorName = anonymousVendorName,
+					SiteVendorName = anonymousVendorName,
 					RequestId = Guid.NewGuid()
 				};
 
@@ -35,17 +35,16 @@ namespace Sp.Api.Customer.Acceptance
 			}
 
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void ShouldTurnInviteStatusOpen( [Frozen] SpAuthApi api, SignedCustomerFixture signedCustomer, string anonymousVendorName )
+			public static void ShouldTurnInviteStatusOpen( [Frozen] SpAuthApi api, NewlyCreatedOrganizationFixture organization, string anonymousVendorName )
 			{
-				var customerInviteHref = signedCustomer.Data._links.inviteStatus.href;
-				string emailToTemplate = "test@inishtech.com";
+				var customerInviteHref = organization.InviteStatusLink;
+				const string emailToTemplate = "test@inishtech.com";
 				char charToChangeCaseOf = emailToTemplate.ToCharArray().Where( Char.IsLower ).ToArray().ElementAtRandom();
 				string emailToMutated = emailToTemplate.Replace( charToChangeCaseOf, Char.ToUpper( charToChangeCaseOf ) );
-				var customerInvite = new SpCustomerApi.CustomerInvite
+				var customerInvite = new SpAuthApi.CustomerInvite
 				{
-					Customer = signedCustomer.Data,
 					EmailTo = emailToMutated,
-					VendorName = anonymousVendorName,
+					SiteVendorName = anonymousVendorName,
 					RequestId = Guid.NewGuid()
 				};
 				var inviteResult = api.InviteCustomer( customerInviteHref, customerInvite );
@@ -89,14 +88,13 @@ namespace Sp.Api.Customer.Acceptance
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void DuplicatePostCustomerInviteShouldYieldConflict( SpAuthApi api, SignedCustomerFixture signedCustomer, string anonymousVendorName )
+		public static void DuplicatePostCustomerInviteShouldYieldConflict( [Frozen] SpAuthApi api, NewlyCreatedOrganizationFixture organization, string anonymousVendorName )
 		{
-			var customerInviteHref = signedCustomer.Data._links.inviteStatus.href;
-			var customerInvite = new SpCustomerApi.CustomerInvite
+			var customerInviteHref = organization.InviteStatusLink;
+			var customerInvite = new SpAuthApi.CustomerInvite
 			{
-				Customer = signedCustomer.Data,
 				EmailTo = "test@inishtech.com",
-				VendorName = anonymousVendorName,
+				SiteVendorName = anonymousVendorName,
 				RequestId = Guid.NewGuid()
 			};
 
@@ -105,6 +103,20 @@ namespace Sp.Api.Customer.Acceptance
 			var apiResult = api.InviteCustomer( customerInviteHref, customerInvite );
 
 			Assert.Equal( HttpStatusCode.Conflict, apiResult.StatusCode );
+		}
+
+		public class NewlyCreatedOrganizationFixture
+		{
+			public NewlyCreatedOrganizationFixture( SpCustomerApi api, NewlyCreatedCustomerFixture customer )
+			{
+				//TODO TP 1043 - arguably inviteStatus link should be in the organization resource rather than in the customer
+				InviteStatusLink = customer.Customer._links.inviteStatus.href;
+				var organization = new SpCustomerApi.OrganizationCreateModel( customer.Customer );
+				var response = api.CreateOrganization( organization );
+				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
+			}
+
+			public string InviteStatusLink { get; private set; }
 		}
 	}
 }

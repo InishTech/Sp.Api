@@ -3,6 +3,7 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
+
 namespace Sp.Api.Customer.Acceptance
 {
 	using Sp.Api.Shared;
@@ -21,7 +22,6 @@ namespace Sp.Api.Customer.Acceptance
 			var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription, RequestId = anonymousRequestId } );
 			
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
-			
 			string result = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
 
 			Assert.NotEmpty( result );

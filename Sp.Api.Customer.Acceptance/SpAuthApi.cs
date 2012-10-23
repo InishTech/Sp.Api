@@ -16,7 +16,7 @@ namespace Sp.Api.Customer.Acceptance
 		{
 		}
 
-		internal IRestResponse InviteCustomer( string inviteLink, SpCustomerApi.CustomerInvite invite )
+		internal IRestResponse InviteCustomer( string inviteLink, CustomerInvite invite )
 		{
 			var request = new RestRequest( inviteLink, Method.POST );
 			request.RequestFormat = DataFormat.Json;
@@ -29,6 +29,13 @@ namespace Sp.Api.Customer.Acceptance
 			var request = new RestRequest( inviteStatusLink );
 			request.RequestFormat = DataFormat.Json;
 			return Execute<InviteStatus>( request );
+		}
+
+		public class CustomerInvite
+		{
+			public string SiteVendorName { get; set; }
+			public string EmailTo { get; set; }
+			public Guid RequestId { get; set; }
 		}
 
 		public class InviteStatus
