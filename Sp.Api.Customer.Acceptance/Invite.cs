@@ -56,17 +56,9 @@ namespace Sp.Api.Customer.Acceptance
 					Assert.Equal( HttpStatusCode.OK, statusResult.StatusCode );
 					var result = statusResult.Data;
 					Assert.Equal( emailToMutated, result.LastInviteSentTo );
-					Assert.Equal( "Invited", result.State );
-					//Assert.True( result.LastInviteSentDateTime.HasValue );
-					//Assert.Equal( DateTime.UtcNow, result.LastInviteSentDateTime.Value, new DateTimeEqualityTolerantComparer( PermittedClientServerClockDrift ) );
-					//Assert.True( DateTime.UtcNow < result.LastInviteExpiryDateTime );
+					Assert.Equal( "OpenInvitation", result.State );
 				} );
 			}
-
-			//static TimeSpan PermittedClientServerClockDrift
-			//{
-			//	get { return TimeSpan.FromMinutes( 3 ); }
-			//}
 		}
 
 		public class SignedCustomerFixture
