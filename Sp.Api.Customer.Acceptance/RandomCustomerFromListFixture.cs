@@ -30,4 +30,25 @@ namespace Sp.Api.Customer.Acceptance
 			Selected = apiResult.Data.results.ElementAtRandom();
 		}
 	}
+
+	/// <summary>
+	/// <para>This Fixture follows the link and does a Get from an arbitrarily selected customer from the list.</para>
+	/// </summary>
+	/// <remarks>
+	/// <para><see cref="RandomCustomerFromListFixture"/> for preconditions.</para>
+	/// <para>The data differs from that in the list available from the index in that the individual GET yields a signature too, which is important for sending Invitations and Assigning Licenses.</para>
+	/// </remarks>
+	public class GetRandomCustomerFixture
+	{
+		public SpCustomerApi.CustomerSummary DataFromGet { get; private set; }
+
+		public GetRandomCustomerFixture( SpCustomerApi api, RandomCustomerFromListFixture list )
+		{
+			//Now query the API for that specific customer by following the self link from the item in the Index obtained in the previous step
+			var linkedAddress = list.Selected._links.self;
+			var apiResult = api.GetCustomer( linkedAddress.href );
+			Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+			DataFromGet = apiResult.Data;
+		}
+	}
 }
