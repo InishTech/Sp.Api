@@ -141,10 +141,10 @@ namespace Sp.Api.Issue.Acceptance
 			public static class Put
 			{
 				[Theory, AutoSoftwarePotentialApiData]
-				public static void ShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
+				public static void ShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, GetRandomCustomerFixture customer )
 				{
 					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
-					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer.Selected );
+					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer.DataFromGet );
 					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 
 					Verify.EventuallyWithBackOff( () =>
@@ -152,21 +152,26 @@ namespace Sp.Api.Issue.Acceptance
 						var updated = api.GetLicense( license.Selected._links.self.href );
 						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
 						Assert.NotNull( updated.Data._links.customer );
-						var customerSelfLink = customer.Selected._links.self;
+						var customerSelfLink = customer.DataFromGet._links.self;
 						Assert.Equal( customerSelfLink.href, updated.Data._links.customer.href );
 					} );
 				}
 
-				[Theory, AutoSoftwarePotentialApiData]
-				public static void ShouldShowInAssignedLicenseListing( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
+				[Theory]
+				[InlineAutoSoftwarePotentialApiData( true )]
+				[InlineAutoSoftwarePotentialApiData( false )]
+				public static void ShouldShowInAssignedLicenseListing( bool expandCustomer, [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, GetRandomCustomerFixture customer )
 				{
 					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
-					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer.Selected );
+					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer.DataFromGet );
 					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 
 					Verify.EventuallyWithBackOff( () =>
 					{
-						var unassignedLicenses = api.GetLicenseList( "$filter=not (Customer eq null)&$expand=Customer" );
+						var query = "$filter=not (Customer eq null)";
+						if ( expandCustomer )
+							query += "&$expand=Customer";
+						var unassignedLicenses = api.GetLicenseList( query );
 
 						var licenseData = VerifyResponse( unassignedLicenses );
 
@@ -176,15 +181,16 @@ namespace Sp.Api.Issue.Acceptance
 						// All licenses within this filtered set should show a customer link
 						Assert.True( licenseData.All( x => x._links.customer.href != null ) );
 						// All licenses within this filtered set should have had their Customer data expanded
-						Assert.True( licenseData.All( x => x._embedded.Customer != null ) );
+						Assert.Equal( expandCustomer, licenseData.All( x => x._embedded.Customer != null ) );
 					} );
 				}
+
 			}
 
 			public static class Delete
 			{
 				[Theory, AutoSoftwarePotentialApiData]
-				public static void ShouldResetCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, RandomCustomerFromListFixture customer )
+				public static void ShouldResetCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, GetRandomCustomerFixture customer )
 				{
 					//Assign a customer first
 					// (This is not strictly necessary, we just want to observe a real user actually seeing the change take place in the License list itself
