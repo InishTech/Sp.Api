@@ -33,7 +33,7 @@ namespace Sp.Api.Customer.Acceptance
 
 		public class CustomerInvite
 		{
-			public string SiteVendorName { get; set; }
+			public Guid InstanceId { get; set; }
 			public string EmailTo { get; set; }
 			public Guid RequestId { get; set; }
 		}

@@ -17,6 +17,12 @@ namespace Sp.Api.Customer.Acceptance
 
 	public static class Invite
 	{
+		static Guid VendorInvitableInstanceId
+		{
+			//TODO TP 1043 - retrieve instance resource and get instance id from there
+			get { return new Guid( "0C37CB62-36B8-4752-ACD8-4C31FC059D66" ); }
+		}
+
 		public static class PostCustomerInvite
 		{
 			[Theory, AutoSoftwarePotentialApiData]
@@ -26,7 +32,7 @@ namespace Sp.Api.Customer.Acceptance
 				var customerInvite = new SpAuthApi.CustomerInvite
 				{
 					EmailTo = "test@inishtech.com",
-					SiteVendorName = anonymousVendorName,
+					InstanceId = VendorInvitableInstanceId,
 					RequestId = Guid.NewGuid()
 				};
 
@@ -44,7 +50,7 @@ namespace Sp.Api.Customer.Acceptance
 				var customerInvite = new SpAuthApi.CustomerInvite
 				{
 					EmailTo = emailToMutated,
-					SiteVendorName = anonymousVendorName,
+					InstanceId = VendorInvitableInstanceId,
 					RequestId = Guid.NewGuid()
 				};
 				var inviteResult = api.InviteCustomer( customerInviteHref, customerInvite );
@@ -86,7 +92,7 @@ namespace Sp.Api.Customer.Acceptance
 			var customerInvite = new SpAuthApi.CustomerInvite
 			{
 				EmailTo = "test@inishtech.com",
-				SiteVendorName = anonymousVendorName,
+				InstanceId = VendorInvitableInstanceId,
 				RequestId = Guid.NewGuid()
 			};
 
