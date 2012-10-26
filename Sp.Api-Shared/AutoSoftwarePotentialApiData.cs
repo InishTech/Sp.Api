@@ -20,10 +20,18 @@ namespace Sp.Api.Shared
 		{
 		}
 
-		AutoSoftwarePotentialApiData(IFixture fixture)
+		AutoSoftwarePotentialApiData( IFixture fixture )
 			: base( fixture )
 		{
-			fixture.Inject( fixture );	
+			fixture.Inject( fixture );
+		}
+	}
+
+	public class InlineAutoSoftwarePotentialApiDataAttribute : InlineAutoDataAttribute
+	{
+		public InlineAutoSoftwarePotentialApiDataAttribute( params object[] args )
+			: base( new AutoSoftwarePotentialApiData(), args )
+		{
 		}
 	}
 
