@@ -4,6 +4,8 @@
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 
+using System.Diagnostics;
+
 namespace Sp.Api.Customer.Acceptance
 {
 	using Ploeh.AutoFixture.Xunit;
@@ -61,9 +63,9 @@ namespace Sp.Api.Customer.Acceptance
 					var statusResult = api.GetInviteStatus( customerInviteHref );
 					Assert.Equal( HttpStatusCode.OK, statusResult.StatusCode );
 					var result = statusResult.Data;
-					Assert.Equal( emailToMutated, result.LastInviteSentTo );
 					Assert.Equal( "OpenInvitation", result.State );
-				} );
+					Assert.Equal( emailToMutated, result.LastEmailSentTo );
+				}, maxAttempts: 6 );
 			}
 		}
 
@@ -107,7 +109,6 @@ namespace Sp.Api.Customer.Acceptance
 		{
 			public NewlyCreatedOrganizationFixture( SpCustomerApi api, NewlyCreatedCustomerFixture customer )
 			{
-				//TODO TP 1043 - arguably inviteStatus link should be in the organization resource rather than in the customer
 				InviteStatusLink = customer.Customer._links.inviteStatus.href;
 				var organization = new SpCustomerApi.OrganizationCreateModel( customer.Customer );
 				var response = api.CreateOrganization( organization );

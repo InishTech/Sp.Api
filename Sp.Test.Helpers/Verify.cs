@@ -11,11 +11,10 @@ namespace Sp.Test.Helpers
 
 	public static partial class Verify
 	{
-		public static void EventuallyWithBackOff( Action action )
+		public static void EventuallyWithBackOff( Action action, int maxAttempts = 5 )
 		{
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
-			int maxAttempts = 5;
 			for ( int attempt = 0; attempt < maxAttempts; attempt++ )
 				try
 				{

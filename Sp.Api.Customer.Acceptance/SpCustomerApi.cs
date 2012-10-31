@@ -82,6 +82,7 @@ namespace Sp.Api.Customer.Acceptance
 			public class InviteStatus
 			{
 				public string State { get; set; }
+				public string LastEmailSentTo { get; set; }
 			}
 
 			public class Links

@@ -41,7 +41,7 @@ namespace Sp.Api.Customer.Acceptance
 		public class InviteStatus
 		{
 			public string State { get; set; }
-			public string LastInviteSentTo { get; set; }
+			public string LastEmailSentTo { get; set; }
 		}
 	}
 }
