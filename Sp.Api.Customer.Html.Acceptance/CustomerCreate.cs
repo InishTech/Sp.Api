@@ -38,7 +38,7 @@ namespace Sp.Api.Customer.Html.Acceptance
 
 				wait.Until( d => d
 					.FindElement( By.Id( "messages" ) )
-					.Text.Equals( "Customer created successfully" ) );
+					.Text.Contains( "Customer created successfully" ) );
 			}
 		}
 	}
