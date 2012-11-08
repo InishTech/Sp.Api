@@ -3,6 +3,9 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
+
+using System.Collections.Generic;
+
 namespace Sp.Api.Customer.Acceptance
 {
 	using RestSharp;
@@ -31,6 +34,12 @@ namespace Sp.Api.Customer.Acceptance
 			return Execute<InviteStatus>( request );
 		}
 
+		public IRestResponse<ServiceInstanceIndexModel> GetServiceInstances()
+		{
+			var request = new RestRequest( ApiPrefix.Auth + "/Registration/Instance" );
+			return Execute<ServiceInstanceIndexModel>( request );
+		}
+
 		public class CustomerInvite
 		{
 			public Guid InstanceId { get; set; }
@@ -42,6 +51,18 @@ namespace Sp.Api.Customer.Acceptance
 		{
 			public string State { get; set; }
 			public string LastEmailSentTo { get; set; }
+		}
+
+		public class ServiceInstanceIndexModel
+		{
+			public List<ServiceInstance> results { get; set; }
+		}
+
+		public class ServiceInstance
+		{
+			public Guid Id { get; set; }
+			public string Name { get; set; }
+			public string ServiceName { get; set; }
 		}
 	}
 }

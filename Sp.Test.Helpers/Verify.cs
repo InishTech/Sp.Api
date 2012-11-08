@@ -11,7 +11,7 @@ namespace Sp.Test.Helpers
 
 	public static partial class Verify
 	{
-		public static void EventuallyWithBackOff( Action action, int maxAttempts = 5 )
+		public static void EventuallyWithBackOff( Action action, int maxAttempts = 6 )
 		{
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
