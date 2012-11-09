@@ -36,7 +36,7 @@ namespace Sp.Api.Customer.Acceptance
 
 		public IRestResponse<ServiceInstanceIndexModel> GetServiceInstances()
 		{
-			var request = new RestRequest( ApiPrefix.Auth + "/Registration/Instance" );
+			var request = new RestRequest( GetApiPrefix( ApiType.Auth ) + "/Registration/Instance" );
 			return Execute<ServiceInstanceIndexModel>( request );
 		}
 

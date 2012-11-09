@@ -15,17 +15,13 @@ namespace Sp.Api.Portal.Acceptance.Wrappers
 	public class SpPortalApi
 	{
 		readonly IRestClient _client;
-		readonly string _username;
-		readonly string _password;
 
 		public SpPortalApi( SpApiConfiguration apiConfiguration )
 		{
-			_client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl );
-
-			_username = apiConfiguration.Username;
-			_password = apiConfiguration.Password;
-
-			_client.Authenticator = new WSFederationAuthenticator( _username, _password );
+			_client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl )
+			{
+				Authenticator = new WSFederationAuthenticator( apiConfiguration )
+			};
 		}
 
 		internal IRestResponse<CustomerTags> GetCustomerTags()

@@ -19,13 +19,13 @@ namespace Sp.Api.Customer.Acceptance
 
 		internal IRestResponse<CustomerSummaryPage> GetCustomerList()
 		{
-			var request = new RestRequest( ApiPrefix.Customer );
+			var request = new RestRequest( GetApiPrefix(ApiType.Customer) );
 			return Execute<CustomerSummaryPage>( request );
 		}
 
 		internal IRestResponse CreateCustomer( CustomerSummary customer )
 		{
-			var request = new RestRequest( ApiPrefix.Customer + "/customer", Method.POST );
+			var request = new RestRequest( GetApiPrefix( ApiType.Customer ) + "/customer", Method.POST );
 			request.RequestFormat = DataFormat.Json;
 			request.AddBody( customer );
 			return Execute( request );
@@ -33,7 +33,7 @@ namespace Sp.Api.Customer.Acceptance
 
 		internal IRestResponse CreateOrganization( OrganizationCreateModel organization )
 		{
-			const string addLink = ApiPrefix.Auth + "/Registration/Organization";
+			string addLink = GetApiPrefix( ApiType.Auth ) + "/Registration/Organization";
 			var request = new RestRequest( addLink, Method.POST );
 			request.RequestFormat = DataFormat.Json;
 			request.AddBody( organization );

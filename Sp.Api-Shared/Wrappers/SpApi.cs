@@ -11,12 +11,14 @@ namespace Sp.Api.Shared.Wrappers
 	public class SpApi
 	{
 		readonly IRestClient _client;
+		readonly SpApiConfiguration _apiConfiguration;
 
 		public SpApi( SpApiConfiguration apiConfiguration )
 		{
+			_apiConfiguration = apiConfiguration;
 			_client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl )
 			{
-				Authenticator = new WSFederationAuthenticator( apiConfiguration.Username, apiConfiguration.Password )
+				Authenticator = new WSFederationAuthenticator( apiConfiguration )
 			};
 		}
 
@@ -30,9 +32,14 @@ namespace Sp.Api.Shared.Wrappers
 			return _client.Execute( request );
 		}
 
+		public string GetApiPrefix( ApiType apiType )
+		{
+			return _apiConfiguration.GetApiPrefix( apiType );
+		}
+
 		public IRestResponse SignOff()
 		{
-			var signOffRequest = new RestRequest( ApiPrefix.WebApiRoot + "/Authentication/LogOff", Method.GET );
+			var signOffRequest = new RestRequest( GetApiPrefix( ApiType.WebApiRoot ) + "/Authentication/LogOff", Method.GET );
 			return _client.Execute( signOffRequest );
 		}
 	}

@@ -22,9 +22,9 @@ namespace Sp.Api.Issue
 			return GetLicenseList( "" );
 		}
 
-		internal IRestResponse<Licenses> GetLicenseList(string query)
+		internal IRestResponse<Licenses> GetLicenseList( string query )
 		{
-			var request = new RestRequest( ApiPrefix.Issue + "/License?"+query );
+			var request = new RestRequest( GetApiPrefix( ApiType.Issue ) + "/License?" + query );
 			return Execute<Licenses>( request );
 		}
 
@@ -55,7 +55,7 @@ namespace Sp.Api.Issue
 			public int? __count { get; set; }
 			public List<License> results { get; set; }
 		}
-		
+
 		public class License
 		{
 			// External identifier as used in activation

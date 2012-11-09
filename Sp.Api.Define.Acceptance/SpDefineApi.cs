@@ -7,7 +7,6 @@ namespace Sp.Api.Define
 {
 	using RestSharp;
 	using Sp.Api.Shared.Wrappers;
-	using System;
 	using System.Collections.Generic;
 
 	public class SpDefineApi : SpApi
@@ -19,7 +18,7 @@ namespace Sp.Api.Define
 
 		internal IRestResponse<ProductsPage> GetProductList()
 		{
-			var request = new RestRequest( ApiPrefix.Define + "/Product" );
+			var request = new RestRequest( GetApiPrefix( ApiType.Define ) + "/Product" );
 			return Execute<ProductsPage>( request );
 		}
 

@@ -3,7 +3,6 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
-
 using System.Text;
 
 namespace Sp.Api.Shared.Wrappers
@@ -20,11 +19,13 @@ namespace Sp.Api.Shared.Wrappers
 	{
 		readonly string _username;
 		readonly string _password;
+		readonly string _rpBaseUrl;
 
-		public WSFederationAuthenticator( string username, string password )
+		public WSFederationAuthenticator( SpApiConfiguration apiConfiguration )
 		{
-			_username = username;
-			_password = password;
+			_username = apiConfiguration.Username;
+			_password = apiConfiguration.Password;
+			_rpBaseUrl = apiConfiguration.BaseUrl + "/" + apiConfiguration.GetApiPrefix( ApiType.WebApiRoot );
 		}
 
 		public void Authenticate( IRestClient client, IRestRequest request )
@@ -33,7 +34,7 @@ namespace Sp.Api.Shared.Wrappers
 				return;
 
 			client.CookieContainer = client.CookieContainer ?? new CookieContainer();
-			var auth = new InnerAuthenticator( client.BaseUrl + "/" + ApiPrefix.WebApiRoot, _username, _password );
+			var auth = new InnerAuthenticator( _rpBaseUrl, _username, _password );
 			var authCookies = auth.SignInAndRetrieveFedAuthCookies();
 			client.CookieContainer.Add( new Uri( client.BaseUrl ), authCookies );
 		}

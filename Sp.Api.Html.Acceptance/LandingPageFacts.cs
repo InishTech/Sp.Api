@@ -19,7 +19,7 @@ namespace Sp.Api.Html.Acceptance
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void LandingPageShouldReturnHtml( SpApi spApi )
 		{
-			var request = new RestRequest( ApiPrefix.WebApiRoot );
+			var request = new RestRequest( spApi.GetApiPrefix(ApiType.WebApiRoot) );
 			request.AddHeader( "Accept", "text/html" );
 			var response = spApi.Execute( request );
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
@@ -29,7 +29,7 @@ namespace Sp.Api.Html.Acceptance
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void LandingPageShouldContainSignedVendorId( SpApi spApi )
 		{
-			var request = new RestRequest( ApiPrefix.WebApiRoot );
+			var request = new RestRequest( spApi.GetApiPrefix( ApiType.WebApiRoot ) );
 			request.AddHeader( "Accept", "text/html" );
 			var response = spApi.Execute( request );
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
