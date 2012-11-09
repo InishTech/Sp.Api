@@ -36,13 +36,13 @@ namespace Sp.Api.Customer.Acceptance
 
 		public IRestResponse<ServiceInstanceIndexModel> GetServiceInstances()
 		{
-			var request = new RestRequest( GetApiPrefix( ApiType.AuthRegistration ) + "/Registration/Instance" );
+			var request = new RestRequest( GetApiPrefix( ApiType.Auth ) + "/Registration/Instance" );
 			return Execute<ServiceInstanceIndexModel>( request );
 		}
 
 		internal IRestResponse CreateOrganization( OrganizationCreateModel organization )
 		{
-			string addLink = GetApiPrefix( ApiType.AuthRegistration ) + "/Registration/Organization";
+			string addLink = GetApiPrefix( ApiType.Auth ) + "/Registration/Organization";
 			var request = new RestRequest( addLink, Method.POST );
 			request.RequestFormat = DataFormat.Json;
 			request.AddBody( organization );
