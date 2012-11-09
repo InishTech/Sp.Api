@@ -62,6 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Sp.Api-Shared\SmokeAttribute.cs">
+      <Link>Inlined\SmokeAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\sp.api-shared\wrappers\SpApiConfiguration.cs">
       <Link>Inlined\Wrappers\SpApiConfiguration.cs</Link>
     </Compile>

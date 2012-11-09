@@ -3,6 +3,9 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
+
+using Sp.Api.Shared;
+
 namespace Sp.Api.Portal.Acceptance
 {
 	using Sp.Api.Portal.Acceptance.Wrappers;
@@ -18,6 +21,7 @@ namespace Sp.Api.Portal.Acceptance
 	{
 		public static class IndexGet
 		{
+			[Smoke]
 			[Theory, AutoPortalDataAttribute]
 			public static void ShouldYieldResults( SpPortalApi api )
 			{
