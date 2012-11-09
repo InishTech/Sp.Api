@@ -36,8 +36,17 @@ namespace Sp.Api.Customer.Acceptance
 
 		public IRestResponse<ServiceInstanceIndexModel> GetServiceInstances()
 		{
-			var request = new RestRequest( GetApiPrefix( ApiType.Auth ) + "/Registration/Instance" );
+			var request = new RestRequest( GetApiPrefix( ApiType.AuthRegistration ) + "/Registration/Instance" );
 			return Execute<ServiceInstanceIndexModel>( request );
+		}
+
+		internal IRestResponse CreateOrganization( OrganizationCreateModel organization )
+		{
+			string addLink = GetApiPrefix( ApiType.AuthRegistration ) + "/Registration/Organization";
+			var request = new RestRequest( addLink, Method.POST );
+			request.RequestFormat = DataFormat.Json;
+			request.AddBody( organization );
+			return Execute( request );
 		}
 
 		public class CustomerInvite
@@ -64,5 +73,21 @@ namespace Sp.Api.Customer.Acceptance
 			public string Name { get; set; }
 			public string ServiceName { get; set; }
 		}
+
+		public class OrganizationCreateModel
+		{
+			public _Embedded _embedded { get; set; }
+
+			public class _Embedded
+			{
+				public SpCustomerApi.CustomerSummary Customer { get; set; }
+			};
+
+			public OrganizationCreateModel( SpCustomerApi.CustomerSummary customer )
+			{
+				_embedded = new _Embedded { Customer = customer };
+			}
+		}
+
 	}
 }

@@ -9,9 +9,9 @@ namespace Sp.Api.Customer.Acceptance
 	public class OrganizationCreate
 	{
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void ShouldYieldAccepted( [Frozen] SpCustomerApi api, FreshCustomerFixture customer )
+		public static void ShouldYieldAccepted( [Frozen] SpAuthApi api, FreshCustomerFixture customer )
 		{
-			var organization = new SpCustomerApi.OrganizationCreateModel( customer.SignedCustomer );
+			var organization = new SpAuthApi.OrganizationCreateModel( customer.SignedCustomer );
 			var response = api.CreateOrganization( organization );
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 		}

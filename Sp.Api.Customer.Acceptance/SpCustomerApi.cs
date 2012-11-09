@@ -31,15 +31,6 @@ namespace Sp.Api.Customer.Acceptance
 			return Execute( request );
 		}
 
-		internal IRestResponse CreateOrganization( OrganizationCreateModel organization )
-		{
-			string addLink = GetApiPrefix( ApiType.Auth ) + "/Registration/Organization";
-			var request = new RestRequest( addLink, Method.POST );
-			request.RequestFormat = DataFormat.Json;
-			request.AddBody( organization );
-			return Execute( request );
-		}
-
 		internal IRestResponse<CustomerSummary> GetCustomer( string href )
 		{
 			var request = new RestRequest( href );
@@ -90,21 +81,6 @@ namespace Sp.Api.Customer.Acceptance
 				public Link self { get; set; }
 				public Link inviteStatus { get; set; }
 				public Link organizationAdd { get; set; }
-			}
-		}
-
-		public class OrganizationCreateModel
-		{
-			public _Embedded _embedded { get; set; }
-
-			public class _Embedded
-			{
-				public CustomerSummary Customer { get; set; }
-			};
-
-			public OrganizationCreateModel( CustomerSummary customer )
-			{
-				_embedded = new _Embedded { Customer = customer };
 			}
 		}
 

@@ -17,15 +17,11 @@ namespace Sp.Api.Shared.Wrappers
 
 	class WSFederationAuthenticator : IAuthenticator
 	{
-		readonly string _username;
-		readonly string _password;
-		readonly string _rpBaseUrl;
+		readonly SpApiConfiguration _apiConfiguration;
 
 		public WSFederationAuthenticator( SpApiConfiguration apiConfiguration )
 		{
-			_username = apiConfiguration.Username;
-			_password = apiConfiguration.Password;
-			_rpBaseUrl = apiConfiguration.BaseUrl + "/" + apiConfiguration.GetApiPrefix( ApiType.WebApiRoot );
+			_apiConfiguration = apiConfiguration;
 		}
 
 		public void Authenticate( IRestClient client, IRestRequest request )
@@ -34,8 +30,10 @@ namespace Sp.Api.Shared.Wrappers
 				return;
 
 			client.CookieContainer = client.CookieContainer ?? new CookieContainer();
-			var auth = new InnerAuthenticator( _rpBaseUrl, _username, _password );
-			var authCookies = auth.SignInAndRetrieveFedAuthCookies();
+			var auth = new InnerAuthenticator( _apiConfiguration );
+			// An unauthenticated request attempt to the resource should redirect us to the STS
+			var stsLoginUri = auth.AttemptRequestAndGetStsLoginUri( request );
+			var authCookies = auth.SignInAndRetrieveFedAuthCookies( stsLoginUri );
 			client.CookieContainer.Add( new Uri( client.BaseUrl ), authCookies );
 		}
 
@@ -51,29 +49,33 @@ namespace Sp.Api.Shared.Wrappers
 			readonly string _password;
 			readonly RestClient _authClient;
 
-			public InnerAuthenticator( string rpBaseUri, string username, string password )
+			public InnerAuthenticator( SpApiConfiguration apiConfiguration )
 			{
-				_username = username;
-				_password = password;
-				_authClient = new RestClient( rpBaseUri );
+				_username = apiConfiguration.Username;
+				_password = apiConfiguration.Password;
+				_authClient = new RestClient( apiConfiguration.BaseUrl );
 			}
 
-			public CookieCollection SignInAndRetrieveFedAuthCookies()
+			public Uri AttemptRequestAndGetStsLoginUri( IRestRequest request )
 			{
-				// An unauthenticated request to the Web should redirect us to the STS
-				var loginPage = _authClient.Execute( new RestRequest( string.Empty, Method.GET ) );
+				// An unauthenticated request attempt to resource should redirect us to the STS
+				var loginPage = _authClient.Execute( request );
 
 				if ( loginPage.StatusCode != HttpStatusCode.OK )
 				{
 					throw new InvalidOperationException( "Request for " + _authClient.BaseUrl + " failed; " + loginPage.ToDiagnosticString() );
 				}
 				var stsLoginUri = loginPage.ResponseUri;
+				return stsLoginUri;
+			}
 
+			public CookieCollection SignInAndRetrieveFedAuthCookies( Uri stsLoginUri )
+			{
 				var wresultRequest = AuthenticateAndSignInWithIpSts( stsLoginUri );
 				// Now we've got WS-Federation wsignin message from IP-STS that we should POST back to the FP-STS
 				var rpAuthResponse = _authClient.Execute( wresultRequest );
 				if ( rpAuthResponse.StatusCode != HttpStatusCode.OK )
-					throw new InvalidOperationException( "Login wasn't successful; " + loginPage.ToDiagnosticString() );
+					throw new InvalidOperationException( "Login wasn't successful; " + rpAuthResponse.ToDiagnosticString() );
 
 				// Proceed with FP-STS - post wsignin message to the RP
 				var wresultRequest2 = PrepareFederationWSignInRequest( rpAuthResponse.ResponseUri.ToString(), rpAuthResponse.Content );
@@ -146,10 +148,10 @@ namespace Sp.Api.Shared.Wrappers
 				that.ResponseUri, that.ResponseStatus, that.StatusCode, that.StatusDescription, that.ErrorMessage, that.ContentWithEscapedCurlies() );
 		}
 
-		public static string  ContentWithEscapedCurlies( this IRestResponse that )
+		public static string ContentWithEscapedCurlies( this IRestResponse that )
 		{
 			//NB - Xunit runner may choke if REST content is included in an error message without curlies being escaped properly
-			var builder = new StringBuilder(that.Content);
+			var builder = new StringBuilder( that.Content );
 			builder.Replace( "{", "{{" );
 			builder.Replace( "}", "}}" );
 			return builder.ToString();

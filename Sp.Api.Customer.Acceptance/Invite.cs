@@ -81,10 +81,10 @@ namespace Sp.Api.Customer.Acceptance
 
 		public class FreshOrganizationFixture
 		{
-			public FreshOrganizationFixture( SpCustomerApi api, FreshCustomerFixture customer )
+			public FreshOrganizationFixture( SpAuthApi api, FreshCustomerFixture customer )
 			{
 				InviteStatusLink = customer.SignedCustomer._links.inviteStatus.href;
-				var organization = new SpCustomerApi.OrganizationCreateModel( customer.SignedCustomer );
+				var organization = new SpAuthApi.OrganizationCreateModel( customer.SignedCustomer );
 				var response = api.CreateOrganization( organization );
 				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 			}
