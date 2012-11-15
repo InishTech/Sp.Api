@@ -27,7 +27,8 @@
 
   <Import Project="$(MSBuildThisFileDirectory)/Sp.Test.Html/after.html.csproj.targets" Condition="$(MSBuildProjectName.EndsWith('Html.Acceptance'))" />
 
-  <PropertyGroup Condition=" '' != '$(OutDirBase)'">
+  <PropertyGroup >
+    <OutDirBase Condition=" '' != '$(OutDirBase)'">$(SolutionDir)/Artifacts/Acceptance</OutDirBase>
     <OutDir>$(OutDirBase)/$(MSBuildProjectName)/</OutDir>
   </PropertyGroup>
 </Project>
