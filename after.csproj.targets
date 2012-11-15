@@ -22,13 +22,13 @@
 
   <!--See http://nuget.codeplex.com/discussions/365785 for any updates on whether this is necessary and/or can be improved upon -->
   <Target Name="NuGetPackageRestoreSolutionLevelPackagesWorkaround">
-    <Exec WorkingDirectory="$(MSBuildThisFileDirectory)" LogStandardErrorAsError="true" Command=".nuget\nuget.exe install .nuget/packages.config -o packages" />
+    <Exec WorkingDirectory="$(MSBuildThisFileDirectory)" LogStandardErrorAsError="true" Command=".nuget\nuget.exe install .nuget\packages.config -o packages" />
   </Target>
 
   <Import Project="$(MSBuildThisFileDirectory)/Sp.Test.Html/after.html.csproj.targets" Condition="$(MSBuildProjectName.EndsWith('Html.Acceptance'))" />
 
   <PropertyGroup >
-    <OutDirBase Condition=" '' != '$(OutDirBase)'">$(SolutionDir)/Artifacts/Acceptance</OutDirBase>
-    <OutDir>$(OutDirBase)/$(MSBuildProjectName)/</OutDir>
+    <OutDirBase Condition=" '' == '$(OutDirBase)' ">$(SolutionDir)\Artifacts\Acceptance</OutDirBase>
+    <OutDir>$(OutDirBase)\$(MSBuildProjectName)\</OutDir>
   </PropertyGroup>
 </Project>
