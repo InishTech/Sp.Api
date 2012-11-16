@@ -5,13 +5,21 @@
   
   FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup Condition=" '' != '$(Solution)' ">
-    <Solution Include="$(Solution)" />
-  </ItemGroup>
 
-  <ItemGroup Condition=" '' == '$(Solution)' ">
-    <Solution Include="*.sln" />
-  </ItemGroup>
+  <!--BUILDING-->
+
+  <Choose>
+    <When Condition=" '' != '$(Solution)' ">
+      <ItemGroup>
+        <Solution Include="$(Solution)" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Solution Include="*.sln" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 
   <Target Name="Build">
     <MSBuild Projects="@(Solution)" Targets="Build"/>
@@ -26,6 +34,8 @@
   <Target Name="FinalClean" AfterTargets="Clean" DependsOnTargets="CustomizeAppConfigs">
     <RemoveDir Directories="$(SolutionDir)packages"/>
   </Target>
+
+  <!--CUSTOMIZING-->
 
   <PropertyGroup>
     <_Instructions>Need to run "./configure.ps1" from the root folder before running the tests.</_Instructions>
@@ -83,6 +93,41 @@
       XmlInputPath="%(_ConfigFilesToCustomize.Identity)"
       Query="%(_ConfigFilesToCustomize.ReplacementQuery)"
       Value="%(_ConfigFilesToCustomize.ReplacementValue)"/>
+  </Target>
+
+  <!--TESTING-->
+
+  <Choose>
+    <When Condition=" '' != '$(XunitProject)' ">
+      <ItemGroup>
+        <XunitProject Include="$(XunitProject)" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <XunitProject Include="*.xunit" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <Target Name="Test"  DependsOnTargets="NuGetPackageRestoreSolutionLevelPackagesWorkaround">
+
+    <ItemGroup Condition=" '' == '$(XunitPath)'">
+      <_XunitPath Include="$(SolutionDir)packages\xunit.runners.*\tools\xunit.console.clr4.exe"/>
+    </ItemGroup>
+    <PropertyGroup>
+      <XunitPath Condition=" '' == '$(XunitPath)'">@(_XunitPath)</XunitPath>
+    </PropertyGroup>
+    <Error Text="Could not locate $(XunitExe). Please specify a $XunitPath Property" Condition="!EXISTS('$(XunitPath)')" />
+    <Exec Command="&quot;$(XunitPath)&quot; &quot;%(XunitProject.Identity)&quot; $(SpAcceptanceTestArgs)" ContinueOnError="true" IgnoreStandardErrorWarningFormat="true" >
+      <Output TaskParameter="ExitCode" ItemName="xUnitExitCodes"/>
+    </Exec>
+    <Error Text="Test error(s) occured" Code="%(xUnitExitCodes.Identity)" Condition=" '%(xUnitExitCodes.Identity)' != '0' AND '@(xUnitExitCodes)' !='' "/>
+  </Target>
+
+  <!--See http://nuget.codeplex.com/discussions/365785 for any updates on whether this is necessary and/or can be improved upon -->
+  <Target Name="NuGetPackageRestoreSolutionLevelPackagesWorkaround">
+    <Exec WorkingDirectory="$(MSBuildThisFileDirectory)" LogStandardErrorAsError="true" Command=".nuget\nuget.exe install .nuget\packages.config -o packages" />
   </Target>
 
 </Project>
