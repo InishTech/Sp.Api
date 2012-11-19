@@ -127,7 +127,7 @@
   </Target>
 
   <!--See http://nuget.codeplex.com/discussions/365785 for any updates on whether this is necessary and/or can be improved upon -->
-  <Target Name="NuGetPackageRestoreSolutionLevelPackagesWorkaround">
+  <Target Name="NuGetPackageRestoreSolutionLevelPackagesWorkaround"  Condition=" '' == '$(XunitPath)'">
     <Exec WorkingDirectory="$(MSBuildThisFileDirectory)" LogStandardErrorAsError="true" Command=".nuget\nuget.exe install .nuget\packages.config -o packages" />
   </Target>
 
