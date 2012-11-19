@@ -83,7 +83,8 @@
       </_Replacements>
     </ItemGroup>
     <ItemGroup>
-      <_ConfigFilesToCustomize Include="**\app.config">
+      <!--The replacements can work either against app.configs (which propagate through to the .dll.config files on compilation), or after the fact (e.g. this is used for monitoring or testing using precompiled artifacts from a build)-->
+      <_ConfigFilesToCustomize Include="**\*.config">
         <ReplacementQuery>%(_Replacements.Query)</ReplacementQuery>
         <ReplacementValue>%(_Replacements.Value)</ReplacementValue>
       </_ConfigFilesToCustomize>
