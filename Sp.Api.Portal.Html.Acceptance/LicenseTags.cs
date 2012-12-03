@@ -64,7 +64,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 				// Verify everything can show when we get everything fresh from the server
 				new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 4 ) ).Until( d =>
 				{
-					driver.FindElementById( "logo_link" ).FindElement( By.TagName( "a" ) ).Click();
+					driver.FindElementByCssSelector( ".section_title a" ).Click();
 					return new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ).Until( d2 =>
 					{
 						var editedRow = findLicenseRowEditedOrDefault();
@@ -111,7 +111,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 			// Wait for the headings to show, potentially re-clicking home to attempt a reload/refresh if they are not what we expect (as a user might)
 			new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 3 ) ).Until( d =>
 			{
-				driver.FindElementByCssSelector( "#logo_link a" ).Click();
+				driver.FindElementByCssSelector( ".section_title a" ).Click();
 				return new WebDriverWait( driver, TimeSpan.FromSeconds( 1 ) ).Until( d2 =>
 				{
 					var tagHeadings = driver.FindElementsByClassName( "tag_header" ).Select( heading => heading.Text ).ToArray();
