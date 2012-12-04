@@ -23,6 +23,12 @@ namespace Sp.Api.Customer.Acceptance
 			return Execute<CustomerSummaryPage>( request );
 		}
 
+		internal IRestResponse<CustomerSummaryPage> GetCustomerList( string query )
+		{
+			var request = new RestRequest( GetApiPrefix( ApiType.Customer ) + "/customer?" + query );
+			return Execute<CustomerSummaryPage>( request );
+		}
+
 		internal IRestResponse CreateCustomer( CustomerSummary customer )
 		{
 			var request = new RestRequest( GetApiPrefix( ApiType.Customer ) + "/customer", Method.POST );

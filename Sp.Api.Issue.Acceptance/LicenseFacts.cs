@@ -37,10 +37,27 @@ namespace Sp.Api.Issue.Acceptance
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
 				// If the request is OK, there should always be some Data
 				Assert.NotNull( apiResult.Data );
-				//-- Portal consumer expects Issue date, activation key, product, version, eval, renewal
+
 				// An empty list is always represented as an empty collection, not null
 				var licenseData = apiResult.Data.results;
 				Assert.NotNull( licenseData );
+			}
+
+			/// <summary>
+			/// The master license list yields a JSON response object which contains the License List collection in a 'results' property.
+			/// </summary>
+			/// <param name="api">Api wrapper.</param>
+			[Smoke]
+			[HighFrequencyAttribute]
+			[Theory, AutoSoftwarePotentialApiData]
+			public static void ShouldHaveAtLeastOneItem( SpIssueApi api )
+			{
+				var apiResult = api.GetLicenseList();
+				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+				Assert.NotNull( apiResult.Data );
+
+				var licenseData = apiResult.Data.results;
+				Assert.NotEmpty( licenseData );
 			}
 
 			[Theory, AutoSoftwarePotentialApiData]
@@ -77,7 +94,7 @@ namespace Sp.Api.Issue.Acceptance
 
 				var resorted = licenseData.OrderByDescending( x => DateTime.Parse( x.IssueDate, CultureInfo.InvariantCulture ) ).ToArray();
 
-				Assert.True( Enumerable.SequenceEqual( resorted, licenseData ) );
+				Assert.True( resorted.SequenceEqual( licenseData ) );
 			}
 
 			public static class ElementFromList
@@ -89,6 +106,7 @@ namespace Sp.Api.Issue.Acceptance
 				/// Success/failure is communicated by the HTTP Status Code being OK		
 				/// </remarks>
 				/// <param name="license">Arbitrarily chosen license from the configured user's list</param>
+				[MediumFrequency]
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void ShouldContainData( RandomLicenseFromListFixture license )
 				{
@@ -143,17 +161,36 @@ namespace Sp.Api.Issue.Acceptance
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void ShouldUpdateCustomerLink( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, GetRandomCustomerFixture customer )
 				{
-					var licenseCustomerAssignmentHref = license.Selected._links.customerAssignment.href;
-					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer.DataFromGet );
+					var licenseData = license.Selected;
+					var signedCustomerData = customer.DataFromGet;
+					UpdateAndVerifyCustomerLink( api, licenseData, signedCustomerData );
+				}
+
+				//TODO - at the moment we need a monitor test that assigns a license to a well known test customer so that Portal monitor tests can work
+				[Smoke]
+				[MediumFrequency]
+				[Theory, AutoSoftwarePotentialApiData]
+				public static void ShouldUpdateCustomerLinkForWellKnownTestCustomer( [Frozen] SpIssueApi api, RandomLicenseFromListFixture license, SpCustomerApi customerApi )
+				{
+					var licenseData = license.Selected;
+					var customerData = customerApi.GetCustomerList( "$filter=Name eq Test" ).Data.results.Single();
+					var signedCustomerData = customerApi.GetCustomer( customerData._links.self.href ).Data;
+					UpdateAndVerifyCustomerLink( api, licenseData, signedCustomerData );
+				}
+
+				static void UpdateAndVerifyCustomerLink( SpIssueApi api, SpIssueApi.License license, SpCustomerApi.CustomerSummary customer )
+				{
+					var licenseCustomerAssignmentHref = license._links.customerAssignment.href;
+					var apiResult = api.PutLicenseCustomerAssignment( licenseCustomerAssignmentHref, customer );
 					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 
 					Verify.EventuallyWithBackOff( () =>
 					{
-						var updated = api.GetLicense( license.Selected._links.self.href );
+						var updated = api.GetLicense( license._links.self.href );
 						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
 						Assert.NotNull( updated.Data._links.customer );
-						var customerSelfLink = customer.DataFromGet._links.self;
-						Assert.Equal( customerSelfLink.href, updated.Data._links.customer.href );
+						var customerSelfLink = customer._links.self;
+						Assert.Equal( customerSelfLink.href, updated.Data._links.customer.href, StringComparer.OrdinalIgnoreCase );
 					} );
 				}
 
@@ -276,6 +313,7 @@ namespace Sp.Api.Issue.Acceptance
 			/// </remarks>
 			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="preSelectedLicense"/> can share the authentication work.</param>
 			/// <param name="preSelectedLicense">Arbitrarily chosen license from the configured user's list</param>
+			[HighFrequencyAttribute]
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetLicenseShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture preSelectedLicense )
 			{

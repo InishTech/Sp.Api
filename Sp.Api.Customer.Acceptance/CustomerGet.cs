@@ -25,6 +25,7 @@ namespace Sp.Api.Customer.Acceptance
 		/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="preSelectedCustomer"/> can share the authentication work.</param>
 		/// <param name="preSelectedCustomer">Arbitrarily chosen customer from the configured user's list</param>
 		[Smoke]
+		[MediumFrequency]
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void GetCustomerShouldContainData( [Frozen] SpCustomerApi api, RandomCustomerFromListFixture preSelectedCustomer )
 		{

@@ -23,6 +23,8 @@ namespace Sp.Api.Customer.Acceptance
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 		}
 
+		[Smoke]
+		[MediumFrequency]
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldHaveExactlyOneItem( SpAuthApi api )
 		{

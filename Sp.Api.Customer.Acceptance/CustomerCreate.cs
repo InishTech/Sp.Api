@@ -29,6 +29,8 @@ namespace Sp.Api.Customer.Acceptance
 
 		public class Fresh
 		{
+			[Smoke]
+			[MediumFrequency]
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldEventuallyBeGettable( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription, Guid anonymousRequestId )
 			{

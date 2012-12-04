@@ -16,4 +16,31 @@ namespace Sp.Api.Shared
 		{
 		}
 	}
+
+	[AttributeUsage( AttributeTargets.Class | AttributeTargets.Method )]
+	class HighFrequencyAttribute : TraitAttribute
+	{
+		public HighFrequencyAttribute()
+			: base( "Frequency", "High" )
+		{
+		}
+	}
+
+	[AttributeUsage( AttributeTargets.Class | AttributeTargets.Method )]
+	class MediumFrequencyAttribute : TraitAttribute
+	{
+		public MediumFrequencyAttribute()
+			: base( "Frequency", "Medium" )
+		{
+		}
+	}
+
+	[AttributeUsage( AttributeTargets.Class | AttributeTargets.Method )]
+	class LowFrequencyAttribute : TraitAttribute
+	{
+		public LowFrequencyAttribute()
+			: base( "Frequency", "Low" )
+		{
+		}
+	}
 }

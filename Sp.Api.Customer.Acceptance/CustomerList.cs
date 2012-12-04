@@ -15,6 +15,8 @@
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 		}
 
+		[Smoke]
+		[HighFrequency]
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldHaveAtLeastOneItem( SpCustomerApi api )
 		{

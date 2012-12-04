@@ -22,6 +22,7 @@ namespace Sp.Api.Portal.Acceptance
 		public static class IndexGet
 		{
 			[Smoke]
+			[HighFrequency]
 			[Theory, AutoPortalDataAttribute]
 			public static void ShouldYieldResults( SpPortalApi api )
 			{
@@ -103,6 +104,8 @@ namespace Sp.Api.Portal.Acceptance
 
 			public static class Items
 			{
+				[Smoke]
+				[MediumFrequency]
 				[Theory, AutoPortalDataAttribute]
 				public static void ShouldContainData( RandomLicenseFromListFixture license )
 				{

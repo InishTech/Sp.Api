@@ -64,6 +64,9 @@
     <Compile Include="..\Sp.Api-Shared\AutoSoftwarePotentialData.cs">
       <Link>Inlined\AutoSoftwarePotentialData.cs</Link>
     </Compile>
+    <Compile Include="..\Sp.Api-Shared\SmokeAttribute.cs">
+      <Link>Inlined\SmokeAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApi.cs">
       <Link>Inlined\Wrappers\SpApi.cs</Link>
     </Compile>
