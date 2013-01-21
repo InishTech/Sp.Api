@@ -34,12 +34,6 @@ namespace Sp.Api.Customer.Acceptance
 			return Execute<InviteStatus>( request );
 		}
 
-		public IRestResponse<ServiceInstanceIndexModel> GetServiceInstances()
-		{
-			var request = new RestRequest( GetApiPrefix( ApiType.Auth ) + "/Registration/Instance" );
-			return Execute<ServiceInstanceIndexModel>( request );
-		}
-
 		internal IRestResponse CreateOrganization( OrganizationCreateModel organization )
 		{
 			string addLink = GetApiPrefix( ApiType.Auth ) + "/Registration/Organization";
@@ -51,7 +45,6 @@ namespace Sp.Api.Customer.Acceptance
 
 		public class CustomerInvite
 		{
-			public Guid InstanceId { get; set; }
 			public string EmailTo { get; set; }
 			public Guid RequestId { get; set; }
 		}

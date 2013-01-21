@@ -19,13 +19,12 @@ namespace Sp.Api.Customer.Acceptance
 		public static class PostCustomerInvite
 		{
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void ShouldYieldAccepted( [Frozen] SpAuthApi api, ServiceInstanceFixture serviceInstance, FreshOrganizationFixture organization )
+			public static void ShouldYieldAccepted( [Frozen] SpAuthApi api, FreshOrganizationFixture organization )
 			{
 				var customerInviteHref = organization.InviteStatusLink;
 				var customerInvite = new SpAuthApi.CustomerInvite
 				{
 					EmailTo = "test@inishtech.com",
-					InstanceId = serviceInstance.ServiceInstance.Id,
 					RequestId = Guid.NewGuid()
 				};
 
@@ -34,7 +33,7 @@ namespace Sp.Api.Customer.Acceptance
 			}
 
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void ShouldTurnInviteStatusOpenAndUpdateLastInviteTo( [Frozen] SpAuthApi api, ServiceInstanceFixture serviceInstance, FreshOrganizationFixture organization )
+			public static void ShouldTurnInviteStatusOpenAndUpdateLastInviteTo( [Frozen] SpAuthApi api, FreshOrganizationFixture organization )
 			{
 				var customerInviteHref = organization.InviteStatusLink;
 				// TOCONSIDER: Extract fixture to represent anonymous email address
@@ -44,7 +43,6 @@ namespace Sp.Api.Customer.Acceptance
 				var customerInvite = new SpAuthApi.CustomerInvite
 				{
 					EmailTo = emailToMutated,
-					InstanceId = serviceInstance.ServiceInstance.Id,
 					RequestId = Guid.NewGuid()
 				};
 				var inviteResult = api.InviteCustomer( customerInviteHref, customerInvite );
@@ -62,13 +60,12 @@ namespace Sp.Api.Customer.Acceptance
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void DuplicatePostCustomerInviteShouldYieldConflict( [Frozen] SpAuthApi api, ServiceInstanceFixture serviceInstance, FreshOrganizationFixture organization )
+		public static void DuplicatePostCustomerInviteShouldYieldConflict( [Frozen] SpAuthApi api,  FreshOrganizationFixture organization )
 		{
 			var customerInviteHref = organization.InviteStatusLink;
 			var customerInvite = new SpAuthApi.CustomerInvite
 			{
 				EmailTo = "test@inishtech.com",
-				InstanceId = serviceInstance.ServiceInstance.Id,
 				RequestId = Guid.NewGuid()
 			};
 
