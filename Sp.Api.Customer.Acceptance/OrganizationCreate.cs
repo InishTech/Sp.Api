@@ -1,6 +1,6 @@
-﻿using System.Net;
-using Ploeh.AutoFixture.Xunit;
+﻿using Ploeh.AutoFixture.Xunit;
 using Sp.Api.Shared;
+using System.Net;
 using Xunit;
 using Xunit.Extensions;
 
@@ -16,6 +16,4 @@ namespace Sp.Api.Customer.Acceptance
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 		}
 	}
-
-
 }
