@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="AssertExtensions.cs" />
     <Compile Include="CustomerTags.cs" />
+    <Compile Include="ItemManagement.cs" />
     <Compile Include="Licenses.cs" />
     <Compile Include="LicenseCustomerTags.cs" />
     <Compile Include="AutoPortalDataAttribute.cs" />
