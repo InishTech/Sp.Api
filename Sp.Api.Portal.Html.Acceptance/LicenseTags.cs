@@ -30,7 +30,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 
 				// Wait for page to populate and then click edit to pop up the editor for a random license row
 				Func<ReadOnlyCollection<IWebElement>> findLicenseRows = () => driver.FindElementsByCssSelector( "#license-list tr" );
-				IWebElement licenseRowToEdit = (new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ).Until( d2 =>
+				IWebElement licenseRowToEdit = (new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( d2 =>
 				{
 					ReadOnlyCollection<IWebElement> loadedRows = findLicenseRows();
 					if ( loadedRows.Count == 0 ) // Not loaded yet
@@ -62,10 +62,10 @@ namespace Sp.Api.Portal.Html.Acceptance
 				new WebDriverWait( driver, TimeSpan.FromSeconds( 3 ) ).Until( d2 => ContainsSequenceOfColumnsContaining( valuesInputted, findLicenseRowEditedOrDefault() ) );
 
 				// Verify everything can show when we get everything fresh from the server
-				new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 4 ) ).Until( d =>
+				new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 5 ) ).Until( d =>
 				{
 					driver.FindElementByCssSelector( ".section_title a" ).Click();
-					return new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ).Until( d2 =>
+					return new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( d2 =>
 					{
 						var editedRow = findLicenseRowEditedOrDefault();
 						if ( editedRow == null ) // rows not loaded yet
