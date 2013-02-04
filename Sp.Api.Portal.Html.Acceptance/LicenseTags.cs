@@ -59,7 +59,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 				driver.FindElementById( "save_tags" ).Click();
 
 				// Verify inputted values show on page without any refreshes
-				new WebDriverWait( driver, TimeSpan.FromSeconds( 3 ) ).Until( d2 => ContainsSequenceOfColumnsContaining( valuesInputted, findLicenseRowEditedOrDefault() ) );
+				new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( d2 => ContainsSequenceOfColumnsContaining( valuesInputted, findLicenseRowEditedOrDefault() ) );
 
 				// Verify everything can show when we get everything fresh from the server
 				new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 5 ) ).Until( d =>
