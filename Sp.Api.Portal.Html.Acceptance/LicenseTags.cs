@@ -79,7 +79,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 		static string[] EnsureWeHaveSomeTagsDefined( RemoteWebDriver driver )
 		{
 			// The page doesn't enable the Add button until we have loaded
-			new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( _ => drive.FindElementById( "add_new_tag" ).Enabled );
+			new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( _ => driver.FindElementById( "add_new_tag" ).Enabled );
 
 			// Delete all except the first three
 			var existing = driver.FindElementsById( "delete_tag" );
