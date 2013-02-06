@@ -25,7 +25,7 @@ namespace Sp.Test.Html
 				new FirefoxDriver( GetSeleniumFirefoxProfile() ),
 				#endif
 				// Using IE as default desktop build driver as it tends to be the most buggy and Firefox / Chrome are consistently used by devs
-				new InternetExplorerDriver();
+				new InternetExplorerDriver()
 			};
 		}
 
