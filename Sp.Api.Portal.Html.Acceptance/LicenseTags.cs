@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 namespace Sp.Api.Portal.Html.Acceptance
 {
 	using OpenQA.Selenium;
@@ -29,17 +30,15 @@ namespace Sp.Api.Portal.Html.Acceptance
 				AwaitSyncingOfSubmittedTags( tagNames, driver );
 
 				// Wait for page to populate and then click edit to pop up the editor for a random license row
-				Func<ReadOnlyCollection<IWebElement>> findLicenseRows = () => driver.FindElementsByCssSelector( "#license-list tr" );
 				IWebElement licenseRowToEdit = (new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( d2 =>
 				{
-					ReadOnlyCollection<IWebElement> loadedRows = findLicenseRows();
+					ReadOnlyCollection<IWebElement> loadedRows = driver.FindElementsByCssSelector( "#license-list tr" );
 					if ( loadedRows.Count == 0 ) // Not loaded yet
 						return null;
 					return loadedRows.ElementAtRandom();
 				} ));
 				var randomTagEditButton = licenseRowToEdit.FindElement( By.ClassName( "tag_editor_dialog_launcher" ) );
 				var editedLicenseActivationKey = randomTagEditButton.GetAttribute( "data-key" );
-				Func<IWebElement> findLicenseRowEditedOrDefault = () => findLicenseRows().SingleOrDefault( x => -1 != x.Text.IndexOf( editedLicenseActivationKey ) );
 				randomTagEditButton.Click();
 
 				var tagEditorEl = driver.FindElementById( "tag_editor" );
@@ -55,37 +54,32 @@ namespace Sp.Api.Portal.Html.Acceptance
 					tagTextInputEl.Clear();
 					tagTextInputEl.SendKeys( new Fixture().CreateAnonymous<string>( "value" ) );
 				}
-				var valuesInputted = tagEditorEl.FindElements( By.Name( "tag" ) ).Select( x => x.GetAttribute( "value" ).Trim() ).ToArray();
+				string[] valuesInputted = tagEditorEl.FindElements( By.Name( "tag" ) ).Select( x => x.GetAttribute( "value" ).Trim() ).ToArray();
 				driver.FindElementById( "save_tags" ).Click();
 
 				// Verify inputted values show on page without any refreshes
-				new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( d2 => ContainsSequenceOfColumnsContaining( valuesInputted, findLicenseRowEditedOrDefault() ) );
+				Func<bool> tableShowsValuesInputtedForSelectedLicense = () => 
+					driver
+						.FindElementsByXPath( "//*[@id='license-list']/tr[contains(.,'" + editedLicenseActivationKey + "')]/td" )
+						.Select( x => x.Text )
+						.ContainsSubsequence( valuesInputted );
+				// Page re-renders row asynchronously in response to preceding Click(), which can yank out the IWebElements from underneath us
+				new WebDriverWaitIgnoringStaleness( driver, TimeSpan.FromSeconds( 5 ) ).Until( _ => tableShowsValuesInputtedForSelectedLicense() );
 
 				// Verify everything can show when we get everything fresh from the server
-				new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 5 ) ).Until( d =>
+				new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 15 ) ).Until( _ =>
 				{
+					// Force refresh by hitting nav home link
 					driver.FindElementByCssSelector( ".section_title a" ).Click();
-					return new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( d2 =>
-					{
-						var editedRow = findLicenseRowEditedOrDefault();
-						if ( editedRow == null ) // rows not loaded yet
-							return false;
-						return ContainsSequenceOfColumnsContaining( valuesInputted, editedRow );
-					} );
+					return new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( __ => tableShowsValuesInputtedForSelectedLicense() );
 				} );
 			}
-		}
-
-		static bool ContainsSequenceOfColumnsContaining( String[] expected, IWebElement rowEl )
-		{
-			var valuesAsFound = string.Join( "|", rowEl.FindElements( By.TagName( "td" ) ).Select( x => x.Text ) );
-			return -1 != valuesAsFound.IndexOf( string.Join( "|", expected ) );
 		}
 
 		static string[] EnsureWeHaveSomeTagsDefined( RemoteWebDriver driver )
 		{
 			// The page doesn't enable the Add button until we have loaded
-			new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ).Until( d => d.FindElement( By.Id( "add_new_tag" ) ).Enabled );
+			new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( _ => drive.FindElementById( "add_new_tag" ).Enabled );
 
 			// Delete all except the first three
 			var existing = driver.FindElementsById( "delete_tag" );
@@ -127,6 +121,36 @@ namespace Sp.Api.Portal.Html.Acceptance
 			{
 				IgnoreExceptionTypes( typeof( TimeoutException ) );
 			}
+		}
+
+		class WebDriverWaitIgnoringStaleness : WebDriverWait
+		{
+			public WebDriverWaitIgnoringStaleness( IWebDriver driver, TimeSpan timeout )
+				: base( driver, timeout )
+			{
+				IgnoreExceptionTypes( typeof( StaleElementReferenceException ) );
+			}
+		}
+	}
+
+	static class SubSequenceExtensions
+	{
+		// http://stackoverflow.com/a/7334462/11635
+		public static bool ContainsSubsequence<T>( this IEnumerable<T> parent, IEnumerable<T> target )
+		{
+			var pattern = target.ToArray();
+			var source = new LinkedList<T>();
+			foreach ( var element in parent )
+			{
+				source.AddLast( element );
+				if ( source.Count == pattern.Length )
+				{
+					if ( source.SequenceEqual( pattern ) )
+						return true;
+					source.RemoveFirst();
+				}
+			}
+			return false;
 		}
 	}
 }
