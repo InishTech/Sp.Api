@@ -21,10 +21,11 @@ namespace Sp.Test.Html
 			return new RemoteWebDriver[] 
 			{
 				#if !DEBUG
-				new InternetExplorerDriver(),
 				new ChromeDriver(),
+				new FirefoxDriver( GetSeleniumFirefoxProfile() ),
 				#endif
-				new FirefoxDriver( GetSeleniumFirefoxProfile() )
+				// Using IE as default desktop build driver as it tends to be the most buggy and Firefox / Chrome are consistently used by devs
+				new InternetExplorerDriver();
 			};
 		}
 
