@@ -7,7 +7,7 @@ namespace Sp.Api.Issue.Acceptance
 {
 	using Ploeh.AutoFixture.Xunit;
 	using Ploeh.SemanticComparison.Fluent;
-	using Sp.Api.Customer.Acceptance;
+	using Sp.Api.Consume.Acceptance;
 	using Sp.Api.Shared;
 	using Sp.Test.Helpers;
 	using System;

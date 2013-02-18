@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 
-namespace Sp.Api.Customer.Acceptance
+namespace Sp.Api.Consume.Acceptance
 {
 	using RestSharp;
 	using Sp.Api.Shared.Wrappers;

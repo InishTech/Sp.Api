@@ -1,4 +1,4 @@
-﻿namespace Sp.Api.Customer.Acceptance
+﻿namespace Sp.Api.Consume.Acceptance
 {
 	using System;
 	using Sp.Api.Shared;

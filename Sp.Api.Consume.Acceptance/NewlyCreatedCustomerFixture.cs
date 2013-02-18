@@ -10,7 +10,7 @@ using RestSharp;
 using Sp.Test.Helpers;
 using Xunit;
 
-namespace Sp.Api.Customer.Acceptance
+namespace Sp.Api.Consume.Acceptance
 {
 	public class FreshCustomerFixture
 	{

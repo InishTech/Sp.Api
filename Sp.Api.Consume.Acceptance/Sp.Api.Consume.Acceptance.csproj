@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1EFFCD7B-D784-4C2C-8935-9B6695F8B989}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Sp.Api.Customer.Acceptance</RootNamespace>
-    <AssemblyName>Sp.Api.Customer.Acceptance</AssemblyName>
+    <RootNamespace>Sp.Api.Consume.Acceptance</RootNamespace>
+    <AssemblyName>Sp.Api.Consume.Acceptance</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

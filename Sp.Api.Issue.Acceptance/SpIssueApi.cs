@@ -6,7 +6,7 @@
 namespace Sp.Api.Issue
 {
 	using RestSharp;
-	using Sp.Api.Customer.Acceptance;
+	using Sp.Api.Consume.Acceptance;
 	using Sp.Api.Shared.Wrappers;
 	using System.Collections.Generic;
 

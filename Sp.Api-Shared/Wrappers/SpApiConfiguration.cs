@@ -36,7 +36,7 @@ namespace Sp.Api.Shared.Wrappers
 			get { return _baseUrl; }
 		}
 
-		// NB this is not the long terma approach - will be using hypermedia and HAL to navigate instead of computing urls the way anything relaiant on this currently does
+		// NB this is not the long term approach - will be using hypermedia and HAL to navigate instead of computing urls the way anything relaiant on this currently does
 		// TODO TP 1105 these should be determined by going to an api landing location
 		public string GetApiPrefix( ApiType apiType )
 		{
@@ -45,10 +45,7 @@ namespace Sp.Api.Shared.Wrappers
 
 		bool IsCloudEnvironment
 		{
-			get
-			{
-				return BaseUrl.Contains( "softwarepotential.com" ) || BaseUrl.Contains( "cloudapp" );
-			}
+			get { return BaseUrl.Contains( "softwarepotential.com" ) || BaseUrl.Contains( "cloudapp" ); }
 		}
 
 		readonly Dictionary<ApiType, string> _azureApiPrefixes = new Dictionary<ApiType, string>
@@ -56,7 +53,7 @@ namespace Sp.Api.Shared.Wrappers
 			{ ApiType.WebApiRoot, "Home" },
 			{ ApiType.Define, "Define" },
 			{ ApiType.Issue, "Issue" },
-			{ ApiType.Customer, "Customer" },
+			{ ApiType.Consume, "Consume" },
 			{ ApiType.Auth, "Auth" },
 		};
 
@@ -65,7 +62,7 @@ namespace Sp.Api.Shared.Wrappers
 			{ ApiType.WebApiRoot, "Sp.Web" },
 			{ ApiType.Define, "Sp.Web.Define" },
 			{ ApiType.Issue, "Sp.Web.Issue" },
-			{ ApiType.Customer, "Sp.Web.CustomerManagement" },
+			{ ApiType.Consume, "Sp.Web.Consume" },
 			{ ApiType.Auth, "Sp.Auth.Web" },
 		};
 	}
@@ -77,7 +74,7 @@ namespace Sp.Api.Shared.Wrappers
 		WebApiRoot,
 		Define,
 		Issue,
-		Customer,
+		Consume,
 		Auth
 	}
 }

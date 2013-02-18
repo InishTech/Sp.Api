@@ -13,7 +13,7 @@ using System.Linq;
 using System.Reflection;
 using Xunit.Extensions;
 
-namespace Sp.Api.Customer.Html.Acceptance
+namespace Sp.Api.Consume.Html.Acceptance
 {
 	public class Learning
 	{

@@ -11,16 +11,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D177EBF0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0E569842-3DB9-4DE1-8485-295EF7560A14}"
 	ProjectSection(SolutionItems) = preProject
-		Sp.Api.Customer.Acceptance.xunit = Sp.Api.Customer.Acceptance.xunit
+		Sp.Api.Consume.Acceptance.xunit = Sp.Api.Consume.Acceptance.xunit
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Test.Helpers", "Sp.Test.Helpers\Sp.Test.Helpers.csproj", "{456EAB19-B94D-43B9-ACDF-A9BB2F19E8A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Test.Html", "Sp.Test.Html\Sp.Test.Html.csproj", "{052A210C-1890-4731-BE07-DD78A045811D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Api.Customer.Acceptance", "Sp.Api.Customer.Acceptance\Sp.Api.Customer.Acceptance.csproj", "{1EFFCD7B-D784-4C2C-8935-9B6695F8B989}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Api.Consume.Acceptance", "Sp.Api.Consume.Acceptance\Sp.Api.Consume.Acceptance.csproj", "{1EFFCD7B-D784-4C2C-8935-9B6695F8B989}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Api.Customer.Html.Acceptance", "Sp.Api.Customer.Html.Acceptance\Sp.Api.Customer.Html.Acceptance.csproj", "{9F7AEC76-EA20-40DE-98C1-DBB6614FE1F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sp.Api.Consume.Html.Acceptance", "Sp.Api.Consume.Html.Acceptance\Sp.Api.Consume.Html.Acceptance.csproj", "{9F7AEC76-EA20-40DE-98C1-DBB6614FE1F5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1D7309F6-CCFF-4250-8D9E-D26285018FD2}"
 	ProjectSection(SolutionItems) = preProject

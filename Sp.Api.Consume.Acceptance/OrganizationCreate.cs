@@ -4,7 +4,7 @@ using System.Net;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Sp.Api.Customer.Acceptance
+namespace Sp.Api.Consume.Acceptance
 {
 	public class OrganizationCreate
 	{

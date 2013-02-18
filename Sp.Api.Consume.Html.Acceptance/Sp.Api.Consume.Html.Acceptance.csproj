@@ -8,8 +8,8 @@
     <ProjectGuid>{9F7AEC76-EA20-40DE-98C1-DBB6614FE1F5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sp.Api.Customer.Html.Acceptance</RootNamespace>
-    <AssemblyName>Sp.Api.Customer.Html.Acceptance</AssemblyName>
+    <RootNamespace>Sp.Api.Consume.Html.Acceptance</RootNamespace>
+    <AssemblyName>Sp.Api.Consume.Html.Acceptance</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

@@ -3,7 +3,7 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
-namespace Sp.Api.Customer.Html.Acceptance
+namespace Sp.Api.Consume.Html.Acceptance
 {
 	using OpenQA.Selenium;
 	using OpenQA.Selenium.Remote;
@@ -20,7 +20,7 @@ namespace Sp.Api.Customer.Html.Acceptance
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
-				navigator.NavigateWithAuthenticate( driver, "Sp.Web.CustomerManagement/customer" );
+				navigator.NavigateWithAuthenticate( driver, "Sp.Web.Consume/customer" );
 				// If we cannot respond in 5 seconds for any reason, a human will seriously distrust the software, no excuses
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
 				wait.Until( d => d

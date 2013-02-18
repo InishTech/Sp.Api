@@ -3,7 +3,7 @@
  * This code is licensed under the BSD 3-Clause License included with this source
  * 
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
-namespace Sp.Api.Customer.Acceptance
+namespace Sp.Api.Consume.Acceptance
 {
 	using RestSharp;
 	using Sp.Api.Shared.Wrappers;
@@ -19,19 +19,19 @@ namespace Sp.Api.Customer.Acceptance
 
 		internal IRestResponse<CustomerSummaryPage> GetCustomerList()
 		{
-			var request = new RestRequest( GetApiPrefix(ApiType.Customer) );
+			var request = new RestRequest( GetApiPrefix(ApiType.Consume) );
 			return Execute<CustomerSummaryPage>( request );
 		}
 
 		internal IRestResponse<CustomerSummaryPage> GetCustomerList( string query )
 		{
-			var request = new RestRequest( GetApiPrefix( ApiType.Customer ) + "/customer?" + query );
+			var request = new RestRequest( GetApiPrefix( ApiType.Consume ) + "/customer?" + query );
 			return Execute<CustomerSummaryPage>( request );
 		}
 
 		internal IRestResponse CreateCustomer( CustomerSummary customer )
 		{
-			var request = new RestRequest( GetApiPrefix( ApiType.Customer ) + "/customer", Method.POST );
+			var request = new RestRequest( GetApiPrefix( ApiType.Consume ) + "/customer", Method.POST );
 			request.RequestFormat = DataFormat.Json;
 			request.AddBody( customer );
 			return Execute( request );
