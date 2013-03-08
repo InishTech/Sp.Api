@@ -17,9 +17,9 @@ namespace Sp.Api.Consume.Acceptance
 	public class CustomerCreate
 	{
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void ShouldYieldAcceptedWithALocationHref( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription, Guid anonymousRequestId )
+		public static void ShouldYieldAcceptedWithALocationHref( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerExternalId, Guid anonymousRequestId )
 		{
-			var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription, RequestId = anonymousRequestId } );
+			var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, ExternalId = anonymousCustomerExternalId, RequestId = anonymousRequestId } );
 			
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 			string result = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
@@ -32,9 +32,9 @@ namespace Sp.Api.Consume.Acceptance
 			[Smoke]
 			[MediumFrequency]
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void ShouldEventuallyBeGettable( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription, Guid anonymousRequestId )
+			public static void ShouldEventuallyBeGettable( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerExternalId, Guid anonymousRequestId )
 			{
-				string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerDescription, anonymousRequestId );
+				string createdAtLocation = PutPendingCreate( api, anonymousCustomerName, anonymousCustomerExternalId, anonymousRequestId );
 
 				Verify.EventuallyWithBackOff( () =>
 				{
@@ -44,9 +44,9 @@ namespace Sp.Api.Consume.Acceptance
 				} );
 			}
 
-			static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerDescription, Guid anonymousRequestId )
+			static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerExternalId, Guid anonymousRequestId )
 			{
-				var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, Description = anonymousCustomerDescription, RequestId = anonymousRequestId } );
+				var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = anonymousCustomerName, ExternalId = anonymousCustomerExternalId, RequestId = anonymousRequestId } );
 				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 				var createdAtLocation = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );
 				return createdAtLocation;
@@ -63,33 +63,33 @@ namespace Sp.Api.Consume.Acceptance
 			public static class Name
 			{
 				[Theory, AutoSoftwarePotentialApiData]
-				public static void PutNullShouldReject( SpCustomerApi api, string anonymousDescription )
+				public static void PutNullShouldReject( SpCustomerApi api, string anonymousExternalId )
 				{
-					var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = null, Description = anonymousDescription } );
+					var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = null, ExternalId = anonymousExternalId } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 
 				[Theory, AutoSoftwarePotentialApiData]
-				public static void PutEmptyShouldReject( SpCustomerApi api, string anonymousDescription )
+				public static void PutEmptyShouldReject( SpCustomerApi api, string anonymousExternalId )
 				{
-					var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = string.Empty, Description = anonymousDescription } );
+					var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = string.Empty, ExternalId = anonymousExternalId } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 
 				[Theory, AutoSoftwarePotentialApiData]
-				public static void PutExcessivelyLongShouldReject( SpCustomerApi api, string anonymousDescription )
+				public static void PutExcessivelyLongShouldReject( SpCustomerApi api, string anonymousExternalId )
 				{
-					var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = new String( 'a', 101 ), Description = anonymousDescription } );
+					var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = new String( 'a', 101 ), ExternalId = anonymousExternalId } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 			}
 
-			public static class Description
+			public static class ExternalId
 			{
 				[Theory, AutoSoftwarePotentialApiData]
 				public static void PutExcessivelyLongShouldReject( SpCustomerApi api, string anonymousName )
 				{
-					var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = anonymousName, Description = new String( 'a', 101 ) } );
+					var response = api.CreateCustomer( new SpCustomerApi.CustomerSummary() { Name = anonymousName, ExternalId = new String( 'a', 101 ) } );
 					Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
 				}
 			}

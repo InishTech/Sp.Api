@@ -60,7 +60,7 @@ namespace Sp.Api.Consume.Acceptance
 		{
 			public Guid RequestId { get; set; }
 			public string Name { get; set; }
-			public string Description { get; set; }
+			public string ExternalId { get; set; }
 
 			public int _version { get; set; }
 			public Links _links { get; set; }

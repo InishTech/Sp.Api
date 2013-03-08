@@ -16,9 +16,9 @@ namespace Sp.Api.Consume.Acceptance
 	{
 		public SpCustomerApi.CustomerSummary SignedCustomer { get; private set; }
 
-		public FreshCustomerFixture( SpCustomerApi api, string customerName, string customerDescription, Guid requestId )
+		public FreshCustomerFixture( SpCustomerApi api, string customerName, string customerExternalId, Guid requestId )
 		{
-			var response = api.CreateCustomer(  new SpCustomerApi.CustomerSummary { Name = customerName, Description = customerDescription, RequestId = requestId } );
+			var response = api.CreateCustomer(  new SpCustomerApi.CustomerSummary { Name = customerName, ExternalId = customerExternalId, RequestId = requestId } );
 
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 			string location = Assert.IsType<string>( response.Headers.Single( x => x.Name == "Location" ).Value );

@@ -30,8 +30,8 @@ namespace Sp.Api.Consume.Html.Acceptance
 				string anonymousCustomerName = "anonymousName" + Guid.NewGuid();
 				nameElement.SendKeys( anonymousCustomerName );
 
-				IWebElement descriptionElement = driver.FindElement( By.Id( "description" ) );
-				descriptionElement.SendKeys( "anonymousDescription" );
+				IWebElement externalIdElement = driver.FindElement( By.Id( "externalId" ) );
+				externalIdElement.SendKeys( "anonymousExternalId" );
 
 				IWebElement createButton = driver.FindElement( By.Id( "add-customer" ) );
 				createButton.Click();

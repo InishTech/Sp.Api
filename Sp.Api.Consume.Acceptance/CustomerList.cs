@@ -36,7 +36,7 @@
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldHaveANonNullDescription( RandomCustomerFromListFixture item )
 			{
-				Assert.NotNull( item.Selected.Description );
+				Assert.NotNull( item.Selected.ExternalId );
 			}
 
 			[Theory, AutoSoftwarePotentialApiData]

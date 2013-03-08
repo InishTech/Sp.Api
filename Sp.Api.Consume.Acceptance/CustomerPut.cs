@@ -30,7 +30,7 @@ namespace Sp.Api.Consume.Acceptance
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void ModifiedShouldYieldAccepted( [Frozen] SpCustomerApi api, string anonymousName, string anonymousDescription, IFixture fixture )
+		public static void ModifiedShouldYieldAccepted( [Frozen] SpCustomerApi api, string anonymousName, string anonymousExternalId, IFixture fixture )
 		{
 			var customerData = default( SpCustomerApi.CustomerSummary );
 			HandleTightLoopEdgeCase( () =>
@@ -38,7 +38,7 @@ namespace Sp.Api.Consume.Acceptance
 				{
 					customerData = customer.DataFromGet;
 					customerData.Name = anonymousName;
-					customerData.Description = anonymousDescription;
+					customerData.ExternalId = anonymousExternalId;
 					var apiResult = api.PutCustomer( customerData._links.self.href, customerData );
 					Assert.Equal( HttpStatusCode.Accepted, apiResult.StatusCode );
 				} ) );
@@ -49,7 +49,7 @@ namespace Sp.Api.Consume.Acceptance
 		public static class PutConflictingChangesToSameBaseData
 		{
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void NonMatchingChangesShouldYieldConflict( [Frozen] SpCustomerApi api, string anonymousName1, string anonymousDescription1, string anonymousName2, string anonymousDescription2, IFixture fixture )
+			public static void NonMatchingChangesShouldYieldConflict( [Frozen] SpCustomerApi api, string anonymousName1, string anonymousExternalId1, string anonymousName2, string anonymousExternalId2, IFixture fixture )
 			{
 				var customerData = default( SpCustomerApi.CustomerSummary );
 				HandleTightLoopEdgeCase( () =>
@@ -57,19 +57,19 @@ namespace Sp.Api.Consume.Acceptance
 					{
 						customerData = customer.DataFromGet;
 						customerData.Name = anonymousName1;
-						customerData.Description = anonymousDescription1;
+						customerData.ExternalId = anonymousExternalId1;
 						var firstResult = api.PutCustomer( customerData._links.self.href, customerData );
 						Assert.Equal( HttpStatusCode.Accepted, firstResult.StatusCode );
 					} ) );
 
 				customerData.Name = anonymousName2;
-				customerData.Description = anonymousDescription2;
+				customerData.ExternalId = anonymousExternalId2;
 				var apiResult = api.PutCustomer( customerData._links.self.href, customerData );
 				Assert.Equal( HttpStatusCode.Conflict, apiResult.StatusCode );
 
 				// Our second edits should not have been applied, so revert
 				customerData.Name = anonymousName1;
-				customerData.Description = anonymousDescription1;
+				customerData.ExternalId = anonymousExternalId1;
 				VerifyGetCustomerReflectsAcceptedChanges( api, customerData );
 			}
 
@@ -78,7 +78,7 @@ namespace Sp.Api.Consume.Acceptance
 			/// <para>This means the very attempt to edit (even if setting the same values as the previous editor has submitted) will be refused.</para>
 			/// </summary>
 			[Theory, AutoSoftwarePotentialApiData]
-			public static void MatchingChangesShouldYieldConflict( [Frozen] SpCustomerApi api,  string anonymousName, string anonymousDescription, IFixture fixture )
+			public static void MatchingChangesShouldYieldConflict( [Frozen] SpCustomerApi api,  string anonymousName, string anonymousExternalId, IFixture fixture )
 			{
 				var customerData = default( SpCustomerApi.CustomerSummary );
 				HandleTightLoopEdgeCase( () =>
@@ -86,7 +86,7 @@ namespace Sp.Api.Consume.Acceptance
 					{
 						customerData = customer.DataFromGet;
 						customerData.Name = anonymousName;
-						customerData.Description = anonymousDescription;
+						customerData.ExternalId = anonymousExternalId;
 						var firstResult = api.PutCustomer( customerData._links.self.href, customerData );
 						Assert.Equal( HttpStatusCode.Accepted, firstResult.StatusCode );
 					} ) );
@@ -112,7 +112,7 @@ namespace Sp.Api.Consume.Acceptance
 
 				apiResult.Data.AsSource().OfLikeness<SpCustomerApi.CustomerSummary>()
 					.OmitAutoComparison()
-					.WithDefaultEquality( x => x.Description )
+					.WithDefaultEquality( x => x.ExternalId )
 					.WithDefaultEquality( x => x.Name )
 					.ShouldEqual( customerData );
 			} );
