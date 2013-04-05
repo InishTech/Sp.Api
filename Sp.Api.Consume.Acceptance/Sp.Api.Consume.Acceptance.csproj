@@ -60,6 +60,7 @@
     <Compile Include="CustomerCreate.cs" />
     <Compile Include="CustomerGet.cs" />
     <Compile Include="CustomerList.cs" />
+    <Compile Include="CustomerQuery.cs" />
     <Compile Include="Invite.cs" />
     <Compile Include="NewlyCreatedCustomerFixture.cs" />
     <Compile Include="OrganizationCreate.cs" />
