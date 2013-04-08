@@ -56,6 +56,7 @@
     <Compile Include="..\Sp.Api-Shared\Wrappers\WSFederationAuthenticator.cs">
       <Link>Inlined\Wrappers\WSFederationAuthenticator.cs</Link>
     </Compile>
+    <Compile Include="CustomerDelete.cs" />
     <Compile Include="CustomerPut.cs" />
     <Compile Include="CustomerCreate.cs" />
     <Compile Include="CustomerGet.cs" />

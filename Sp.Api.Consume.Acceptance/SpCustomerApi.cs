@@ -51,6 +51,13 @@ namespace Sp.Api.Consume.Acceptance
 			return Execute( request );
 		}
 
+		public IRestResponse DeleteCustomer( string href )
+		{
+			var request = new RestRequest( href, Method.DELETE );
+			request.RequestFormat = DataFormat.Json;
+			return Execute( request );
+		}
+
 		public class CustomerSummaryPage
 		{
 			public List<CustomerSummary> results { get; set; }
