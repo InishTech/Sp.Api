@@ -30,7 +30,7 @@ namespace Sp.Api.Consume.Acceptance
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void UpdateDeletedCustomerShould500( [Frozen] SpCustomerApi api, string anonymousName, string anonymousExternalId, FreshCustomerFixture freshCustomerFixture )
+		public static void UpdateDeletedCustomerShould410( [Frozen] SpCustomerApi api, string anonymousName, string anonymousExternalId, FreshCustomerFixture freshCustomerFixture )
 		{
 			var linkedAddress = freshCustomerFixture.SignedCustomer._links.self;
 			var apiResult = api.DeleteCustomer( linkedAddress.href );
@@ -40,7 +40,7 @@ namespace Sp.Api.Consume.Acceptance
 			updatedCustomer.ExternalId = anonymousExternalId;
 			updatedCustomer._version++;
 			apiResult = api.PutCustomer( linkedAddress.href, updatedCustomer );
-			Assert.Equal( HttpStatusCode.InternalServerError, apiResult.StatusCode );
+			Assert.Equal( HttpStatusCode.Gone, apiResult.StatusCode );
 		}
 	}
 }
