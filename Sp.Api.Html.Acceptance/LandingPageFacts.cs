@@ -41,15 +41,5 @@ namespace Sp.Api.Html.Acceptance
 			Assert.NotNull( node );
 			Assert.Contains( "bff714f1-3c88-40e7-9e78-a73c041ac8eb", node.InnerText );
 		}
-
-		[Theory, AutoSoftwarePotentialApiData]
-		public static void SignoffShouldRedirectToRootSite( SpApi spApi )
-		{
-			LandingPageShouldReturnHtml( spApi );
-
-			var result = spApi.SignOff();
-			Assert.Equal( HttpStatusCode.OK, result.StatusCode );
-			Assert.Equal( "/", result.ResponseUri.AbsolutePath );
-		}
 	}
 }
