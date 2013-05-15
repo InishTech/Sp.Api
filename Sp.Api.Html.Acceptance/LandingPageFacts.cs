@@ -43,13 +43,13 @@ namespace Sp.Api.Html.Acceptance
 		}
 
 		[Theory, AutoSoftwarePotentialApiData]
-		public static void SignoffShouldRedirectBackToSts( SpApi spApi )
+		public static void SignoffShouldRedirectToRootSite( SpApi spApi )
 		{
 			LandingPageShouldReturnHtml( spApi );
 
 			var result = spApi.SignOff();
 			Assert.Equal( HttpStatusCode.OK, result.StatusCode );
-			Assert.Contains( "Sp.Auth.Sts", result.ResponseUri.AbsolutePath );
+			Assert.Equal( "/", result.ResponseUri.AbsolutePath );
 		}
 	}
 }
