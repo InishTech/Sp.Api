@@ -1,3 +1,5 @@
+using OpenQA.Selenium.Support.UI;
+
 namespace Sp.Api.Shared
 {
 	using OpenQA.Selenium;
@@ -49,6 +51,9 @@ namespace Sp.Api.Shared
 		{
 			driver.Navigate().GoToUrl( _configuration.BaseUrl + "/" + service );
 			Authenticate( driver, _configuration.Username, _configuration.Password );
+
+			var wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
+			wait.Until( d => d.Url.StartsWith( _configuration.BaseUrl, StringComparison.InvariantCultureIgnoreCase ) );
 		}
 
 		static void Authenticate( RemoteWebDriver driver, string username, string password )
