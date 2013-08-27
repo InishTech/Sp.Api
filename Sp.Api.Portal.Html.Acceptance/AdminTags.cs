@@ -22,7 +22,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 				navigator.NavigateWithAuthenticate( driver, "tag" );
 
 				// We don't enable the Add button until we have loaded
-				WebDriverWait shortWait = new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) );
+				WebDriverWait shortWait = new WebDriverWait( driver, TimeSpan.FromSeconds( 3 ) ); // 2s timeout fails too regularly
 				shortWait.Until( d => driver.FindElementById( "add_new_tag" ).Enabled );
 
 				// Delete all except the first (if there is one)
