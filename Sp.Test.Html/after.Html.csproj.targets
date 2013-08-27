@@ -18,7 +18,7 @@
     </WebDriverDriver>
     <WebDriverDriver Include="Chrome">
       <Url>http://code.google.com/p/chromedriver/downloads/list</Url>
-      <Prefix>chromedriver_win_</Prefix>
+      <Prefix>chromedriver_win32_</Prefix>
       <InternalName>ChromeDriver.exe</InternalName>
     </WebDriverDriver>
   </ItemGroup>
