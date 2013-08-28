@@ -4,25 +4,24 @@ namespace Sp.Api.Portal.Html.Acceptance
 	using OpenQA.Selenium.Remote;
 	using OpenQA.Selenium.Support.UI;
 	using Ploeh.AutoFixture;
-	using Sp.Api.Shared;
 	using Sp.Api.Portal.Acceptance;
+	using Sp.Api.Shared;
 	using Sp.Test.Html;
 	using System;
 	using System.Linq;
-	using Xunit;
 	using Xunit.Extensions;
 
-	public class AdminTags
+	public static class AdminTags
 	{
 		[Theory, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
-		public static void DeletesAndAddsShouldBeEvidentOnRefresh( RemoteWebDriver driver, AuthenticatingNavigator navigator )
+		static void DeletesAndAddsShouldBeEvidentOnRefresh( RemoteWebDriver driver, AuthenticatingNavigator navigator )
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
 				navigator.NavigateWithAuthenticate( driver, "tag" );
 
 				// We don't enable the Add button until we have loaded
-				WebDriverWait shortWait = new WebDriverWait( driver, TimeSpan.FromSeconds( 3 ) ); // 2s timeout fails too regularly
+				WebDriverWait shortWait = new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ); 
 				shortWait.Until( d => driver.FindElementById( "add_new_tag" ).Enabled );
 
 				// Delete all except the first (if there is one)
@@ -39,11 +38,15 @@ namespace Sp.Api.Portal.Html.Acceptance
 
 				string[] tagsAsSubmitted = SaveAndRecordSubmittedTags( driver );
 
-				// Verify reloading the page shows the same tags pretty quickly
-				driver.Navigate().Refresh();
-				shortWait.Until( d =>
-					driver.FindElementById( "add_new_tag" ).Enabled
-					&& tagsAsSubmitted.SequenceEqual( driver.FindElementsById( "tag_name" ).Select( tagNameEl => tagNameEl.GetAttribute( "value" ).Trim() ) ) );
+				// Need a retry in case the initial load loads data which does not include the (eventually consistent) changes
+				new WebDriverWaitIgnoringNestedTimeouts( driver, TimeSpan.FromSeconds( 7 ) ).Until( _ =>
+				{
+					driver.Navigate().Refresh();
+					// Verify reloading the page shows the same tags pretty quickly
+					return shortWait.Until( d =>
+						driver.FindElementById( "add_new_tag" ).Enabled
+						&& tagsAsSubmitted.SequenceEqual( driver.FindElementsById( "tag_name" ).Select( tagNameEl => tagNameEl.GetAttribute( "value" ).Trim() ) ) );
+				} );
 			}
 		}
 

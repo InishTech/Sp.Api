@@ -114,15 +114,6 @@ namespace Sp.Api.Portal.Html.Acceptance
 			} );
 		}
 
-		class WebDriverWaitIgnoringNestedTimeouts : WebDriverWait
-		{
-			public WebDriverWaitIgnoringNestedTimeouts( IWebDriver driver, TimeSpan timeout )
-				: base( driver, timeout )
-			{
-				IgnoreExceptionTypes( typeof( TimeoutException ) );
-			}
-		}
-
 		class WebDriverWaitIgnoringStaleness : WebDriverWait
 		{
 			public WebDriverWaitIgnoringStaleness( IWebDriver driver, TimeSpan timeout )
@@ -133,6 +124,15 @@ namespace Sp.Api.Portal.Html.Acceptance
 		}
 	}
 
+	class WebDriverWaitIgnoringNestedTimeouts : WebDriverWait
+	{
+		public WebDriverWaitIgnoringNestedTimeouts( IWebDriver driver, TimeSpan timeout )
+			: base( driver, timeout )
+		{
+			IgnoreExceptionTypes( typeof( TimeoutException ) );
+		}
+	}
+	
 	static class SubSequenceExtensions
 	{
 		// http://stackoverflow.com/a/7334462/11635
