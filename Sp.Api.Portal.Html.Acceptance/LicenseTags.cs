@@ -129,7 +129,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 		public WebDriverWaitIgnoringNestedTimeouts( IWebDriver driver, TimeSpan timeout )
 			: base( driver, timeout )
 		{
-			IgnoreExceptionTypes( typeof( TimeoutException ) );
+			IgnoreExceptionTypes( typeof( WebDriverTimeoutException ) );
 		}
 	}
 	
