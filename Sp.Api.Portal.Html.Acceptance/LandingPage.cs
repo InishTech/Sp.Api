@@ -12,7 +12,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 {
 	public class LandingPage
 	{
-		[Theory, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
+		[TheoryWithLazyLoading, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
 		public static void ShouldPresentLicenseList( RemoteWebDriver driver, AuthenticatingNavigator navigator )
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
@@ -24,7 +24,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 			}
 		}
 
-		[Theory, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
+		[TheoryWithLazyLoading, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
 		public static void ShouldContainCustomerUsername( RemoteWebDriver driver, AuthenticatingNavigator navigator )
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
@@ -38,7 +38,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 			}
 		}
 
-		[Theory, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
+		[TheoryWithLazyLoading, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
 		public static void SignoffShouldRedirectToHostRoot( RemoteWebDriver driver, AuthenticatingNavigator navigator )
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )

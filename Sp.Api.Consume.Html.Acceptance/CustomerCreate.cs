@@ -10,14 +10,12 @@ namespace Sp.Api.Consume.Html.Acceptance
 	using Sp.Api.Shared;
 	using Sp.Test.Html;
 	using System;
-	using System.Linq;
-	using Xunit;
 	using Xunit.Extensions;
 	using OpenQA.Selenium.Support.UI;
 
 	public class CustomerCreate
 	{
-		[Theory, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialDataFixture> ) )]
+		[TheoryWithLazyLoading, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialDataFixture> ) )]
 		public static void CreateCustomerShouldSucceed( RemoteWebDriver driver, AuthenticatingNavigator navigator )
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )

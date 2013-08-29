@@ -1,14 +1,8 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Remote;
-using OpenQA.Selenium.Support.UI;
-using Ploeh.AutoFixture.Kernel;
+﻿using Ploeh.AutoFixture.Kernel;
 using Ploeh.AutoFixture.Xunit;
-using Sp.Api.Shared;
-using Sp.Api.Shared.Wrappers;
 using Sp.Test.Html;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Xunit.Extensions;

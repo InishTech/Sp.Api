@@ -18,15 +18,13 @@ namespace Sp.Test.Html
 	{
 		protected override IEnumerable<RemoteWebDriver> Generate()
 		{
-			return new RemoteWebDriver[] 
-			{
-				// Using IE as default desktop build driver as it tends to be the most buggy and Firefox / Chrome are consistently used by devs
-				new InternetExplorerDriver(),
-				#if !DEBUG
-				new ChromeDriver(),
-				new FirefoxDriver( GetSeleniumFirefoxProfile() ),
-				#endif
-			};
+			// Setting IE as default desktop build driver as it tends to be the most buggy and Firefox / Chrome are consistently used by devs
+			yield return new InternetExplorerDriver();
+			yield return new ChromeDriver();
+#if !DEBUG
+			yield return new FirefoxDriver( GetSeleniumFirefoxProfile() );
+
+#endif
 		}
 
 		static FirefoxProfile GetSeleniumFirefoxProfile()

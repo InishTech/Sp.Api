@@ -15,7 +15,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 
 	public class LicenseList
 	{
-		[Theory, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
+		[TheoryWithLazyLoading, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
 		public static void ShouldIncludeAtLeastOneLicense( RemoteWebDriver driver, AuthenticatingNavigator navigator ) 
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
