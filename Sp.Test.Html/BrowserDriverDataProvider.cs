@@ -20,10 +20,9 @@ namespace Sp.Test.Html
 		{
 			// Setting IE as default desktop build driver as it tends to be the most buggy and Firefox / Chrome are consistently used by devs
 			yield return new InternetExplorerDriver();
-			yield return new ChromeDriver();
 #if !DEBUG
 			yield return new FirefoxDriver( GetSeleniumFirefoxProfile() );
-
+			yield return new ChromeDriver();
 #endif
 		}
 

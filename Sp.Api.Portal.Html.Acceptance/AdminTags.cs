@@ -20,17 +20,19 @@ namespace Sp.Api.Portal.Html.Acceptance
 			{
 				navigator.NavigateWithAuthenticate( driver, "tag" );
 
-				// We don't enable the Add button until we have loaded
-				WebDriverWait shortWait = new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) ); 
-				shortWait.Until( d => driver.FindElementById( "add_new_tag" ).Enabled );
+				// Once the 'Add New Tag' button appers, we know that all tags have been loaded
+				WebDriverWait shortWait = new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) );
+				shortWait.Until( d => d.FindElement( By.Id( "add_new_tag" ) ).Enabled );
 
 				// Delete all except the first (if there is one)
-				foreach ( IWebElement item in driver.FindElementsById( "delete_tag" ).Skip( 1 ) )
+				foreach ( IWebElement item in driver.FindElements( By.CssSelector( "button.delete" ) ).Skip( 1 ) )
 					item.Click();
 
+				shortWait.Until( d => d.FindElements( By.CssSelector( "input.tag_name" ) ).Count <= 1 );
+
 				// Add a fresh one; give it a name
-				driver.FindElementById( "add_new_tag" ).Click();
-				var newTagInputElement = driver.FindElementsById( "tag_name" ).Last();
+				driver.FindElement( By.Id( "add_new_tag" ) ).Click();
+				var newTagInputElement = driver.FindElements( By.CssSelector( "input.tag_name" ) ).Last();
 				newTagInputElement.Clear();
 				newTagInputElement.Click();
 				var newTagName = new Fixture().CreateAnonymous<string>();
@@ -44,8 +46,8 @@ namespace Sp.Api.Portal.Html.Acceptance
 					driver.Navigate().Refresh();
 					// Verify reloading the page shows the same tags pretty quickly
 					return shortWait.Until( d =>
-						driver.FindElementById( "add_new_tag" ).Enabled
-						&& tagsAsSubmitted.SequenceEqual( driver.FindElementsById( "tag_name" ).Select( tagNameEl => tagNameEl.GetAttribute( "value" ).Trim() ) ) );
+						d.FindElement( By.Id( "add_new_tag" ) ).Enabled
+						&& tagsAsSubmitted.SequenceEqual( d.FindElements( By.CssSelector( "input.tag_name" ) ).Select( tagNameEl => tagNameEl.GetAttribute( "value" ).Trim() ) ) );
 				} );
 			}
 		}
@@ -53,15 +55,15 @@ namespace Sp.Api.Portal.Html.Acceptance
 		public static string[] SaveAndRecordSubmittedTags( RemoteWebDriver driver )
 		{
 			// Save
-			driver.FindElementById( "save_tags" ).Click();
+			driver.FindElement( By.Id( "save_tags" ) ).Click();
 
 			// Stash the values we entered
-			var tagsAsSubmitted = driver.FindElementsById( "tag_name" ).Select( tagNameEl => tagNameEl.GetAttribute( "value" ).Trim() ).ToArray();
+			var tagsAsSubmitted = driver.FindElements( By.CssSelector( "input.tag_name" ) ).Select( tagNameEl => tagNameEl.GetAttribute( "value" ).Trim() ).ToArray();
 
 			// Wait for the success report
 			new WebDriverWait( driver, TimeSpan.FromSeconds( 10 ) ).Until( d =>
 			{
-				var messagesElement = driver.FindElementById( "messages" );
+				var messagesElement = driver.FindElement( By.Id( "messages" ) );
 				return messagesElement.Displayed && -1 != messagesElement.Text.IndexOf( "saved successfully", StringComparison.InvariantCultureIgnoreCase );
 			} );
 
