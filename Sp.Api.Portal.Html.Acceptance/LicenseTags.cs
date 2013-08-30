@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading;
+
 namespace Sp.Api.Portal.Html.Acceptance
 {
 	using OpenQA.Selenium;
@@ -58,7 +60,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 				driver.FindElementById( "save_tags" ).Click();
 
 				// Verify inputted values show on page without any refreshes
-				Func<bool> tableShowsValuesInputtedForSelectedLicense = () => 
+				Func<bool> tableShowsValuesInputtedForSelectedLicense = () =>
 					driver
 						.FindElementsByXPath( "//*[@id='license-list']/tr[contains(.,'" + editedLicenseActivationKey + "')]/td" )
 						.Select( x => x.Text )
@@ -80,9 +82,11 @@ namespace Sp.Api.Portal.Html.Acceptance
 		{
 			// The page doesn't enable the Add button until we have loaded
 			new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) ).Until( _ => driver.FindElementById( "add_new_tag" ).Enabled );
+			//TODO TP 1650 - an enabled 'Add New Tag' button doesn't guarantee that the rendering is finished in Chrome; doing some unconditional wait...
+			Thread.Sleep( 1000 );
 
 			// Delete all except the first three
-			var existing = driver.FindElementsById( "delete_tag" );
+			var existing = driver.FindElements( By.CssSelector( "button.delete" ) );
 			foreach ( IWebElement item in existing.Skip( 3 ) )
 				item.Click();
 
@@ -92,7 +96,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 				{
 					// Add a fresh one; give it a name
 					driver.FindElementById( "add_new_tag" ).Click();
-					var newTagInputElement = driver.FindElementsById( "tag_name" ).Last();
+					var newTagInputElement = driver.FindElements( (By.CssSelector( "input.tag_name" )) ).Last();
 					newTagInputElement.SendKeys( newTag );
 				}
 
@@ -132,7 +136,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 			IgnoreExceptionTypes( typeof( WebDriverTimeoutException ) );
 		}
 	}
-	
+
 	static class SubSequenceExtensions
 	{
 		// http://stackoverflow.com/a/7334462/11635

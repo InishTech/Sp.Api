@@ -1,3 +1,5 @@
+using System.Threading;
+
 namespace Sp.Api.Portal.Html.Acceptance
 {
 	using OpenQA.Selenium;
@@ -20,9 +22,11 @@ namespace Sp.Api.Portal.Html.Acceptance
 			{
 				navigator.NavigateWithAuthenticate( driver, "tag" );
 
-				// Once the 'Add New Tag' button appers, we know that all tags have been loaded
+				// Once the 'Add New Tag' button becomes enabled, we know that all tags have been loaded
 				WebDriverWait shortWait = new WebDriverWait( driver, TimeSpan.FromSeconds( 2 ) );
 				shortWait.Until( d => d.FindElement( By.Id( "add_new_tag" ) ).Enabled );
+				//TODO TP 1650 - an enabled 'Add New Tag' button doesn't guarantee that the rendering is finished in Chrome; doing some unconditional wait...
+				Thread.Sleep( 1000 );
 
 				// Delete all except the first (if there is one)
 				foreach ( IWebElement item in driver.FindElements( By.CssSelector( "button.delete" ) ).Skip( 1 ) )
