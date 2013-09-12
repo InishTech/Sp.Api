@@ -36,7 +36,7 @@ namespace Sp.Api.Consume.Acceptance
 
 		internal IRestResponse CreateOrganization( OrganizationCreateModel organization )
 		{
-			string addLink = GetApiPrefix( ApiType.Auth ) + "/Registration/Organization";
+			string addLink = GetApiPrefix( ApiType.Auth ) + "/Organization";
 			var request = new RestRequest( addLink, Method.POST );
 			request.RequestFormat = DataFormat.Json;
 			request.AddBody( organization );
