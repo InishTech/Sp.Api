@@ -17,7 +17,7 @@
       <InternalName>IEDriverServer.exe</InternalName>
     </WebDriverDriver>
     <WebDriverDriver Include="Chrome">
-      <Url>http://code.google.com/p/chromedriver/downloads/list</Url>
+      <Url>http://code.google.com/p/chromedriver/downloads/list?q=chromedriver</Url>
       <Prefix>chromedriver_win32_</Prefix>
       <InternalName>ChromeDriver.exe</InternalName>
     </WebDriverDriver>
