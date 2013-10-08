@@ -15,12 +15,14 @@
       <Url>http://code.google.com/p/selenium/downloads/list</Url>
       <Prefix>IEDriverServer_Win32_</Prefix>
       <InternalName>IEDriverServer.exe</InternalName>
+      <IndexPageType>GoogleCode</IndexPageType>
     </WebDriverDriver>
     <WebDriverDriver Include="Chrome">
-      <Url>http://code.google.com/p/chromedriver/downloads/list?q=chromedriver</Url>
-      <Prefix>chromedriver_win32_</Prefix>
+      <Url>http://chromedriver.storage.googleapis.com</Url>
+      <Prefix>chromedriver_win32</Prefix>
       <InternalName>ChromeDriver.exe</InternalName>
-    </WebDriverDriver>
+      <IndexPageType>GoogleCloudStorage</IndexPageType>
+     </WebDriverDriver>
   </ItemGroup>
 
   <PropertyGroup Condition=" 'true' != '$(SlpsSkipDownloadSeleniumDrivers)' ">
@@ -39,7 +41,7 @@
     <Message Importance="normal" Text="Updating $(_PackageShimsPath)\_%(WebDriverDriver.Identity)Driver.zip" />
     <Exec
       IgnoreStandardErrorWarningFormat="true"
-      Command="powershell -Version 3 -NoProfile ../Sp.Test.Html/Download-GoogleCodeDownload.ps1 $(_PackageShimsPath)\_%(Identity)Driver.zip %(WebDriverDriver.Prefix) %(WebDriverDriver.Url)"
+      Command="powershell -Version 3 -NoProfile ../Sp.Test.Html/Download-GoogleCodeDownload.ps1 $(_PackageShimsPath)\_%(Identity)Driver.zip %(WebDriverDriver.Prefix) %(WebDriverDriver.Url) %(WebDriverDriver.IndexPageType)"
       Condition=" !EXISTS( '$(_PackageShimsPath)\_%(Identity)Driver.zip' )"/>
     <ItemGroup>
       <FileWrites Include="@(WebDriverDriver->'$(_PackageShimsPath)\_%(Identity)Driver.zip')"/>
