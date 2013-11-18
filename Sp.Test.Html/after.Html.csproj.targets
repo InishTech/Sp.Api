@@ -19,7 +19,7 @@
     </WebDriverDriver>
     <WebDriverDriver Include="Chrome">
       <Url>http://chromedriver.storage.googleapis.com</Url>
-      <Prefix>chromedriver_win32</Prefix>
+      <Prefix>chromedriver_win32.</Prefix>
       <InternalName>ChromeDriver.exe</InternalName>
       <IndexPageType>GoogleCloudStorage</IndexPageType>
      </WebDriverDriver>
