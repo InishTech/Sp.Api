@@ -38,7 +38,7 @@
     Name="AfterBuildDownloadWebDriverDrivers"
     Outputs="@(WebDriverDriver->'$(_PackageShimsPath)\_%(Identity)Driver.zip')">
     <MakeDir Directories="$(_PackageShimsPath)" Condition="!EXISTS('$(_PackageShimsPath)')" />
-    <Message Importance="normal" Text="Updating $(_PackageShimsPath)\_%(WebDriverDriver.Identity)Driver.zip" />
+    <Message Importance="normal" Text="Updating $(_PackageShimsPath)\_%(WebDriverDriver.Identity)Driver.zip" Condition="!EXISTS( '$(_PackageShimsPath)\_%(Identity)Driver.zip' )" />
     <Exec
       IgnoreStandardErrorWarningFormat="true"
       Command="powershell -Version 3 -NoProfile ../Sp.Test.Html/Download-GoogleCodeDownload.ps1 $(_PackageShimsPath)\_%(Identity)Driver.zip %(WebDriverDriver.Prefix) %(WebDriverDriver.Url) %(WebDriverDriver.IndexPageType)"
