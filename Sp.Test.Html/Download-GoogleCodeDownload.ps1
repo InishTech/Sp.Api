@@ -10,7 +10,7 @@ $ErrorActionPreference = "Stop"
 
 function extractDownloadUrlFromGoogleCloudStorageIndexPage($pageResult){
 	[xml] $releaseIndex = $pageResult
-	$lastRelease = $releaseIndex.ListBucketResult.Contents | where { $_.Key.Contains($namePrefix) } | sort Key -desc | select -first 1
+	$lastRelease = $releaseIndex.ListBucketResult.Contents | where { $_.Key.Contains($namePrefix) } | sort LastModified -desc | select -first 1
 	return "$url/$($lastRelease.Key)"
 }
 
