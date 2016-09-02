@@ -5,147 +5,37 @@
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Api.Portal.Acceptance.Wrappers
 {
-	using RestSharp;
-	using Sp.Api.Shared.Wrappers;
-	using Sp.Test.Helpers;
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+    using RestSharp;
+    using Sp.Api.Shared.Wrappers;
+    using Sp.Test.Helpers;
 
-	public class SpPortalApi
-	{
-		readonly IRestClient _client;
+    public abstract class SpPortalApi
+    {
+        readonly IRestClient _client;
 
-		public SpPortalApi( SpApiConfiguration apiConfiguration )
-		{
-			_client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl )
-			{
-				Authenticator = new WSFederationAuthenticator( apiConfiguration )
-			};
-		}
+        public SpPortalApi( SpApiConfiguration apiConfiguration )
+        {
+            _client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl )
+            {
+                Authenticator = new WSFederationAuthenticator( apiConfiguration )
+            };
+        }
 
-		internal IRestResponse<CustomerTags> GetCustomerTags()
-		{
-			var request = new RestRequest( "tag" );
-			return Execute<CustomerTags>( request );
-		}
+        public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
+        {
+            return _client.Execute<T>( request );
+        }
 
-		public IRestResponse PutCustomerTags( IEnumerable<CustomerTag> tags )
-		{
-			var request = new RestRequest( "tag", Method.PUT );
-			request.RequestFormat = DataFormat.Json;
-			request.AddBody( tags.ToList() );
-			return Execute( request );
-		}
+        public IRestResponse Execute( RestRequest request )
+        {
+            return _client.Execute( request );
+        }
 
-		public IRestResponse PutLicenseTags( string licenseTagsAssignmentHref, IEnumerable<LicenseTag> tags )
-		{
-			var request = new RestRequest( licenseTagsAssignmentHref, Method.PUT );
-			request.RequestFormat = DataFormat.Json;
-			request.AddBody( tags );
-			return Execute( request );
-		}
+        public IRestResponse SignOff()
+        {
+            var signOffRequest = new RestRequest( "Authentication/LogOff", Method.GET );
+            return _client.Execute( signOffRequest );
+        }
 
-		public IRestResponse<Licenses> GetLicenses()
-		{
-			var request = new RestRequest( "License" );
-			return Execute<Licenses>( request );
-		}
-
-		public IRestResponse<Licenses> GetLicenses( string queryParameters )
-		{
-			var request = new RestRequest( "License/?" + queryParameters );
-			return Execute<Licenses>( request );
-		}
-
-		public IRestResponse<License> GetLicense( string href )
-		{
-			var request = new RestRequest( href );
-			return Execute<License>( request );
-		}
-
-		public class CustomerTags
-		{
-			public List<CustomerTag> results { get; set; }
-		}
-
-		public class CustomerTag
-		{
-			public Guid Id { get; set; }
-			public string Name { get; set; }
-		}
-
-		public class Link
-		{
-			public string href { get; set; }
-		}
-
-		public class License
-		{
-			public string ActivationKey { get; set; }
-
-			public string ProductLabel { get; set; }
-			public string VersionLabel { get; set; }
-
-			public string IssueDate { get; set; }
-			public bool IsEvaluation { get; set; }
-			public bool IsRenewable { get; set; }
-			//public Guid? CustomerId { get; set; }
-			public bool IsActivatable { get; set; }
-			public string ActivatableMessage { get; set; }
-
-			public Embedded _embedded { get; set; }
-			public Links _links { get; set; }
-
-			public class Embedded
-			{
-				public LicenseTags CustomerTags { get; set; }
-			}
-
-			public class Links
-			{
-				public Link self { get; set; }
-			}
-		}
-
-		public class LicenseTags
-		{
-			public List<LicenseTag> results { get; set; }
-	
-			public Links _links { get; set; }
-			
-			public class Links
-			{
-				public Link self { get; set; }
-			}
-		}
-
-		public class LicenseTag
-		{
-			public Guid Id { get; set; }
-			public string Value { get; set; }
-		}
-
-		public class Licenses
-		{
-			public int? __count { get; set; }
-			public List<License> results { get; set; }
-		}
-
-		public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
-		{
-			return _client.Execute<T>( request );
-		}
-
-		public IRestResponse Execute( RestRequest request )
-		{
-			return _client.Execute( request );
-		}
-
-		public IRestResponse SignOff()
-		{
-			var signOffRequest = new RestRequest( "Authentication/LogOff", Method.GET );
-			return _client.Execute( signOffRequest );
-		}
-	}
+    }
 }

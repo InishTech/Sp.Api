@@ -70,6 +70,7 @@
     <Compile Include="..\Sp.Api.Portal.Acceptance\AutoPortalDataAttribute.cs">
       <Link>Inlined\AutoPortalDataAttribute.cs</Link>
     </Compile>
+    <Compile Include="ActivationList.cs" />
     <Compile Include="AdminTags.cs" />
     <Compile Include="LandingPage.cs" />
     <Compile Include="LicenseList.cs" />

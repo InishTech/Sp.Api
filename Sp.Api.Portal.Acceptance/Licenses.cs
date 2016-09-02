@@ -23,30 +23,30 @@ namespace Sp.Api.Portal.Acceptance
 		{
 			[Smoke]
 			[HighFrequency]
-			[Theory, AutoPortalDataAttribute]
-			public static void ShouldYieldResults( SpPortalApi api )
+			[Theory, AutoPortalData]
+			public static void ShouldYieldResults( SpPortalLicenseApi api )
 			{
 				var apiResult = api.GetLicenses();
 
 				VerifyResponse( apiResult );
 			}
 
-			[Theory, AutoPortalDataAttribute]
-			public static void ShouldAllowPaging( SpPortalApi api )
+			[Theory, AutoPortalData]
+			public static void ShouldAllowPaging( SpPortalLicenseApi api )
 			{
 				var firstQuery = api.GetLicenses( "$skip=0&$top=1" );
 				var secondQuery = api.GetLicenses( "$skip=1&$top=1" );
 
-				SpPortalApi.License first = VerifyResponse( firstQuery ).Single();
-				SpPortalApi.License second = VerifyResponse( secondQuery ).Single();
+				SpPortalLicenseApi.License first = VerifyResponse( firstQuery ).Single();
+				SpPortalLicenseApi.License second = VerifyResponse( secondQuery ).Single();
 
 				Assert.NotNull( first );
 				Assert.NotNull( second );
 				Assert.NotEqual( first._links.self.href, second._links.self.href );
 			}
 
-			[Theory, AutoPortalDataAttribute]
-			public static void ShouldAllowCounting( SpPortalApi api )
+			[Theory, AutoPortalData]
+			public static void ShouldAllowCounting( SpPortalLicenseApi api )
 			{
 				var apiResult = api.GetLicenses( "$inlinecount=allpages&$top=1" );
 
@@ -56,7 +56,7 @@ namespace Sp.Api.Portal.Acceptance
 			}
 
 			[Theory, AutoPortalData]
-			public static void ShouldOrderByIssueDateDescending( SpPortalApi api )
+			public static void ShouldOrderByIssueDateDescending( SpPortalLicenseApi api )
 			{
 				var apiResult = api.GetLicenses();
 
@@ -68,8 +68,8 @@ namespace Sp.Api.Portal.Acceptance
 				Assert.Equal( ordered.AsEnumerable(), data.AsEnumerable() );
 			}
 
-			[Theory, AutoPortalDataAttribute]
-			public static void ShouldRespondToUnsupportedQueriesWithBadRequestAndStatusDescription( SpPortalApi api )
+			[Theory, AutoPortalData]
+			public static void ShouldRespondToUnsupportedQueriesWithBadRequestAndStatusDescription( SpPortalLicenseApi api )
 			{
 				var expectedFailures = new Dictionary<string, string>()
 				{
@@ -87,7 +87,7 @@ namespace Sp.Api.Portal.Acceptance
 				}
 			}
 
-			static SpPortalApi.License[] VerifyResponse( IRestResponse<SpPortalApi.Licenses> apiResult, bool shouldHaveCount = false )
+			static SpPortalLicenseApi.License[] VerifyResponse( IRestResponse<SpPortalLicenseApi.Licenses> apiResult, bool shouldHaveCount = false )
 			{
 				// It should always be possible to get the list
 				Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
@@ -106,7 +106,7 @@ namespace Sp.Api.Portal.Acceptance
 			{
 				[Smoke]
 				[MediumFrequency]
-				[Theory, AutoPortalDataAttribute]
+				[Theory, AutoPortalData]
 				public static void ShouldContainData( RandomLicenseFromListFixture license )
 				{
 					// There should always be valid Activation Key
@@ -123,14 +123,14 @@ namespace Sp.Api.Portal.Acceptance
 					Assert.NotNull( license.Selected._embedded.CustomerTags.results );
 				}
 
-				[Theory, AutoPortalDataAttribute]
+				[Theory, AutoPortalData]
 				public static void ShouldIncludeSelfLink( RandomLicenseFromListFixture license )
 				{
 					Assert.NotNull( license.Selected._links.self );
 					Assert.NotEmpty( license.Selected._links.self.href );
 				}
 
-				[Theory, AutoPortalDataAttribute]
+				[Theory, AutoPortalData]
 				public static void ShouldIncludeLicenseTagsAssignmentLink( RandomLicenseFromListFixture license )
 				{
 					Assert.NotNull( license.Selected._embedded.CustomerTags._links.self );

@@ -23,14 +23,14 @@ namespace Sp.Api.Portal.Acceptance
 			public static class Get
 			{
 				[Theory, AutoPortalDataAttribute]
-				public static void ShouldAlwaysBeAvailable( SpPortalApi api )
+				public static void ShouldAlwaysBeAvailable( SpPortalLicenseApi api )
 				{
 					var response = api.GetCustomerTags();
 					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
 				}
 
 				[Theory, AutoPortalDataAttribute]
-				public static void ShouldHaveNonEmptyIds( SpPortalApi api )
+				public static void ShouldHaveNonEmptyIds( SpPortalLicenseApi api )
 				{
 					var response = api.GetCustomerTags();
 					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
@@ -38,7 +38,7 @@ namespace Sp.Api.Portal.Acceptance
 				}
 
 				[Theory, AutoPortalDataAttribute]
-				public static void ShouldHaveNonEmptyNames( SpPortalApi api )
+				public static void ShouldHaveNonEmptyNames( SpPortalLicenseApi api )
 				{
 					var response = api.GetCustomerTags();
 					Assert.Equal( HttpStatusCode.OK, response.StatusCode );
@@ -49,14 +49,14 @@ namespace Sp.Api.Portal.Acceptance
 			public static class Put
 			{
 				[Theory, AutoPortalDataAttribute]
-				public static void ShouldYieldAccepted( [Frozen]SpPortalApi api, SpPortalApi.CustomerTag[] tags )
+				public static void ShouldYieldAccepted( [Frozen]SpPortalLicenseApi api, SpPortalLicenseApi.CustomerTag[] tags )
 				{
 					var apiResponse = api.PutCustomerTags( tags );
 					Assert.Equal( HttpStatusCode.Accepted, apiResponse.StatusCode );
 				}
 
 				[Theory, AutoPortalDataAttribute]
-				public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
+				public static void ShouldEventuallyBeVisible( [Frozen]SpPortalLicenseApi api, ExistingTagsFixture tags )
 				{
 					VerifyCollectionEventuallyGetsUpdatedTo( tags.Tags, api );
 				}
@@ -64,7 +64,7 @@ namespace Sp.Api.Portal.Acceptance
 				public class Reorder
 				{
 					[Theory, AutoPortalDataAttribute]
-					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
+					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalLicenseApi api, ExistingTagsFixture tags )
 					{
 						var updated = tags.Tags.Reverse();
 						VerifyPutEventuallyGetsApplied( updated, api );
@@ -74,9 +74,9 @@ namespace Sp.Api.Portal.Acceptance
 				public class Rename
 				{
 					[Theory, AutoPortalDataAttribute]
-					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
+					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalLicenseApi api, ExistingTagsFixture tags )
 					{
-						var updated = tags.Tags.Select( x => new SpPortalApi.CustomerTag { Id = x.Id, Name = x.Name + "renamed" } );
+						var updated = tags.Tags.Select( x => new SpPortalLicenseApi.CustomerTag { Id = x.Id, Name = x.Name + "renamed" } );
 						VerifyPutEventuallyGetsApplied( updated, api );
 					}
 				}
@@ -84,21 +84,21 @@ namespace Sp.Api.Portal.Acceptance
 				public class Delete
 				{
 					[Theory, AutoPortalDataAttribute]
-					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalApi api, ExistingTagsFixture tags )
+					public static void ShouldEventuallyBeVisible( [Frozen]SpPortalLicenseApi api, ExistingTagsFixture tags )
 					{
 						var updated = tags.Tags.Where( ( x, index ) => index != 1 );
 						VerifyPutEventuallyGetsApplied( updated, api );
 					}
 				}
 
-				static void VerifyPutEventuallyGetsApplied( IEnumerable<SpPortalApi.CustomerTag> expected, SpPortalApi api )
+				static void VerifyPutEventuallyGetsApplied( IEnumerable<SpPortalLicenseApi.CustomerTag> expected, SpPortalLicenseApi api )
 				{
 					var apiResponse = api.PutCustomerTags( expected );
 					Assert.Equal( HttpStatusCode.Accepted, apiResponse.StatusCode );
 					VerifyCollectionEventuallyGetsUpdatedTo( expected, api );
 				}
 
-				static void VerifyCollectionEventuallyGetsUpdatedTo( IEnumerable<SpPortalApi.CustomerTag> expected, SpPortalApi api )
+				static void VerifyCollectionEventuallyGetsUpdatedTo( IEnumerable<SpPortalLicenseApi.CustomerTag> expected, SpPortalLicenseApi api )
 				{
 					Verify.EventuallyWithBackOff( () =>
 					{
@@ -111,9 +111,9 @@ namespace Sp.Api.Portal.Acceptance
 				public static class Bad
 				{
 					[Theory, AutoPortalDataAttribute]
-					public static void NameMissingShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
+					public static void NameMissingShouldYieldBadRequest( SpPortalLicenseApi api, IFixture fixture )
 					{
-						var badTag = fixture.Build<SpPortalApi.CustomerTag>().With( x => x.Name, null ).CreateAnonymous();
+						var badTag = fixture.Build<SpPortalLicenseApi.CustomerTag>().With( x => x.Name, null ).CreateAnonymous();
 
 						var response = api.PutCustomerTags( new[] { badTag } );
 
@@ -121,9 +121,9 @@ namespace Sp.Api.Portal.Acceptance
 					}
 
 					[Theory, AutoPortalDataAttribute]
-					public static void TooLongShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
+					public static void TooLongShouldYieldBadRequest( SpPortalLicenseApi api, IFixture fixture )
 					{
-						var badTag = fixture.Build<SpPortalApi.CustomerTag>().With( x => x.Name, new String( 'a', 101 ) ).CreateAnonymous();
+						var badTag = fixture.Build<SpPortalLicenseApi.CustomerTag>().With( x => x.Name, new String( 'a', 101 ) ).CreateAnonymous();
 
 						var response = api.PutCustomerTags( new[] { badTag } );
 
@@ -131,9 +131,9 @@ namespace Sp.Api.Portal.Acceptance
 					}
 
 					[Theory( Skip = "Currently 500 instead due to choice of Serializer" ), AutoPortalDataAttribute]
-					public static void IdEmptyShouldYieldBadRequest( SpPortalApi api, IFixture fixture )
+					public static void IdEmptyShouldYieldBadRequest( SpPortalLicenseApi api, IFixture fixture )
 					{
-						var badTag = fixture.Build<SpPortalApi.CustomerTag>().With( x => x.Id, Guid.Empty ).CreateAnonymous();
+						var badTag = fixture.Build<SpPortalLicenseApi.CustomerTag>().With( x => x.Id, Guid.Empty ).CreateAnonymous();
 
 						var response = api.PutCustomerTags( new[] { badTag } );
 
@@ -145,11 +145,11 @@ namespace Sp.Api.Portal.Acceptance
 	}
 	public class ExistingTagsFixture : IDisposable
 	{
-		readonly SpPortalApi _api;
+		readonly SpPortalLicenseApi _api;
 
-		public SpPortalApi.CustomerTag[] Tags { get; private set; }
+		public SpPortalLicenseApi.CustomerTag[] Tags { get; private set; }
 
-		public ExistingTagsFixture( SpPortalApi api, SpPortalApi.CustomerTag[] tags )
+		public ExistingTagsFixture( SpPortalLicenseApi api, SpPortalLicenseApi.CustomerTag[] tags )
 		{
 			Tags = tags;
 			_api = api;
@@ -159,7 +159,7 @@ namespace Sp.Api.Portal.Acceptance
 
 		void IDisposable.Dispose()
 		{
-			_api.PutCustomerTags( Enumerable.Empty<SpPortalApi.CustomerTag>() );
+			_api.PutCustomerTags( Enumerable.Empty<SpPortalLicenseApi.CustomerTag>() );
 		}
 	}
 }

@@ -14,9 +14,9 @@ namespace Sp.Api.Portal.Acceptance
 
 	public class RandomLicenseFromListFixture
 	{
-		readonly SpPortalApi.License _randomItem;
+		readonly SpPortalLicenseApi.License _randomItem;
 
-		public RandomLicenseFromListFixture( SpPortalApi api )
+		public RandomLicenseFromListFixture( SpPortalLicenseApi api )
 		{
 			var apiResult = api.GetLicenses();
 			Assert.Equal( ResponseStatus.Completed, apiResult.ResponseStatus );
@@ -25,7 +25,7 @@ namespace Sp.Api.Portal.Acceptance
 			_randomItem = apiResult.Data.results.ElementAtRandom();
 		}
 
-		public SpPortalApi.License Selected
+		public SpPortalLicenseApi.License Selected
 		{
 			get { return _randomItem; }
 		}

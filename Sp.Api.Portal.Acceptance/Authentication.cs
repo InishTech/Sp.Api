@@ -21,7 +21,7 @@ namespace Sp.Api.Portal.Acceptance
 			var autoFixture = new Fixture()
 				.Customize( new SoftwarePotentialApiIncorrectCredentialsConfigurationCustomization() )
 				.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() );
-			var portalApi = autoFixture.CreateAnonymous<SpPortalApi>();
+			var portalApi = autoFixture.CreateAnonymous<SpPortalLicenseApi>();
 
 			var request = new RestRequest( string.Empty );
 			request.AddHeader( "Accept", "text/html" );

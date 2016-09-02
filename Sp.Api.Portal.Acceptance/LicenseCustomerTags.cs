@@ -21,10 +21,10 @@ namespace Sp.Api.Portal.Acceptance
 		public static class Put
 		{
 			[Theory, AutoPortalDataAttribute]
-			public static void ShouldUpdateTags( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
+			public static void ShouldUpdateTags( [Frozen] SpPortalLicenseApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
 			{
 				var valuesForEachDefinedTag = tags.Tags
-					.Select( ct => fixture.Build<SpPortalApi.LicenseTag>().With( x => x.Id, ct.Id ).CreateAnonymous() )
+					.Select( ct => fixture.Build<SpPortalLicenseApi.LicenseTag>().With( x => x.Id, ct.Id ).CreateAnonymous() )
 					.ToList();
 
 				var licenseTagsAssignmentHref = license.Selected._embedded.CustomerTags._links.self.href;
@@ -51,7 +51,7 @@ namespace Sp.Api.Portal.Acceptance
 			public static class Bad
 			{
 				[Theory, AutoPortalDataAttribute]
-				public static void EmptyValuesShouldBeRejected( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags )
+				public static void EmptyValuesShouldBeRejected( [Frozen] SpPortalLicenseApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags )
 				{
 					var validTagWithValueThatIsEmpty = GenerateLicenseTag( String.Empty, tags );
 
@@ -62,7 +62,7 @@ namespace Sp.Api.Portal.Acceptance
 				}
 
 				[Theory, AutoPortalDataAttribute]
-				public static void TooLongValuesShouldBeRejected( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
+				public static void TooLongValuesShouldBeRejected( [Frozen] SpPortalLicenseApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
 				{
 					var validTagWithValueThatIsTooLong = GenerateLicenseTag( new String( 'a', 101 ), tags );
 
@@ -72,10 +72,10 @@ namespace Sp.Api.Portal.Acceptance
 					Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
 				}
 
-				static SpPortalApi.LicenseTag[] GenerateLicenseTag( string value, ExistingTagsFixture tags )
+				static SpPortalLicenseApi.LicenseTag[] GenerateLicenseTag( string value, ExistingTagsFixture tags )
 				{
 					return tags.Tags
-						.Select( ct => new Fixture().Build<SpPortalApi.LicenseTag>()
+						.Select( ct => new Fixture().Build<SpPortalLicenseApi.LicenseTag>()
 							.With( x => x.Id, ct.Id )
 							.With( x => x.Value, value )
 							.CreateAnonymous() )
@@ -84,10 +84,10 @@ namespace Sp.Api.Portal.Acceptance
 				}
 
 				[Theory, AutoPortalDataAttribute]
-				public static void DuplicateValuesShouldBeRejected( [Frozen] SpPortalApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
+				public static void DuplicateValuesShouldBeRejected( [Frozen] SpPortalLicenseApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
 				{
 					var validTagValue = tags.Tags
-						.Select( ct => fixture.Build<SpPortalApi.LicenseTag>()
+						.Select( ct => fixture.Build<SpPortalLicenseApi.LicenseTag>()
 							.With( x => x.Id, ct.Id )
 							.CreateAnonymous() )
 						.Take( 1 )
