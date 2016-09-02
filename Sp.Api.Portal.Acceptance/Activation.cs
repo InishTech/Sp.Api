@@ -11,7 +11,7 @@ namespace Sp.Api.Portal.Acceptance
     public static class Activations
     {
         public static class IndexGet
-        {          
+        {
             [Theory, AutoPortalData]
             public static void ShouldYieldResults( SpPortalActivationApi api )
             {
@@ -46,7 +46,7 @@ namespace Sp.Api.Portal.Acceptance
             [Theory, AutoPortalData]
             public static void ShouldAllowOrdering( SpPortalActivationApi api )
             {
-                var apiResult = api.GetActivations("$orderby=ActivationTime desc");
+                var apiResult = api.GetActivations( "$orderby=ActivationTime desc" );
 
                 var data = VerifyResponse( apiResult );
 
@@ -88,5 +88,5 @@ namespace Sp.Api.Portal.Acceptance
                 return apiResult.Data.results.ToArray();
             }
         }
-        }
     }
+}
