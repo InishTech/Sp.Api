@@ -83,8 +83,8 @@ namespace Sp.Api.Portal.Acceptance
 						.ToArray();
 				}
 
-				[Theory, AutoPortalDataAttribute]
-				public static void DuplicateValuesShouldBeRejected( [Frozen] SpPortalLicenseApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
+                [Theory( Skip = "Was working by coincidence, tag functionality removed for now so ignore" ), AutoPortalDataAttribute]
+                public static void DuplicateValuesShouldBeRejected( [Frozen] SpPortalLicenseApi portalApi, RandomLicenseFromListFixture license, ExistingTagsFixture tags, IFixture fixture )
 				{
 					var validTagValue = tags.Tags
 						.Select( ct => fixture.Build<SpPortalLicenseApi.LicenseTag>()

@@ -24,7 +24,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 				
 				// Even when cold, 5 seconds is a long time to wait
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
-				wait.Until( d => driver.FindElementsByCssSelector( "#license-list tr" ).Count > 0 );
+				wait.Until( d => driver.FindElementsByCssSelector( "#licenses tr" ).Count > 0 );
 			}
 		}
 	}

@@ -15,7 +15,7 @@ namespace Sp.Api.Portal.Html.Acceptance
 
 	public static class AdminTags
 	{
-		[TheoryWithLazyLoading, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
+		[TheoryWithLazyLoading( Skip = "Tag facilities disabled" ), ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialPortalDataFixture> ) )]
 		static void DeletesAndAddsShouldBeEvidentOnRefresh( RemoteWebDriver driver, AuthenticatingNavigator navigator )
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
