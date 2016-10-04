@@ -86,7 +86,7 @@ namespace Sp.Api.Consume.Acceptance
 			public class InviteStatus
 			{
 				public string State { get; set; }
-				public string LastEmailSentTo { get; set; }
+				public DateTime LastEmailSentTo { get; set; }
 			}
 
 			public class Links

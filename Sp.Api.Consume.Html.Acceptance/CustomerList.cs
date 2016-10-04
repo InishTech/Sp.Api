@@ -24,7 +24,7 @@ namespace Sp.Api.Consume.Html.Acceptance
 				// If we cannot respond in 5 seconds for any reason, a human will seriously distrust the software, no excuses
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
 				wait.Until( d => d
-					.FindElement( By.Id( "customer-list" ) )
+					.FindElement( By.Id( "customers" ) )
 					.FindElements( By.TagName( "tr" ) )
 					.Count > 0 );
 			}

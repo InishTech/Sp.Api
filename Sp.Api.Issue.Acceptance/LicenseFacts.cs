@@ -92,7 +92,7 @@ namespace Sp.Api.Issue.Acceptance
 
 				var licenseData = VerifyResponse( apiResult );
 
-				var resorted = licenseData.OrderByDescending( x => DateTime.Parse( x.IssueDate, CultureInfo.InvariantCulture ) ).ToArray();
+				var resorted = licenseData.OrderByDescending( x =>  x.IssueDate ).ToArray();
 
 				Assert.True( resorted.SequenceEqual( licenseData ) );
 			}
@@ -292,15 +292,6 @@ namespace Sp.Api.Issue.Acceptance
 
 				Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
 				Assert.Equal( "Unsupported Parameter: $select", apiResult.StatusDescription );
-			}
-
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void GetListShouldRejectQueriesWithUnsupportedOrderFields( SpIssueApi api )
-			{
-				var apiResult = api.GetLicenseList( "$orderby=ProductLabel" );
-
-				Assert.Equal( HttpStatusCode.BadRequest, apiResult.StatusCode );
-				Assert.Contains( "The field OrderBy must match", apiResult.StatusDescription );
 			}
 		}
 
