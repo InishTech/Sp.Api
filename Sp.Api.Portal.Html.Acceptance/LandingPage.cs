@@ -30,9 +30,10 @@ namespace Sp.Api.Portal.Html.Acceptance
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
 				navigator.NavigateWithAuthenticate( driver, "" );
-
-				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
-				var usernameElement = wait.Until( d => driver.FindElementByCssSelector( "span[data-claimid='username']" ) );
+                WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
+                var userSettingsMenu = wait.Until( d => driver.FindElementByCssSelector( "button[name='settings']" ) );
+                userSettingsMenu.Click();
+                var usernameElement = wait.Until( d => driver.FindElementByCssSelector( "li[id='username']" ) );
 
 				Assert.Contains( ConfigurationManager.AppSettings[ "PortalUsername" ], usernameElement.Text );
 			}
@@ -44,9 +45,10 @@ namespace Sp.Api.Portal.Html.Acceptance
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
 				navigator.NavigateWithAuthenticate( driver, "" );
-
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
-				var logoffButton = wait.Until( d => driver.FindElementByCssSelector( "a[name='logoff']" ) );
+                var userSettingsMenu = wait.Until( d => driver.FindElementByCssSelector( "button[name='settings']" ) );
+                userSettingsMenu.Click();
+                var logoffButton = wait.Until( d => driver.FindElementByCssSelector( "a[name='logoff']" ) );
 
 				var portalUrl = new Uri( driver.Url );
 				logoffButton.Click();
