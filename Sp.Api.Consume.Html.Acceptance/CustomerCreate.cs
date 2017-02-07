@@ -18,8 +18,8 @@ namespace Sp.Api.Consume.Html.Acceptance
 		[TheoryWithLazyLoading, ClassData( typeof( RemoteWebDriverAndAuthenticatingNavigatorProvider<SoftwarePotentialDataFixture> ) )]
 		public static void CreateCustomerShouldSucceed( RemoteWebDriver driver, AuthenticatingNavigator navigator )
 		{
-			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
-			{
+			//using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
+			//{
 				navigator.NavigateWithAuthenticate( driver, "Sp.Web.Consume/Customer/Create" );
 
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
@@ -38,6 +38,6 @@ namespace Sp.Api.Consume.Html.Acceptance
 					.FindElement( By.Id( "messages" ) )
 					.Text.Contains( "Customer created successfully" ) );
 			}
-		}
+		//}
 	}
 }

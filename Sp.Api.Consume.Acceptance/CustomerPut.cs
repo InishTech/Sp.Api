@@ -45,58 +45,7 @@ namespace Sp.Api.Consume.Acceptance
 
 			VerifyGetCustomerReflectsAcceptedChanges( api, customerData );
 		}
-
-		public static class PutConflictingChangesToSameBaseData
-		{
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void NonMatchingChangesShouldYieldConflict( [Frozen] SpCustomerApi api, string anonymousName1, string anonymousExternalId1, string anonymousName2, string anonymousExternalId2, IFixture fixture )
-			{
-				var customerData = default( SpCustomerApi.CustomerSummary );
-				HandleTightLoopEdgeCase( () =>
-					fixture.Do( ( GetRandomCustomerFixture customer ) =>
-					{
-						customerData = customer.DataFromGet;
-						customerData.Name = anonymousName1;
-						customerData.ExternalId = anonymousExternalId1;
-						var firstResult = api.PutCustomer( customerData._links.self.href, customerData );
-						Assert.Equal( HttpStatusCode.Accepted, firstResult.StatusCode );
-					} ) );
-
-				customerData.Name = anonymousName2;
-				customerData.ExternalId = anonymousExternalId2;
-				var apiResult = api.PutCustomer( customerData._links.self.href, customerData );
-				Assert.Equal( HttpStatusCode.Conflict, apiResult.StatusCode );
-
-				// Our second edits should not have been applied, so revert
-				customerData.Name = anonymousName1;
-				customerData.ExternalId = anonymousExternalId1;
-				VerifyGetCustomerReflectsAcceptedChanges( api, customerData );
-			}
-
-			/// <summary>
-			/// <para>The concurrency checking is actually performed based on a _version reference number that is kept alongside the data.</para>
-			/// <para>This means the very attempt to edit (even if setting the same values as the previous editor has submitted) will be refused.</para>
-			/// </summary>
-			[Theory, AutoSoftwarePotentialApiData]
-			public static void MatchingChangesShouldYieldConflict( [Frozen] SpCustomerApi api,  string anonymousName, string anonymousExternalId, IFixture fixture )
-			{
-				var customerData = default( SpCustomerApi.CustomerSummary );
-				HandleTightLoopEdgeCase( () =>
-					fixture.Do( ( GetRandomCustomerFixture customer ) =>
-					{
-						customerData = customer.DataFromGet;
-						customerData.Name = anonymousName;
-						customerData.ExternalId = anonymousExternalId;
-						var firstResult = api.PutCustomer( customerData._links.self.href, customerData );
-						Assert.Equal( HttpStatusCode.Accepted, firstResult.StatusCode );
-					} ) );
-
-				var apiResult = api.PutCustomer( customerData._links.self.href, customerData );
-				Assert.Equal( HttpStatusCode.Conflict, apiResult.StatusCode );
-
-				VerifyGetCustomerReflectsAcceptedChanges( api, customerData );
-			}
-		}
+        	
 
 		/// <summary>
 		/// In the course of our testing, we need to be assured the changes actually get applied.
