@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xunit>
+  <assemblies>
+    <assembly filename="Artifacts\Acceptance\Sp.Api.Develop.Acceptance\Sp.Api.Develop.Acceptance.dll" shadow-copy="true" />
+  </assemblies>
+</xunit>

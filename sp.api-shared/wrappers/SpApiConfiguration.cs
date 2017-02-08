@@ -55,7 +55,8 @@ namespace Sp.Api.Shared.Wrappers
 			{ ApiType.Issue, "Issue" },
 			{ ApiType.Consume, "Consume" },
 			{ ApiType.Auth, "Auth" },
-		};
+            { ApiType.Develop, "Develop" }
+        };
 
 		readonly Dictionary<ApiType, string> _iisApiPrefixes = new Dictionary<ApiType, string>
 		{
@@ -64,7 +65,8 @@ namespace Sp.Api.Shared.Wrappers
 			{ ApiType.Issue, "Sp.Web.Issue" },
 			{ ApiType.Consume, "Sp.Web.Consume" },
 			{ ApiType.Auth, "Sp.Auth.Web" },
-		};
+            { ApiType.Develop, "Sp.Web.Develop" }
+        };
 	}
 
 	// NB this is not the long terma approach - will be using hypermedia and HAL to navigate instead of computing urls the way anything relaiant on this currently does
@@ -75,6 +77,7 @@ namespace Sp.Api.Shared.Wrappers
 		Define,
 		Issue,
 		Consume,
-		Auth
+		Auth,
+        Develop
 	}
 }

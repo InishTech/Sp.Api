@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C1364C2F-341D-4A61-82C4-FC0FF7151351}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Sp.Api.Develop.Acceptance</RootNamespace>
+    <AssemblyName>Sp.Api.Develop.Acceptance</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture, Version=2.11.4.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.2.11.4\lib\Ploeh.AutoFixture.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.Xunit, Version=2.11.4.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.Xunit.2.11.4\lib\Ploeh.AutoFixture.Xunit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.SemanticComparison, Version=2.11.4.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.2.11.4\lib\Ploeh.SemanticComparison.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp, Version=104.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="xunit, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.extensions, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensions.1.9.2\lib\net20\xunit.extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Sp.Api-Shared\AutoSoftwarePotentialApiData.cs">
+      <Link>Inlined\AutoSoftwarePotentialApiData.cs</Link>
+    </Compile>
+    <Compile Include="..\Sp.Api-Shared\AutoSoftwarePotentialData.cs">
+      <Link>Inlined\AutoSoftwarePotentialData.cs</Link>
+    </Compile>
+    <Compile Include="..\Sp.Api-Shared\SmokeAttribute.cs">
+      <Link>Inlined\SmokeAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Sp.Api-Shared\Wrappers\SpApi.cs">
+      <Link>Inlined\Wrappers\SpApi.cs</Link>
+    </Compile>
+    <Compile Include="..\Sp.Api-Shared\Wrappers\SpApiConfiguration.cs">
+      <Link>Inlined\Wrappers\SpApiConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Sp.Api-Shared\Wrappers\WSFederationAuthenticator.cs">
+      <Link>Inlined\Wrappers\WSFederationAuthenticator.cs</Link>
+    </Compile>
+    <Compile Include="RegisterWebHook.cs" />
+    <Compile Include="SpWebHookApi.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sp.Test.Helpers\Sp.Test.Helpers.csproj">
+      <Project>{456eab19-b94d-43b9-acdf-a9bb2f19e8a7}</Project>
+      <Name>Sp.Test.Helpers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\after.csproj.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+</Project>
