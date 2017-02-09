@@ -28,8 +28,7 @@ namespace Sp.Api.Develop.Acceptance
 
         public class WebHookRegistrationModel
         {
-
-            public string Id { get; set; }
+            public string EventId { get; set; }
 
             public string Description { get; set; }
 
@@ -37,5 +36,12 @@ namespace Sp.Api.Develop.Acceptance
             
             public string WebHookUri { get; set; }
         }
+
+      
+    }
+    public enum WebHookEvents
+    {
+        LicenseIssue = 0,
+        LicenseReissue = 1
     }
 }
