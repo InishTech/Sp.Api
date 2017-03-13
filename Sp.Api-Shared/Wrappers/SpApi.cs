@@ -6,7 +6,8 @@
 namespace Sp.Api.Shared.Wrappers
 {
 	using RestSharp;
-	using Sp.Test.Helpers;
+    using RestSharp.Serializers;
+    using Sp.Test.Helpers;
 
 	public class SpApi
 	{
@@ -18,7 +19,7 @@ namespace Sp.Api.Shared.Wrappers
 			_apiConfiguration = apiConfiguration;
 			_client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl )
 			{
-				Authenticator = new WSFederationAuthenticator( apiConfiguration )
+				Authenticator = new WSFederationAuthenticator( apiConfiguration )            
 			};
 		}
 
