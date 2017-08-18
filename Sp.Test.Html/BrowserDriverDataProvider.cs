@@ -20,18 +20,6 @@ namespace Sp.Test.Html
 		{
 			yield return new ChromeDriver();
 		}
-
-		static FirefoxProfile GetSeleniumFirefoxProfile()
-		{
-			const string profileName = "Selenium";
-			FirefoxProfileManager profileManager = new FirefoxProfileManager();
-			FirefoxProfile profile = profileManager.GetProfile( profileName );
-			if ( profile == null )
-				throw new InvalidOperationException( "Cannot find Firefox profile " + profileName );
-			profile.SetPreference( "browser.ssl_override_behavior", 1 );
-			profile.AcceptUntrustedCertificates = false;
-			return profile;
-		}
 	}
 
 	public static class QuitGuardExtensions
