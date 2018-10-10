@@ -42,7 +42,7 @@ namespace Sp.Api.Develop.Acceptance
 
         public class WebHookRegistrationModel
         {
-            public string[] Events { get; set; }
+            public string[] Actions { get; set; }
 
             public string Secret { get; set; }
 
@@ -80,7 +80,7 @@ namespace Sp.Api.Develop.Acceptance
    
         public class InvalidWebHookRegistrationModel
         {
-            public string[] Events { get; set; }
+            public string[] Actions { get; set; }
 
             public string Secret { get; set; }
 

@@ -12,7 +12,7 @@ namespace Sp.Api.Develop.Acceptance
         [Theory, AutoSoftwarePotentialApiData]
         public static void ShouldYieldAcceptedWithALocationHref( SpWebHookApi api, WebHookEvents[] anonymousEvents, string anonymousSecret, Uri anonymousUri )
         {
-            var response = api.CreateWebHook( new SpWebHookApi.WebHookRegistrationModel() { Events = anonymousEvents.Select( x => x.ToString() ).ToArray(), Secret = anonymousSecret, WebHookUri = anonymousUri } );
+            var response = api.CreateWebHook( new SpWebHookApi.WebHookRegistrationModel() { Actions = anonymousEvents.Select( x => x.ToString() ).ToArray(), Secret = anonymousSecret, WebHookUri = anonymousUri } );
 
             Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
         }
@@ -23,25 +23,25 @@ namespace Sp.Api.Develop.Acceptance
             [Theory, AutoSoftwarePotentialApiData]
             public static void TooShortSecret( SpWebHookApi api, WebHookEvents[] anonymousEvents, Uri anonymousUri )
             {
-                var response = api.CreateWebHook( new SpWebHookApi.WebHookRegistrationModel() { Events = anonymousEvents.Select( x => x.ToString() ).ToArray(), Secret = "short", WebHookUri = anonymousUri } );
+                var response = api.CreateWebHook( new SpWebHookApi.WebHookRegistrationModel() { Actions = anonymousEvents.Select( x => x.ToString() ).ToArray(), Secret = "short", WebHookUri = anonymousUri } );
 
                 Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
                 Assert.Contains( "The Shared Secret field is required and must be between 32 and 64 characters.", response.Content );
             }
 
             [Theory, AutoSoftwarePotentialApiData]
-            public static void UnknownEvent( SpWebHookApi api, string[] anonymousInvalidEvents, string anonymousSecret, Uri anonymousUri )
+            public static void UnknownAction( SpWebHookApi api, string[] anonymousInvalidActions, string anonymousSecret, Uri anonymousUri )
             {
-                var response = api.CreateWebHook( new SpWebHookApi.WebHookRegistrationModel() { Events = anonymousInvalidEvents, Secret = anonymousSecret, WebHookUri = anonymousUri } );
+                var response = api.CreateWebHook( new SpWebHookApi.WebHookRegistrationModel() { Actions = anonymousInvalidActions, Secret = anonymousSecret, WebHookUri = anonymousUri } );
 
                 Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
-                Assert.Contains( "Unknown WebHook Event: " + anonymousInvalidEvents.First() + ". Event must be one of the following known events", response.Content );
+                Assert.Contains( "Unknown WebHook Action: " + anonymousInvalidActions.First() + ". Action must be one of the following known actions", response.Content );
             }
 
             [Theory, AutoSoftwarePotentialApiData]
             public static void InvalidUri( SpInvalidWebHookApi api, WebHookEvents[] anonymousEvents, string anonymousSecret, string anonymousInvalidUri )
             {
-                var response = api.CreateWebHook( new SpInvalidWebHookApi.InvalidWebHookRegistrationModel() { Events = anonymousEvents.Select( x => x.ToString() ).ToArray(), Secret = anonymousSecret, WebHookUri = anonymousInvalidUri } );
+                var response = api.CreateWebHook( new SpInvalidWebHookApi.InvalidWebHookRegistrationModel() { Actions = anonymousEvents.Select( x => x.ToString() ).ToArray(), Secret = anonymousSecret, WebHookUri = anonymousInvalidUri } );
 
                 Assert.Equal( HttpStatusCode.BadRequest, response.StatusCode );
                 Assert.Contains( "Invalid URI ", response.Content );

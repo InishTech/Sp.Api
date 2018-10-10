@@ -22,7 +22,7 @@ namespace Sp.Api.Develop.Acceptance
         [Theory, AutoSoftwarePotentialApiData]
         public static void ModifiedShouldYieldAccepted( SpWebHookApi api, ExistingWebHookFixture existingWebHook, WebHookEvents[] anonymousEvents, string anonymousSecret, Uri anonymousUri )
         {
-            var updated = new SpWebHookApi.WebHookRegistrationModel() { Events = anonymousEvents.Select( x => x.ToString() ).Distinct().ToArray(), Secret = anonymousSecret, WebHookUri = anonymousUri };
+            var updated = new SpWebHookApi.WebHookRegistrationModel() { Actions = anonymousEvents.Select( x => x.ToString() ).Distinct().ToArray(), Secret = anonymousSecret, WebHookUri = anonymousUri };
             var response = api.UpdateWebHook( existingWebHook.Location, updated );
              
             Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
@@ -32,7 +32,7 @@ namespace Sp.Api.Develop.Acceptance
                 var apiResult = api.GetWebhook( existingWebHook.Location );
                 Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
                 var updatedWebhook = JsonConvert.DeserializeObject<SpWebHookApi.WebHookRegistrationModel>( apiResult.Content );
-                Assert.Equal( updated.Events.Distinct(), updatedWebhook.Events );
+                Assert.Equal( updated.Actions.Distinct(), updatedWebhook.Actions );
                 Assert.Equal( updated.WebHookUri, updatedWebhook.WebHookUri );
                 Assert.Equal( updated.IsPaused, updatedWebhook.IsPaused );
 
@@ -46,7 +46,7 @@ namespace Sp.Api.Develop.Acceptance
             public SpWebHookApi.WebHookRegistrationModel RegisteredWebHook { get; private set; }
             public ExistingWebHookFixture( SpWebHookApi api, WebHookEvents[] anonymousEvents, string anonymousSecret, Uri anonymousUri )
             {
-                RegisteredWebHook = new SpWebHookApi.WebHookRegistrationModel() { Events = anonymousEvents.Select( x => x.ToString() ).ToArray(), Secret = anonymousSecret, WebHookUri = anonymousUri };
+                RegisteredWebHook = new SpWebHookApi.WebHookRegistrationModel() { Actions = anonymousEvents.Select( x => x.ToString() ).ToArray(), Secret = anonymousSecret, WebHookUri = anonymousUri };
 
                 var response = api.CreateWebHook( RegisteredWebHook );
                 Location = response.Headers.Single( x => x.Name == "Location" ).Value.ToString();
