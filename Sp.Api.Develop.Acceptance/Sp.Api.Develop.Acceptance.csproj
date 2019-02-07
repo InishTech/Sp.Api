@@ -87,9 +87,11 @@
     <Compile Include="..\Sp.Api-Shared\Wrappers\WSFederationAuthenticator.cs">
       <Link>Inlined\Wrappers\WSFederationAuthenticator.cs</Link>
     </Compile>
+    <Compile Include="ExistingWebHookFixture.cs" />
     <Compile Include="RegisterWebHook.cs" />
     <Compile Include="SpWebHookApi.cs" />
     <Compile Include="UpdateWebHook.cs" />
+    <Compile Include="WebhookList.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sp.Test.Helpers\Sp.Test.Helpers.csproj">

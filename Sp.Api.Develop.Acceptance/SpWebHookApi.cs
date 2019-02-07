@@ -8,6 +8,7 @@
 using RestSharp;
 using Sp.Api.Shared.Wrappers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Sp.Api.Develop.Acceptance
@@ -38,6 +39,12 @@ namespace Sp.Api.Develop.Acceptance
         {
             var request = new RestRequest( href );
             return Execute<WebHookRegistrationModel>( request );
+        }
+
+        internal IRestResponse<List<WebHookRegistrationModel>> ListWebHooks(  )
+        {
+            var request = new RestRequest( GetApiPrefix( ApiType.Develop ) + "/webhook" );
+            return Execute<List<WebHookRegistrationModel>>( request );
         }
 
         public class WebHookRegistrationModel
