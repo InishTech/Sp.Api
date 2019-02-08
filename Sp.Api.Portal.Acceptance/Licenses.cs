@@ -22,7 +22,6 @@ namespace Sp.Api.Portal.Acceptance
         public static class IndexGet
         {
             [Smoke]
-            [HighFrequency]
             [Theory, AutoPortalData]
             public static void ShouldYieldResults( SpPortalLicenseApi api )
             {
