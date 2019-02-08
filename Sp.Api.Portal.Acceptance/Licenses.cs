@@ -104,7 +104,6 @@ namespace Sp.Api.Portal.Acceptance
             public static class Items
             {
                 [Smoke]
-                [MediumFrequency]
                 [Theory, AutoPortalData]
                 public static void ShouldContainData( RandomLicenseFromListFixture license )
                 {
