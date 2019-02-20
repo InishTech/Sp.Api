@@ -14,13 +14,12 @@ namespace Sp.Api.Develop.Acceptance
     {
         [Theory, AutoSoftwarePotentialApiData]
         [HighFrequency]
-        public static void ShouldBeAbleToListWebHooks( SpWebHookApi api, ExistingWebHookFixture existingWebHook )
+        public static void ShouldBeAbleToListWebHooks( SpWebHookApi api)
         {
             Verify.EventuallyWithBackOff( () =>
             {
                 var apiResult = api.ListWebHooks();
                 Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-                Assert.NotEmpty( apiResult.Data );
 
             } );
         }

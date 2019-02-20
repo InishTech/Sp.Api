@@ -66,8 +66,6 @@ namespace Sp.Api.Develop.Acceptance
         {
             public string href { get; set; }
         }
-
-
     }
 
     public class SpInvalidWebHookApi : SpApi
@@ -76,6 +74,7 @@ namespace Sp.Api.Develop.Acceptance
         {
 
         }
+
         public IRestResponse CreateWebHook( InvalidWebHookRegistrationModel webhook )
         {
             var request = new RestRequest( GetApiPrefix( ApiType.Develop ) + "/webhook", Method.POST );
@@ -83,7 +82,6 @@ namespace Sp.Api.Develop.Acceptance
             request.AddBody( webhook );
             return Execute( request );
         }
-
    
         public class InvalidWebHookRegistrationModel
         {
