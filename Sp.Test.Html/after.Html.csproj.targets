@@ -18,7 +18,7 @@
     </WebDriverDriver>
     <WebDriverDriver Include="Chrome">
       <Url>http://chromedriver.storage.googleapis.com</Url>
-      <Prefix>chromedriver_win32.</Prefix>
+      <Prefix>73.0.3683.68/chromedriver_win32.</Prefix>
       <InternalName>ChromeDriver.exe</InternalName>
      </WebDriverDriver>
   </ItemGroup>
