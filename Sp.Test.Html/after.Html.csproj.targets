@@ -11,16 +11,11 @@
   </Target>
 
   <ItemGroup>
-    <WebDriverDriver Include="IE">
-      <Url>http://selenium-release.storage.googleapis.com</Url>
-      <Prefix>IEDriverServer_Win32_</Prefix>
-      <InternalName>IEDriverServer.exe</InternalName>
-    </WebDriverDriver>
     <WebDriverDriver Include="Chrome">
       <Url>http://chromedriver.storage.googleapis.com</Url>
       <Prefix>chromedriver_win32.</Prefix>
       <InternalName>ChromeDriver.exe</InternalName>
-     </WebDriverDriver>
+    </WebDriverDriver>
   </ItemGroup>
 
   <PropertyGroup Condition=" 'true' != '$(SlpsSkipDownloadSeleniumDrivers)' ">
