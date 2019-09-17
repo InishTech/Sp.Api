@@ -39,10 +39,14 @@
 
   <PropertyGroup>
     <_Instructions>Need to run "./configure.ps1" from the root folder before running the tests.</_Instructions>
-
     <TestAppConfigUsername Condition=" '' == '$(TestAppConfigUsername)'">INSERT USERNAME HERE - $(_Instructions)</TestAppConfigUsername>
     <TestAppConfigPassword Condition=" '' == '$(TestAppConfigPassword)'">INSERT PASSWORD HERE - $(_Instructions)</TestAppConfigPassword>
+
+    <TestAppConfigClientId Condition=" '' == '$(TestAppConfigClientId)'">INSERT CLIENT ID HERE - $(_Instructions)</TestAppConfigClientId>
+    <TestAppConfigClientSecret Condition=" '' == '$(TestAppConfigClientSecret)'">INSERT CLIENT SECRET HERE - $(_Instructions)</TestAppConfigClientSecret>
+    
     <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://srv.softwarepotential.com</TestAppConfigBaseUrl>
+    <TestAppConfigAuthority Condition=" '' == '$(TestAppConfigAuthority)'">https://sts.softwarepotential.com</TestAppConfigAuthority>
 
     <TestAppConfigPortalUsername Condition=" '' == '$(TestAppConfigPortalUsername)'">INSERT PORTAL USERNAME HERE - $(_Instructions)</TestAppConfigPortalUsername>
     <TestAppConfigPortalPassword Condition=" '' == '$(TestAppConfigPortalPassword)'">INSERT PORTAL PASSWORD HERE - $(_Instructions)</TestAppConfigPortalPassword>
@@ -55,11 +59,21 @@
     <TestAppConfigParam Include="Username">
       <Value>$(TestAppConfigUsername)</Value>
     </TestAppConfigParam>
+    <TestAppConfigParam Include="Password">
+      <Value>$(TestAppConfigPassword)</Value>
+    </TestAppConfigParam>
     <TestAppConfigParam Include="PortalUsername">
       <Value>$(TestAppConfigPortalUsername)</Value>
     </TestAppConfigParam>
-    <TestAppConfigParam Include="Password">
-      <Value>$(TestAppConfigPassword)</Value>
+    <TestAppConfigParam Include="ClientId">
+      <Value>$(TestAppConfigClientId)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="ClientSecret">
+      <Value>$(TestAppConfigClientSecret)</Value>
+    </TestAppConfigParam>
+
+    <TestAppConfigParam Include="Authority">
+      <Value>$(TestAppConfigAuthority)</Value>
     </TestAppConfigParam>
     <TestAppConfigParam Include="PortalPassword">
       <Value>$(TestAppConfigPortalPassword)</Value>

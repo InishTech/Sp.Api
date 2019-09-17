@@ -5,44 +5,59 @@
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Api.Shared.Wrappers
 {
-	using RestSharp;
+    using IdentityModel.Client;
+    using RestSharp;
     using RestSharp.Serializers;
     using Sp.Test.Helpers;
+    using System.Net.Http;
 
-	public class SpApi
-	{
-		readonly IRestClient _client;
-		readonly SpApiConfiguration _apiConfiguration;
+    public class SpApi
+    {
+        readonly IRestClient _client;
+        readonly SpApiConfiguration _apiConfiguration;
 
-		public SpApi( SpApiConfiguration apiConfiguration )
-		{
-			_apiConfiguration = apiConfiguration;
-			_client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl )
-			{
-				Authenticator = new WSFederationAuthenticator( apiConfiguration )            
-			};
-		}
+        public SpApi( SpApiConfiguration apiConfiguration )
+        {
+            System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
+            _apiConfiguration = apiConfiguration;
+            _client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl );
+            _client.AddDefaultHeader( "Authorization", string.Format( "Bearer {0}", GetAccessToken() ) );
+        }
 
-		public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
-		{
-			return _client.Execute<T>( request );
-		}
+        string GetAccessToken()
+        {
+            var client = new HttpClient();
+            var disco = client.GetDiscoveryDocumentAsync( _apiConfiguration.Authority.ToLower() ).Result;
 
-		public IRestResponse Execute( RestRequest request )
-		{
-			return _client.Execute( request );
-		}
+            if ( disco.IsError )
+                throw new System.Exception( disco.Error );
 
-		public string GetApiPrefix( ApiType apiType )
-		{
-			return _apiConfiguration.GetApiPrefix( apiType );
-		}
+            var tokenResponse = client.RequestClientCredentialsTokenAsync( new ClientCredentialsTokenRequest
+            {
+                Address = disco.TokenEndpoint,
+                ClientId = _apiConfiguration.ClientId,
+                ClientSecret = _apiConfiguration.ClientSecret,
+                Scope = _apiConfiguration.Scope
+            } ).Result;
+            if ( tokenResponse.IsError )
+                throw new System.Exception( tokenResponse.Error );
+            return tokenResponse.AccessToken;
+        }
 
-		public IRestResponse SignOff()
-		{
-			var signOffRequest = new RestRequest( GetApiPrefix( ApiType.WebApiRoot ) + "/Authentication/LogOff", Method.GET );
-			signOffRequest.AddHeader( "Accept", "text/html" );
-			return _client.Execute( signOffRequest );
-		}
-	}
+        public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
+        {
+         
+            return _client.Execute<T>( request );
+        }
+
+        public IRestResponse Execute( RestRequest request )
+        {
+            return _client.Execute( request );
+        }
+
+        public string GetApiPrefix( ApiType apiType )
+        {
+            return _apiConfiguration.GetApiPrefix( apiType );
+        }    
+    }
 }

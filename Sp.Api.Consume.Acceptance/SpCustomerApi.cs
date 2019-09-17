@@ -19,7 +19,7 @@ namespace Sp.Api.Consume.Acceptance
 
 		internal IRestResponse<CustomerSummaryPage> GetCustomerList()
 		{
-			var request = new RestRequest( GetApiPrefix(ApiType.Consume) );
+			var request = new RestRequest( GetApiPrefix( ApiType.Consume ) + "/customer/" );
 			return Execute<CustomerSummaryPage>( request );
 		}
 

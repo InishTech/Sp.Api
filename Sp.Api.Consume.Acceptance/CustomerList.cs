@@ -13,7 +13,7 @@
 		{
 			var response = api.GetCustomerList();
 			Assert.Equal( HttpStatusCode.OK, response.StatusCode );
-		}
+		}   
 
 		[Smoke]
 		[HighFrequency]
