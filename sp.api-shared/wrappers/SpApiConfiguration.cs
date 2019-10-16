@@ -62,7 +62,7 @@ namespace Sp.Api.Shared.Wrappers
         {
             { ApiType.WebApiRoot, "Sp.Web" },
             { ApiType.Define, "Sp.Web.Define" },
-            { ApiType.Issue, "Sp.Web.Issue" },
+            { ApiType.Issue, "Sp.Api.Issue" },
             { ApiType.Consume, "Sp.Api.Consume" },
             { ApiType.Auth, "Sp.Auth.Web" },
             { ApiType.Develop, "Sp.Api.Develop" }
