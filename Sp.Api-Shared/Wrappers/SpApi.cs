@@ -27,7 +27,11 @@ namespace Sp.Api.Shared.Wrappers
         string GetAccessToken()
         {
             var client = new HttpClient();
-            var disco = client.GetDiscoveryDocumentAsync( _apiConfiguration.Authority.ToLower() ).Result;
+            var disco = client.GetDiscoveryDocumentAsync( new DiscoveryDocumentRequest
+            {
+                Address = _apiConfiguration.Authority.ToLower(),
+                Policy = { RequireHttps = _apiConfiguration.RequireHttps }
+            } ).Result;
 
             if ( disco.IsError )
                 throw new System.Exception( disco.Error );
@@ -37,7 +41,8 @@ namespace Sp.Api.Shared.Wrappers
                 Address = disco.TokenEndpoint,
                 ClientId = _apiConfiguration.ClientId,
                 ClientSecret = _apiConfiguration.ClientSecret,
-                Scope = _apiConfiguration.Scope
+                Scope = _apiConfiguration.Scope,
+
             } ).Result;
             if ( tokenResponse.IsError )
                 throw new System.Exception( tokenResponse.Error );
@@ -46,7 +51,7 @@ namespace Sp.Api.Shared.Wrappers
 
         public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
         {
-         
+
             return _client.Execute<T>( request );
         }
 
@@ -58,6 +63,6 @@ namespace Sp.Api.Shared.Wrappers
         public string GetApiPrefix( ApiType apiType )
         {
             return _apiConfiguration.GetApiPrefix( apiType );
-        }    
+        }
     }
 }

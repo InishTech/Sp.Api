@@ -11,7 +11,7 @@ namespace Sp.Api.Shared.Wrappers
     public class SpApiConfiguration
     {
 
-        public SpApiConfiguration( string username, string password, string clientId, string clientSecret, string baseUrl, string authority, string scope )
+        public SpApiConfiguration( string username, string password, string clientId, string clientSecret, string baseUrl, string authority, string scope, string skipCertValidation)
         {
             Username = username;
             Password = password;
@@ -20,6 +20,7 @@ namespace Sp.Api.Shared.Wrappers
             ClientSecret = clientSecret;
             BaseUrl = baseUrl;
             Authority = authority;
+            RequireHttps = !bool.Parse( skipCertValidation );
         }
 
         public string Username { get; }
@@ -35,6 +36,8 @@ namespace Sp.Api.Shared.Wrappers
         public string Authority { get; }
 
         public string Scope { get; }
+
+        public bool RequireHttps { get; }
 
         // NB this is not the long term approach - will be using hypermedia and HAL to navigate instead of computing urls the way anything relaiant on this currently does
         // TODO TP 1105 these should be determined by going to an api landing location
