@@ -21,42 +21,17 @@ namespace Sp.Api.Shared.Wrappers
             System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
             _apiConfiguration = apiConfiguration;
             _client = new RelativePathAwareCustomRestClient( apiConfiguration.BaseUrl );
-            _client.AddDefaultHeader( "Authorization", string.Format( "Bearer {0}", GetAccessToken() ) );
         }
 
-        string GetAccessToken()
+        public IRestResponse<T> Execute<T>( IRestRequest request ) where T : new()
         {
-            var client = new HttpClient();
-            var disco = client.GetDiscoveryDocumentAsync( new DiscoveryDocumentRequest
-            {
-                Address = _apiConfiguration.Authority.ToLower(),
-                Policy = { RequireHttps = _apiConfiguration.RequireHttps }
-            } ).Result;
-
-            if ( disco.IsError )
-                throw new System.Exception( disco.Error );
-
-            var tokenResponse = client.RequestClientCredentialsTokenAsync( new ClientCredentialsTokenRequest
-            {
-                Address = disco.TokenEndpoint,
-                ClientId = _apiConfiguration.ClientId,
-                ClientSecret = _apiConfiguration.ClientSecret,
-                Scope = _apiConfiguration.Scope,
-
-            } ).Result;
-            if ( tokenResponse.IsError )
-                throw new System.Exception( tokenResponse.Error );
-            return tokenResponse.AccessToken;
-        }
-
-        public IRestResponse<T> Execute<T>( RestRequest request ) where T : new()
-        {
-
+            request.AddAuthorizationHeader();
             return _client.Execute<T>( request );
         }
 
-        public IRestResponse Execute( RestRequest request )
+        public IRestResponse Execute( IRestRequest request )
         {
+            request.AddAuthorizationHeader();
             return _client.Execute( request );
         }
 
