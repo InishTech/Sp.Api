@@ -19,8 +19,14 @@ function warn( [string]$message) {
 
 $msbuildProperties=@("Configuration=$configuration")
 
-# using FW64 breaks in Slps Sdk versions <1928
-$msbuild="${env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\Professional\MSBuild\current\Bin\amd64\MSBuild"
+# the following will calculate the MSBuild path for VS2017 and above. Alternatively hard code your own MSBuild path 
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Install-Module VSSetup -Scope CurrentUser -Force
+$instance = Get-VSSetupInstance -All | Select-VSSetupInstance -Product * -Require 'Microsoft.Component.MSBuild' -Latest # -Product * will include BuildTools install (without it is only full VSInstances)
+$installDir = $instance.installationPath
+$msBuild = $installDir + '\MSBuild\Current\Bin\MSBuild.exe' # VS2019
+   
+   
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
 
 warn "Starting at $([datetime]::Now)" 
