@@ -20,7 +20,7 @@ function warn( [string]$message) {
 $msbuildProperties=@("Configuration=$configuration")
 
 # using FW64 breaks in Slps Sdk versions <1928
-$msbuild="${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Professional\MSBuild\current\Bin\amd64\MSBuild"
+$msbuild="${env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\Professional\MSBuild\current\Bin\amd64\MSBuild"
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
 
 warn "Starting at $([datetime]::Now)" 
