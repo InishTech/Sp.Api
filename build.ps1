@@ -21,12 +21,20 @@ $msbuildProperties=@("Configuration=$configuration")
 
 # the following will calculate the MSBuild path for VS2017 and above. Alternatively hard code your own MSBuild path 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-Install-Module VSSetup -Scope CurrentUser -Force
+if (-not (Get-Module -ListAvailable -Name VSSetup )){
+	Install-Module VSSetup -Scope CurrentUser -Force
+}
 $instance = Get-VSSetupInstance -All | Select-VSSetupInstance -Product * -Require 'Microsoft.Component.MSBuild' -Latest # -Product * will include BuildTools install (without it is only full VSInstances)
 $installDir = $instance.installationPath
-$msBuild = $installDir + '\MSBuild\Current\Bin\MSBuild.exe' # VS2019
-   
-   
+$msBuild = $installDir + '\MSBuild\Current\Bin\MSBuild.exe'
+if(Test-Path $installDir'\MSBuild\Current\Bin\MSBuild.exe'){
+	$msBuild =   $installDir + '\MSBuild\Current\Bin\MSBuild.exe'
+}elseif(Test-Path $installDir'\MSBuild\15.0\Bin\MSBuild.exe'){
+	$msBuild =  $installDir +  '\MSBuild\15.0\Bin\MSBuild.exe';
+}
+else {
+	error "MSBuild not found"
+}
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
 
 warn "Starting at $([datetime]::Now)" 
