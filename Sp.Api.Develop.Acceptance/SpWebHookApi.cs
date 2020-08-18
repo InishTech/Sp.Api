@@ -23,7 +23,7 @@ namespace Sp.Api.Develop.Acceptance
         {
             var request = new RestRequest( GetApiPrefix( ApiType.Develop ) + "/webhook", Method.POST );
             request.RequestFormat = DataFormat.Json;
-            request.AddBody( webhook );
+            request.AddJsonBody( webhook );
             return Execute( request );
         }
 
@@ -31,7 +31,7 @@ namespace Sp.Api.Develop.Acceptance
         {
             var request = new RestRequest( href, Method.PUT );
             request.RequestFormat = DataFormat.Json;
-            request.AddBody( webhook );
+            request.AddJsonBody( webhook );
             return Execute( request );
         }
 
@@ -79,7 +79,7 @@ namespace Sp.Api.Develop.Acceptance
         {
             var request = new RestRequest( GetApiPrefix( ApiType.Develop ) + "/webhook", Method.POST );
             request.RequestFormat = DataFormat.Json;
-            request.AddBody( webhook );
+            request.AddJsonBody( webhook );
             return Execute( request );
         }
    

@@ -32,7 +32,7 @@ namespace Sp.Api.Define
 		{
 			var request = new RestRequest( product._links.self.href, Method.PUT );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody( product );
+			request.AddJsonBody( product );
 
 			return Execute( request );
 		}

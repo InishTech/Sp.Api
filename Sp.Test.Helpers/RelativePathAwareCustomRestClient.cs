@@ -12,7 +12,7 @@ namespace Sp.Test.Helpers
 	{
 		public RelativePathAwareCustomRestClient( string baseUrl )
 		{
-			BaseUrl = baseUrl;
+			BaseUrl = new Uri(baseUrl);
 		}
 
 		public override IRestResponse<T> Execute<T>( IRestRequest request )
@@ -30,7 +30,7 @@ namespace Sp.Test.Helpers
 		// Required if your BaseUri includes a path (e.g., within InishTech test environments, instances are not always at / on a machine)
 		Uri MakeUriRelativeToRestSharpClientBaseUri( string resource )
 		{
-			return UriHelper.MakeUriRelativeToBase( BaseUrl, resource );
+			return UriHelper.MakeUriRelativeToBase( BaseUrl.ToString(), resource );
 		}
 	}
 }

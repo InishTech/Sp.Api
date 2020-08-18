@@ -7,7 +7,7 @@ namespace Sp.Api.Define.Acceptance
 {
 	using Sp.Api.Shared;
 	using Sp.Test.Helpers;
-	using Ploeh.AutoFixture.Xunit;
+	using AutoFixture.Xunit;
 	using RestSharp;
 	using System;
 	using System.Linq;

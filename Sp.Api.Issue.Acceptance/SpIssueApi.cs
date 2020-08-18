@@ -38,7 +38,7 @@ namespace Sp.Api.Issue
 		{
 			var request = new RestRequest( licenseCustomerAssignmentHref, Method.PUT );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody( customer );
+			request.AddJsonBody( customer );
 
 			return Execute( request );
 		}

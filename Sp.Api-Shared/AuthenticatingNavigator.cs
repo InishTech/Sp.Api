@@ -4,7 +4,7 @@ namespace Sp.Api.Shared
 {
 	using OpenQA.Selenium;
 	using OpenQA.Selenium.Remote;
-	using Ploeh.AutoFixture;
+	using AutoFixture;
 	using Sp.Api.Shared.Wrappers;
 	using Sp.Test.Html;
 	using System;
@@ -20,7 +20,7 @@ namespace Sp.Api.Shared
 		protected override IEnumerable<Tuple<RemoteWebDriver, AuthenticatingNavigator>> Generate()
 		{
 			var bbdp = new BrowserDriverDataProvider();
-			var configuration = new TFixture().CreateAnonymous<SpApiConfiguration>();
+			var configuration = new TFixture().Create<SpApiConfiguration>();
 			var navigator = new AuthenticatingNavigator( configuration );
 			return
 				from object[] rwd in bbdp

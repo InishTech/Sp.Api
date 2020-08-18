@@ -63,7 +63,7 @@ namespace Sp.Api.Shared.Wrappers
 
         readonly Dictionary<ApiType, string> _iisApiPrefixes = new Dictionary<ApiType, string>
         {
-            { ApiType.WebApiRoot, "Sp.Web" },
+            { ApiType.WebApiRoot, "Sp.Api.Web" },
             { ApiType.Define, "Sp.Api.Define" },
             { ApiType.Issue, "Sp.Api.Issue" },
             { ApiType.Consume, "Sp.Api.Consume" },

@@ -5,8 +5,8 @@
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Api.Shared
 {
-	using Ploeh.AutoFixture;
-	using Ploeh.AutoFixture.Xunit;
+	using AutoFixture;
+	using AutoFixture.Xunit;
 	using System;
 	using System.Configuration;
 	using System.Net;
@@ -14,14 +14,14 @@ namespace Sp.Api.Shared
 	public class AutoSoftwarePotentialApiData : AutoDataAttribute
 	{
 		public AutoSoftwarePotentialApiData()
-			: this( new Fixture()
+			: this(  new Fixture()
 				.Customize( new SkipSSlCertificateValidationIfRequestedCustomization() )
 				.Customize( new SoftwarePotentialApiConfigurationFromAppSettingsCustomization() ) )
 		{
 		}
 
 		AutoSoftwarePotentialApiData( IFixture fixture )
-			: base( fixture )
+			: base( () => fixture )
 		{
 			fixture.Inject( fixture );
 		}

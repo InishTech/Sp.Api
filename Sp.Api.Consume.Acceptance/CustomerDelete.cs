@@ -1,4 +1,4 @@
-﻿using Ploeh.AutoFixture.Xunit;
+﻿using AutoFixture.Xunit;
 using Sp.Api.Shared;
 using Sp.Test.Helpers;
 using System.Net;

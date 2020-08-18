@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<xunit>
-  <assemblies>
-    <assembly filename="Artifacts\Acceptance\Sp.Api.Portal.Acceptance\Sp.Api.Portal.Acceptance.dll" shadow-copy="true" />
-    <assembly filename="Artifacts\Acceptance\Sp.Api.Portal.Html.Acceptance\Sp.Api.Portal.Html.Acceptance.dll" shadow-copy="true" />
-  </assemblies>
-</xunit>

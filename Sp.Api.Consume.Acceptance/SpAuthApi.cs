@@ -23,7 +23,7 @@ namespace Sp.Api.Consume.Acceptance
 		{
 			var request = new RestRequest( inviteLink, Method.POST );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody( invite );
+			request.AddJsonBody( invite );
 			return Execute( request );
 		}
 
@@ -39,7 +39,7 @@ namespace Sp.Api.Consume.Acceptance
 			string addLink = GetApiPrefix( ApiType.Auth ) + "/Organization";
 			var request = new RestRequest( addLink, Method.POST );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody( organization );
+			request.AddJsonBody( organization );
 			return Execute( request );
 		}
 

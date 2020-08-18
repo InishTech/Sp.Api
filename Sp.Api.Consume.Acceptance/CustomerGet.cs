@@ -5,8 +5,8 @@
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Api.Consume.Acceptance
 {
-	using Ploeh.AutoFixture.Xunit;
-	using Ploeh.SemanticComparison.Fluent;
+	using AutoFixture.Xunit;
+	using SemanticComparison.Fluent;
 	using Sp.Api.Shared;
 	using Sp.Test.Helpers;
 	using System;

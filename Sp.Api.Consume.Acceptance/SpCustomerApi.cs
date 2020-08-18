@@ -33,7 +33,7 @@ namespace Sp.Api.Consume.Acceptance
 		{
 			var request = new RestRequest( GetApiPrefix( ApiType.Consume ) + "/customer", Method.POST );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody( customer );
+			request.AddJsonBody( customer );
 			return Execute( request );
 		}
 
@@ -47,7 +47,7 @@ namespace Sp.Api.Consume.Acceptance
 		{
 			var request = new RestRequest( href, Method.PUT );
 			request.RequestFormat = DataFormat.Json;
-			request.AddBody( customer );
+			request.AddJsonBody( customer );
 			return Execute( request );
 		}
 
