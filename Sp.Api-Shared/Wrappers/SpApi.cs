@@ -6,9 +6,7 @@
 namespace Sp.Api.Shared.Wrappers
 {
     using RestSharp;
-    using RestSharp.Serializers;
     using Sp.Test.Helpers;
-    using System.Net.Http;
 
     public class SpApi
     {
