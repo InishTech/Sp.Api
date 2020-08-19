@@ -5,7 +5,6 @@
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Api.Shared.Wrappers
 {
-    using IdentityModel.Client;
     using RestSharp;
     using RestSharp.Serializers;
     using Sp.Test.Helpers;
