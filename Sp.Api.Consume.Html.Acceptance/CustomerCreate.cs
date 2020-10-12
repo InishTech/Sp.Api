@@ -12,6 +12,7 @@ namespace Sp.Api.Consume.Html.Acceptance
 	using System;
 	using Xunit.Extensions;
 	using OpenQA.Selenium.Support.UI;
+	using Sp.Api.Shared.Wrappers;
 
 	public class CustomerCreate
 	{
@@ -20,7 +21,7 @@ namespace Sp.Api.Consume.Html.Acceptance
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
-				navigator.NavigateWithAuthenticate( driver, "Sp.Web.Consume/Customer/Create" );
+				navigator.NavigateWithAuthenticate( driver, ApiType.Consume, "Customer/Create" ) ;
 
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
 				wait.Until( d => d.FindElement( By.Id( "create-view" ) ) );

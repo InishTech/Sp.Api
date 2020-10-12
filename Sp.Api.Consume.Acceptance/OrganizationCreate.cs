@@ -12,7 +12,8 @@ namespace Sp.Api.Consume.Acceptance
 		public static void ShouldYieldAccepted( [Frozen] SpAuthApi api, FreshCustomerFixture customer )
 		{
 			var organization = new SpAuthApi.OrganizationCreateModel( customer.SignedCustomer );
-			var response = api.CreateOrganization( organization );
+			var addOrganizationLink = customer.SignedCustomer._links.organizationAdd.href;
+			var response = api.CreateOrganization( organization, addOrganizationLink );
 			Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
 		}
 	}
