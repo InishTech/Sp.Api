@@ -11,7 +11,7 @@ namespace Sp.Api.Shared.Wrappers
     public class SpApiConfiguration
     {
 
-        public SpApiConfiguration( string username, string password, string clientId, string clientSecret, string baseUrl, string authority, string scope, string skipCertValidation)
+        public SpApiConfiguration( string username, string password, string clientId, string clientSecret, string baseUrl, string authBaseUrl, string authority, string scope, string skipCertValidation)
         {
             Username = username;
             Password = password;
@@ -19,7 +19,8 @@ namespace Sp.Api.Shared.Wrappers
             ClientId = clientId;
             ClientSecret = clientSecret;
             BaseUrl = baseUrl;
-            Authority = authority;
+			AuthBaseUrl = authBaseUrl;
+			Authority = authority;
             RequireHttps = !bool.Parse( skipCertValidation );
         }
 
@@ -33,7 +34,9 @@ namespace Sp.Api.Shared.Wrappers
 
         public string BaseUrl { get; }
 
-        public string Authority { get; }
+		public string AuthBaseUrl { get; }
+
+		public string Authority { get; }
 
         public string Scope { get; }
 
@@ -41,44 +44,52 @@ namespace Sp.Api.Shared.Wrappers
 
 		// NB this is not the long term approach - will be using hypermedia and HAL to navigate instead of computing urls the way anything relaiant on this currently does
 		// TODO TP 1105 these should be determined by going to an api landing location
-		public string GetApiPrefix( ApiType apiType ) => IsCloudEnvironment ? _azureApiPrefixes[ apiType ] : _iisApiPrefixes[ apiType ];
-        public string GetHtmlPrefix( ApiType apiType ) => IsCloudEnvironment ? _azureHtmlPrefixes[ apiType ] : _iisHtmlPrefixes[ apiType ];
+		public string GetApiPrefix( ApiType apiType ) => IsCloudEnvironment ? _azureApiPrefixes[ apiType ] : _iisOrKestrelApiPrefixes[ apiType ];
+		public string GetHtmlPrefix( ApiType apiType ) => IsCloudEnvironment ? _azureHtmlPrefixes[ apiType ] : _iisOrKestrelHtmlPrefixes[ apiType ];
 
-        bool IsCloudEnvironment
-        {
-            get { return BaseUrl.Contains( "softwarepotential.com" ) || BaseUrl.Contains( "cloudapp" ); }
-        }
+		bool IsCloudEnvironment
+		{
+			get { return BaseUrl.Contains( "softwarepotential.com" ) || BaseUrl.Contains( "cloudapp" ); }
+		}
 
-        readonly Dictionary<ApiType, string> _azureApiPrefixes = new Dictionary<ApiType, string>
-        {
-            { ApiType.WebApiRoot, "Home" },
-            { ApiType.Define, "DefineApi" },
-            { ApiType.Issue, "IssueApi" },
-            { ApiType.Consume, "ConsumeApi" },
-            { ApiType.Auth, "Auth" },
-            { ApiType.Develop, "DevelopApi" }
-        };
+		readonly Dictionary<ApiType, string> _azureApiPrefixes = new Dictionary<ApiType, string>
+		{
+			{ ApiType.WebApiRoot, "Home" },
+			{ ApiType.Define, "DefineApi" },
+			{ ApiType.Issue, "IssueApi" },
+			{ ApiType.Consume, "ConsumeApi" },
+			{ ApiType.Develop, "DevelopApi" }
+		};
 
-        readonly Dictionary<ApiType, string> _iisApiPrefixes = new Dictionary<ApiType, string>
-        {
-            { ApiType.WebApiRoot, "Sp.Api.Web" },
-            { ApiType.Define, "Sp.Api.Define" },
-            { ApiType.Issue, "Sp.Api.Issue" },
-            { ApiType.Consume, "Sp.Api.Consume" },
-            { ApiType.Auth, "Sp.Auth.Web" },
-            { ApiType.Develop, "Sp.Api.Develop" }
-        };
+		readonly Dictionary<ApiType, string> _iisOrKestrelApiPrefixes = new Dictionary<ApiType, string>
+		{
+			{ ApiType.WebApiRoot, "Sp.Api.Web" },
+			{ ApiType.Define, "Sp.Api.Define" },
+			{ ApiType.Issue, "Sp.Api.Issue" },
+			{ ApiType.Consume, "Sp.Api.Consume" },
+			{ ApiType.Develop, "Sp.Api.Develop" },
+			{ ApiType.Auth, "auth/api" }
+		};
 
-        readonly Dictionary<ApiType, string> _azureHtmlPrefixes = new Dictionary<ApiType, string>
-        {
-            { ApiType.Consume, "Consume" },
-        };
+		readonly Dictionary<ApiType, string> _azureHtmlPrefixes = new Dictionary<ApiType, string>
+		{
+			{ ApiType.WebApiRoot, "Home" },
+			{ ApiType.Define, "Define" },
+			{ ApiType.Issue, "Issue" },
+			{ ApiType.Consume, "Consume" },
+			{ ApiType.Develop, "Develop" }
+		};
 
-        readonly Dictionary<ApiType, string> _iisHtmlPrefixes = new Dictionary<ApiType, string>
-        {
-            { ApiType.Consume, "Sp.Web.Consume" },
-        };
-    }
+		readonly Dictionary<ApiType, string> _iisOrKestrelHtmlPrefixes = new Dictionary<ApiType, string>
+		{
+			{ ApiType.WebApiRoot, "Sp.Web" },
+			{ ApiType.Define, "Sp.Web.Define" },
+			{ ApiType.Issue, "Sp.Web.Issue" },
+			{ ApiType.Consume, "Sp.Web.Consume" },
+			{ ApiType.Develop, "Sp.Web.Develop" },
+			{ ApiType.Auth, "auth" }
+		};
+	}
 
     // NB this is not the long terma approach - will be using hypermedia and HAL to navigate instead of computing urls the way anything relaiant on this currently does
     // TODO TP 1105 these should be determined by going to an api landing location

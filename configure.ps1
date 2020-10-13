@@ -12,6 +12,7 @@ param(
 	[string] $clientSecret = $(Read-Host -prompt "Software Potential api client secret"),
 	[string] $baseUrl="https://srv.softwarepotential.com",
 	[string] $authority="https://sts.softwarepotential.com",
+	[string] $authBaseUrl="https://auth.softwarepotential.com",
 	[string] $portalBaseUrl="https://srv.softwarepotential.com/portal",	
 	[bool] $skipValidation=$false
 )
@@ -23,6 +24,7 @@ $msbuildProperties=$msbuildProperties+"TestAppConfigBaseUrl=$baseUrl"
 $msbuildProperties=$msbuildProperties+"TestAppConfigClientId=$clientId"
 $msbuildProperties=$msbuildProperties+"TestAppConfigClientSecret=$clientSecret"
 $msbuildProperties=$msbuildProperties+"TestAppConfigAuthority=$authority"
+$msbuildProperties=$msbuildProperties+"TestAppConfigAuthBaseUrl=$authBaseUrl"
 $msbuildProperties=$msbuildProperties+"TestAppConfigPortalBaseUrl=$portalBaseUrl"
 $msbuildProperties=$msbuildProperties+"TestAppConfigPortalUsername=$portalUsername"
 $msbuildProperties=$msbuildProperties+"TestAppConfigPortalPassword=$portalPassword"
