@@ -9,6 +9,7 @@ namespace Sp.Api.Consume.Html.Acceptance
 	using OpenQA.Selenium.Remote;
 	using OpenQA.Selenium.Support.UI;
 	using Sp.Api.Shared;
+	using Sp.Api.Shared.Wrappers;
 	using Sp.Test.Html;
 	using System;
 	using Xunit.Extensions;
@@ -20,7 +21,7 @@ namespace Sp.Api.Consume.Html.Acceptance
 		{
 			using ( driver.FinallyQuitGuard() ) // TODO improve this using http://xunit.codeplex.com/workitem/9798 ( WAS: http://xunit.codeplex.com/discussions/362097 )
 			{
-				navigator.NavigateWithAuthenticate( driver, "Sp.Web.Consume/customer" );
+				navigator.NavigateWithAuthenticate( driver, ApiType.Consume, "Customer" );
 				// If we cannot respond in 5 seconds for any reason, a human will seriously distrust the software, no excuses
 				WebDriverWait wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
 				wait.Until( d => d

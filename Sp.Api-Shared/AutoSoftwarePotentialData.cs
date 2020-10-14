@@ -45,9 +45,10 @@ namespace Sp.Api.Shared
                 ConfigurationManager.AppSettings[ "ClientId" ],
                 ConfigurationManager.AppSettings[ "ClientSecret" ],
                 ConfigurationManager.AppSettings[ "BaseUrl" ],
+                ConfigurationManager.AppSettings[ "AuthBaseUrl" ],
                 ConfigurationManager.AppSettings[ "Authority" ],
                 ConfigurationManager.AppSettings[ "Scope" ] ,
-                 ConfigurationManager.AppSettings[ "SkipCertValidation" ] ) );
+                ConfigurationManager.AppSettings[ "SkipCertValidation" ] ) );
         }
     }
 
@@ -61,9 +62,10 @@ namespace Sp.Api.Shared
                 string.Empty,
                 string.Empty,
                 ConfigurationManager.AppSettings[ "BaseUrl" ],
-                 string.Empty,
+                ConfigurationManager.AppSettings[ "AuthBaseUrl" ],
                 string.Empty,
-                 ConfigurationManager.AppSettings[ "SkipCertValidation" ] ) );
+                string.Empty,
+                ConfigurationManager.AppSettings[ "SkipCertValidation" ] ) );
         }
     }
 }

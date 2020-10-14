@@ -47,9 +47,10 @@ namespace Sp.Api.Shared
 			_configuration = configuration;
 		}
 
-		public void NavigateWithAuthenticate( RemoteWebDriver driver, string service )
+		public void NavigateWithAuthenticate( RemoteWebDriver driver, ApiType apiType, string service )
 		{
-			driver.Navigate().GoToUrl( _configuration.BaseUrl + "/" + service );
+			var url = $"{_configuration.BaseUrl.EnsureTrailingSlash()}{_configuration.GetHtmlPrefix( apiType ).EnsureTrailingSlash()}{service}";
+			driver.Navigate().GoToUrl( url );
 			Authenticate( driver, _configuration.Username, _configuration.Password );
 
 			var wait = new WebDriverWait( driver, TimeSpan.FromSeconds( 5 ) );
@@ -65,6 +66,19 @@ namespace Sp.Api.Shared
 			passwordElement.SendKeys( password );
 
 			passwordElement.Submit();
+		}
+	}
+
+	public static class StringExtensions
+	{
+		public static string EnsureTrailingSlash( this string input )
+		{
+			if ( !input.EndsWith( "/" ) )
+			{
+				return input + "/";
+			}
+
+			return input;
 		}
 	}
 }

@@ -46,6 +46,7 @@
     <TestAppConfigClientSecret Condition=" '' == '$(TestAppConfigClientSecret)'">INSERT CLIENT SECRET HERE - $(_Instructions)</TestAppConfigClientSecret>
     
     <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigBaseUrl)'">https://srv.softwarepotential.com</TestAppConfigBaseUrl>
+    <TestAppConfigBaseUrl Condition=" '' == '$(TestAppConfigAuthBaseUrl)'">https://auth.softwarepotential.com</TestAppConfigBaseUrl>
     <TestAppConfigAuthority Condition=" '' == '$(TestAppConfigAuthority)'">https://sts.softwarepotential.com</TestAppConfigAuthority>
 
     <TestAppConfigPortalUsername Condition=" '' == '$(TestAppConfigPortalUsername)'">INSERT PORTAL USERNAME HERE - $(_Instructions)</TestAppConfigPortalUsername>
@@ -80,6 +81,9 @@
     </TestAppConfigParam>
     <TestAppConfigParam Include="BaseUrl">
       <Value>$(TestAppConfigBaseUrl)</Value>
+    </TestAppConfigParam>
+    <TestAppConfigParam Include="AuthBaseUrl">
+      <Value>$(TestAppConfigAuthBaseUrl)</Value>
     </TestAppConfigParam>
     <TestAppConfigParam Include="PortalBaseUrl">
       <Value>$(TestAppConfigPortalBaseUrl)</Value>

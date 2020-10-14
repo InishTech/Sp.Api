@@ -106,6 +106,9 @@
     <Compile Include="..\Sp.Api-Shared\AutoSoftwarePotentialData.cs">
       <Link>Inlined\AutoSoftwarePotentialData.cs</Link>
     </Compile>
+    <Compile Include="..\Sp.Api-Shared\SmokeAttribute.cs">
+      <Link>Inlined\SmokeAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApiConfiguration.cs">
       <Link>Inlined\Wrappers\SpApiConfiguration.cs</Link>
     </Compile>
@@ -115,6 +118,7 @@
     <Compile Include="..\Sp.Api-Shared\Wrappers\SpApi.cs">
       <Link>Inlined\Wrappers\SpApi.cs</Link>
     </Compile>
+    <Compile Include="EndpointAvailablilityTests.cs" />
     <Compile Include="RootLinksFacts.cs" />
     <Compile Include="SpRootsApi.cs" />
   </ItemGroup>
