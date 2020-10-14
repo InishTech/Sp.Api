@@ -24,6 +24,7 @@ namespace Sp.Api.Acceptance
 		[InlineAutoSoftwarePotentialApiData( ApiType.Issue )]
 		[InlineAutoSoftwarePotentialApiData( ApiType.Consume )]
 		[InlineAutoSoftwarePotentialApiData( ApiType.Develop )]
+		[InlineAutoSoftwarePotentialApiData( ApiType.Analyze )]
 		public void Subsystems( ApiType apiType, SpApiConfiguration config )
 		{
 			var statusCode = HttpHelper.GetStatusCode( config.BaseUrl, config.GetHtmlPrefix( apiType ) );
