@@ -36,7 +36,7 @@ namespace Sp.Api.Acceptance
 		[Theory, AutoSoftwarePotentialApiData]
 		public void AuthSubsystem( SpApiConfiguration config )
 		{
-			var statusCode = HttpHelper.GetStatusCode( config.AuthBaseUrl, config.GetHtmlPrefix( ApiType.Auth ) );
+			var statusCode = HttpHelper.GetStatusCode( config.AuthBaseUrl );
 
 			Assert.Equal( HttpStatusCode.OK, statusCode );
 		}
@@ -61,9 +61,9 @@ namespace Sp.Api.Acceptance
 				_client = new HttpClient();
 			}
 
-			public static HttpStatusCode GetStatusCode( string baseUrl, string susbsystmePrefix )
+			public static HttpStatusCode GetStatusCode( string baseUrl, string subsystmePrefix = "")
 			{
-				var request = new HttpRequestMessage() { RequestUri = new Uri( EnsureTrailingSlash( baseUrl ) + susbsystmePrefix ) };
+				var request = new HttpRequestMessage() { RequestUri = new Uri( EnsureTrailingSlash( baseUrl ) + subsystmePrefix ) };
 				request.Headers.Accept.Add( new MediaTypeWithQualityHeaderValue( "application/json" ) );
 
 				return _client.SendAsync( request ).Result.StatusCode;

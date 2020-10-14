@@ -68,7 +68,7 @@ namespace Sp.Api.Shared.Wrappers
 			{ ApiType.Issue, "Sp.Api.Issue" },
 			{ ApiType.Consume, "Sp.Api.Consume" },
 			{ ApiType.Develop, "Sp.Api.Develop" },
-			{ ApiType.Auth, "auth/api" }
+			{ ApiType.Auth, "api" }
 		};
 
 		readonly Dictionary<ApiType, string> _azureHtmlPrefixes = new Dictionary<ApiType, string>
@@ -86,8 +86,7 @@ namespace Sp.Api.Shared.Wrappers
 			{ ApiType.Define, "Sp.Web.Define" },
 			{ ApiType.Issue, "Sp.Web.Issue" },
 			{ ApiType.Consume, "Sp.Web.Consume" },
-			{ ApiType.Develop, "Sp.Web.Develop" },
-			{ ApiType.Auth, "auth" }
+			{ ApiType.Develop, "Sp.Web.Develop" }
 		};
 	}
 
