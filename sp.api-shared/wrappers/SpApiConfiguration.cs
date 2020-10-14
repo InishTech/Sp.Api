@@ -77,7 +77,8 @@ namespace Sp.Api.Shared.Wrappers
 			{ ApiType.Define, "Define" },
 			{ ApiType.Issue, "Issue" },
 			{ ApiType.Consume, "Consume" },
-			{ ApiType.Develop, "Develop" }
+			{ ApiType.Develop, "Develop" },
+			{ ApiType.Analyze, "Analyze" }
 		};
 
 		readonly Dictionary<ApiType, string> _iisOrKestrelHtmlPrefixes = new Dictionary<ApiType, string>
@@ -86,7 +87,8 @@ namespace Sp.Api.Shared.Wrappers
 			{ ApiType.Define, "Sp.Web.Define" },
 			{ ApiType.Issue, "Sp.Web.Issue" },
 			{ ApiType.Consume, "Sp.Web.Consume" },
-			{ ApiType.Develop, "Sp.Web.Develop" }
+			{ ApiType.Develop, "Sp.Web.Develop" },
+			{ ApiType.Analyze, "Sp.Web.Analyze" }
 		};
 	}
 
@@ -99,6 +101,7 @@ namespace Sp.Api.Shared.Wrappers
         Issue,
         Consume,
         Auth,
-        Develop
+        Develop,
+		Analyze
     }
 }
