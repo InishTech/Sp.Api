@@ -16,8 +16,7 @@ namespace Sp.Api.Acceptance
 
 	public class EndpointAvailablilityTests
 	{
-		[Smoke]
-		[HighFrequency]
+		[MediumFrequency]
 		[Theory]
 		[InlineAutoSoftwarePotentialApiData( ApiType.WebApiRoot )]
 		[InlineAutoSoftwarePotentialApiData( ApiType.Define )]
@@ -32,8 +31,7 @@ namespace Sp.Api.Acceptance
 			Assert.Equal( HttpStatusCode.OK, statusCode );
 		}
 
-		[Smoke]
-		[HighFrequency]
+		[MediumFrequency]
 		[Theory, AutoSoftwarePotentialApiData]
 		public void AuthSubsystem( SpApiConfiguration config )
 		{
@@ -42,8 +40,7 @@ namespace Sp.Api.Acceptance
 			Assert.Equal( HttpStatusCode.OK, statusCode );
 		}
 
-		[Smoke]
-		[HighFrequency]
+		[MediumFrequency]
 		[Theory, AutoSoftwarePotentialApiData]
 		public void Sts( SpApiConfiguration config )
 		{
