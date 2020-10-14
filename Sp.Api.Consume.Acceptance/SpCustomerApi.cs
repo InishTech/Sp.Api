@@ -60,6 +60,7 @@ namespace Sp.Api.Consume.Acceptance
 
 		public class CustomerSummaryPage
 		{
+			public int? __count { get; set; }
 			public List<CustomerSummary> results { get; set; }
 		}
 
