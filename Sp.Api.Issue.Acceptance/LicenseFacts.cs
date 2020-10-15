@@ -190,7 +190,7 @@ namespace Sp.Api.Issue.Acceptance
 						Assert.Equal( HttpStatusCode.OK, updated.StatusCode );
 						Assert.NotNull( updated.Data._links.customer );
 						var customerSelfLink = customer._links.self;
-						Assert.Equal( customerSelfLink.href, updated.Data._links.customer.href, StringComparer.OrdinalIgnoreCase );
+						Assert.Contains( customerSelfLink.href.ToLower(), updated.Data._links.customer.href.ToLower());
 					} );
 				}
 
