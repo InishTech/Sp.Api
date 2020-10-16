@@ -33,7 +33,7 @@ if(Test-Path $installDir'\MSBuild\Current\Bin\MSBuild.exe'){
 	$msBuild =  $installDir +  '\MSBuild\15.0\Bin\MSBuild.exe';
 }
 else {
-	error "MSBuild not found"
+	$msbuild="$env:windir\Microsoft.NET\Framework\v4.0.30319\MSBuild"
 }
 $properties="/p:$([string]::Join(';',$msBuildProperties))"
 
