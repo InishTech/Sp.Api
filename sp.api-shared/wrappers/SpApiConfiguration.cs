@@ -78,6 +78,7 @@ namespace Sp.Api.Shared.Wrappers
 			{ ApiType.Issue, "Issue" },
 			{ ApiType.Consume, "Consume" },
 			{ ApiType.Develop, "Develop" },
+			{ ApiType.Nuget, "Nuget" },
 			{ ApiType.Analyze, "Analyze" }
 		};
 
@@ -88,6 +89,7 @@ namespace Sp.Api.Shared.Wrappers
 			{ ApiType.Issue, "Sp.Web.Issue" },
 			{ ApiType.Consume, "Sp.Web.Consume" },
 			{ ApiType.Develop, "Sp.Web.Develop" },
+			{ ApiType.Nuget, "Sp.Web.Develop.Nuget" },
 			{ ApiType.Analyze, "Sp.Web.Analyze" }
 		};
 	}
@@ -102,6 +104,7 @@ namespace Sp.Api.Shared.Wrappers
         Consume,
         Auth,
         Develop,
+		Nuget,
 		Analyze
     }
 }

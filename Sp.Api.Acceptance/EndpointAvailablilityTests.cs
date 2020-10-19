@@ -32,6 +32,15 @@ namespace Sp.Api.Acceptance
 
 		[HighFrequency]
 		[Theory, AutoSoftwarePotentialApiData]
+		public void Nuget( SpApiConfiguration config )
+		{
+			var statusCode = HttpHelper.GetStatusCode( config.BaseUrl, config.GetHtmlPrefix( ApiType.Nuget ) );
+
+			Assert.Equal( HttpStatusCode.Unauthorized, statusCode );
+		}
+
+		[HighFrequency]
+		[Theory, AutoSoftwarePotentialApiData]
 		public void AuthSubsystem( SpApiConfiguration config )
 		{
 			var statusCode = HttpHelper.GetStatusCode( config.AuthBaseUrl );
