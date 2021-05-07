@@ -5,76 +5,84 @@
  * FOR DETAILS, SEE https://github.com/InishTech/Sp.Api/wiki/License */
 namespace Sp.Test.Html
 {
-	using OpenQA.Selenium.Chrome;
-	using OpenQA.Selenium.Remote;
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.Linq;
+    using OpenQA.Selenium.Chrome;
+    using OpenQA.Selenium.Remote;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Linq;
 
-	public class BrowserDriverDataProvider : TupleTheoryDataProvider<RemoteWebDriver>
-	{
-		protected override IEnumerable<RemoteWebDriver> Generate()
-		{
-			yield return new ChromeDriver();
-		}
-	}
+    public class BrowserDriverDataProvider : TupleTheoryDataProvider<RemoteWebDriver>
+    {
+        protected override IEnumerable<RemoteWebDriver> Generate()
+        {
+            var options = new ChromeOptions();
 
-	public static class QuitGuardExtensions
-	{
-		public static IDisposable FinallyQuitGuard( this RemoteWebDriver that )
-		{
-			return new LambdaDisposable( that.Quit );
-		}
+            options.AddArguments( "--window-size=1980,1080", "--no-sandbox", "headless","--incognito" );
+            var ignoreCertErrors = Boolean.Parse( ConfigurationManager.AppSettings[ "SkipCertValidation" ] );
+            if ( ignoreCertErrors )
+                options.AddArguments( "ignore-certificate-errors" );
 
-		class LambdaDisposable : IDisposable
-		{
-			Action _action;
+            yield return new ChromeDriver( options );
+        }
+    }
 
-			public LambdaDisposable( Action action )
-			{
-				_action = action;
-			}
+    public static class QuitGuardExtensions
+    {
+        public static IDisposable FinallyQuitGuard( this RemoteWebDriver that )
+        {
+            return new LambdaDisposable( that.Quit );
+        }
 
-			void IDisposable.Dispose()
-			{
-				if ( _action == null )
-					throw new ObjectDisposedException( "Should not be triggering a LambdaDisposable twice" );
+        class LambdaDisposable : IDisposable
+        {
+            Action _action;
 
-				try
-				{
-					_action();
-				}
-				finally
-				{
-					_action = null;
-				}
-			}
-		}
-	}
+            public LambdaDisposable( Action action )
+            {
+                _action = action;
+            }
 
-	public abstract class TupleTheoryDataProvider<T1> : TheoryDataProvider
-	{
-		protected abstract IEnumerable<T1> Generate();
+            void IDisposable.Dispose()
+            {
+                if ( _action == null )
+                    throw new ObjectDisposedException( "Should not be triggering a LambdaDisposable twice" );
 
-		protected override sealed IEnumerable<object[]> DataSource()
-		{
-			return Generate().Select( x => new object[] { x } );
-		}
-	}
+                try
+                {
+                    _action();
+                }
+                finally
+                {
+                    _action = null;
+                }
+            }
+        }
+    }
 
-	public abstract class TheoryDataProvider : IEnumerable<object[]>
-	{
-		public IEnumerator<object[]> GetEnumerator()
-		{
-			return DataSource().GetEnumerator();
-		}
+    public abstract class TupleTheoryDataProvider<T1> : TheoryDataProvider
+    {
+        protected abstract IEnumerable<T1> Generate();
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return DataSource().GetEnumerator();
-		}
+        protected override sealed IEnumerable<object[]> DataSource()
+        {
+            return Generate().Select( x => new object[] { x } );
+        }
+    }
 
-		protected abstract IEnumerable<object[]> DataSource();
-	}
+    public abstract class TheoryDataProvider : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            return DataSource().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return DataSource().GetEnumerator();
+        }
+
+        protected abstract IEnumerable<object[]> DataSource();
+    }
 }
