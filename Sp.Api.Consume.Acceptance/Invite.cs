@@ -80,8 +80,8 @@ namespace Sp.Api.Consume.Acceptance
 		{
 			public FreshOrganizationFixture( SpAuthApi api, FreshCustomerFixture customer )
 			{
-				InviteStatusLink = customer.SignedCustomer._links.inviteStatus.href;
-				var addOrganizationLink = customer.SignedCustomer._links.organizationAdd.href;
+				InviteStatusLink = customer.SignedCustomer._links.inviteStatus.href.EnsureTrailingSlash();
+				var addOrganizationLink = customer.SignedCustomer._links.organizationAdd.href.EnsureTrailingSlash();
 				var organization = new SpAuthApi.OrganizationCreateModel( customer.SignedCustomer );
 				var response = api.CreateOrganization( organization, addOrganizationLink );
 				Assert.Equal( HttpStatusCode.Accepted, response.StatusCode );
