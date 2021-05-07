@@ -16,7 +16,7 @@
 		}   
 
 		[Smoke]
-		[HighFrequency]
+		[MediumFrequency]
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void ShouldHaveAtLeastOneItem( SpCustomerApi api )
 		{

@@ -1,16 +1,14 @@
 ﻿using Sp.Api.Shared;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using Xunit;
 using Xunit.Extensions;
 
 namespace Sp.Api.Consume.Acceptance
 {
-    public static class CustomerQuery
+	public static class CustomerQuery
     {
         [Theory, AutoSoftwarePotentialApiData]
-        static void FilterByKnownExternalIdShouldReturnOneOrMoreCustomersWithThatExternalId( SpCustomerApi api, RandomCustomerFromListFixture preSelectedCustomer )
+        public static void FilterByKnownExternalIdShouldReturnOneOrMoreCustomersWithThatExternalId( SpCustomerApi api, RandomCustomerFromListFixture preSelectedCustomer )
         {
             var id = preSelectedCustomer.Selected.ExternalId;
             var response = api.GetCustomerList( "$filter=ExternalId eq '" + id + '"' );
@@ -36,7 +34,6 @@ namespace Sp.Api.Consume.Acceptance
             Assert.NotEqual( firstCustomer.Name, secondCustomer.Name );
         }
 
-
         [Theory, AutoSoftwarePotentialApiData]
         public static void ShouldBeSortable( SpCustomerApi api )
         {
@@ -46,6 +43,5 @@ namespace Sp.Api.Consume.Acceptance
             var resorted = customers.OrderByDescending( x => x.Name ).ToArray();
             Assert.True( resorted.SequenceEqual( customers ) );
         }
-
     }
 }

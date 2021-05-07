@@ -1,26 +1,21 @@
 ﻿using Sp.Api.Shared;
 using Sp.Test.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using Xunit;
 using Xunit.Extensions;
 
 namespace Sp.Api.Develop.Acceptance
 {
-    public class WebHookList
+	public class WebHookList
     {
         [Theory, AutoSoftwarePotentialApiData]
-        [HighFrequency]
+        [MediumFrequency]
         public static void ShouldBeAbleToListWebHooks( SpWebHookApi api)
         {
             Verify.EventuallyWithBackOff( () =>
             {
                 var apiResult = api.ListWebHooks();
                 Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-
             } );
         }
 
@@ -31,8 +26,6 @@ namespace Sp.Api.Develop.Acceptance
             {
                 var apiResult = api.GetWebhook( existingWebHook.Location );
                 Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-
-
             } );
         }
     }

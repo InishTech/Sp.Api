@@ -48,7 +48,7 @@ namespace Sp.Api.Issue.Acceptance
 			/// </summary>
 			/// <param name="api">Api wrapper.</param>
 			[Smoke]
-			[HighFrequencyAttribute]
+			[MediumFrequency]
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldHaveAtLeastOneItem( SpIssueApi api )
 			{
@@ -304,7 +304,7 @@ namespace Sp.Api.Issue.Acceptance
 			/// </remarks>
 			/// <param name="api">Api wrapper. [Frozen] so requests involved in getting <paramref name="preSelectedLicense"/> can share the authentication work.</param>
 			/// <param name="preSelectedLicense">Arbitrarily chosen license from the configured user's list</param>
-			[HighFrequencyAttribute]
+			[MediumFrequency]
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void GetLicenseShouldContainData( [Frozen] SpIssueApi api, RandomLicenseFromListFixture preSelectedLicense )
 			{

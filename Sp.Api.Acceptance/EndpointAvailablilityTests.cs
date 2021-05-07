@@ -16,10 +16,9 @@ namespace Sp.Api.Acceptance
 
 	public class EndpointAvailablilityTests
 	{
-		[MediumFrequency]
+		[HighFrequency]
 		[Theory]
 		[InlineAutoSoftwarePotentialApiData( ApiType.WebApiRoot )]
-		[InlineAutoSoftwarePotentialApiData( ApiType.Define )]
 		[InlineAutoSoftwarePotentialApiData( ApiType.Issue )]
 		[InlineAutoSoftwarePotentialApiData( ApiType.Consume )]
 		[InlineAutoSoftwarePotentialApiData( ApiType.Develop )]
@@ -31,7 +30,16 @@ namespace Sp.Api.Acceptance
 			Assert.Equal( HttpStatusCode.OK, statusCode );
 		}
 
-		[MediumFrequency]
+		[HighFrequency]
+		[Theory, AutoSoftwarePotentialApiData]
+		public void Nuget( SpApiConfiguration config )
+		{
+			var statusCode = HttpHelper.GetStatusCode( config.BaseUrl, config.GetHtmlPrefix( ApiType.Nuget ) );
+
+			Assert.Equal( HttpStatusCode.Unauthorized, statusCode );
+		}
+
+		[HighFrequency]
 		[Theory, AutoSoftwarePotentialApiData]
 		public void AuthSubsystem( SpApiConfiguration config )
 		{
@@ -40,7 +48,7 @@ namespace Sp.Api.Acceptance
 			Assert.Equal( HttpStatusCode.OK, statusCode );
 		}
 
-		[MediumFrequency]
+		[HighFrequency]
 		[Theory, AutoSoftwarePotentialApiData]
 		public void Sts( SpApiConfiguration config )
 		{
