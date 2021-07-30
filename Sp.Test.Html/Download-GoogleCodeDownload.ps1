@@ -15,7 +15,8 @@ function extractDownloadUrlFromGoogleCloudStorageIndexPage($pageResult, $release
 }
 
 $result = Invoke-WebRequest $url
-$latestRelease = Invoke-WebRequest "$url/LATEST_RELEASE"
+$chromeMajorVersion = ((Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe').'(Default)').VersionInfo).ProductVersion.split('.')[0];
+$latestRelease = Invoke-WebRequest "$url/LATEST_RELEASE_$chromeMajorVersion"
 $downloadUrl = extractDownloadUrlFromGoogleCloudStorageIndexPage $result $latestRelease
 
 Write-Host "Downloading $downloadUrl to $filename"
