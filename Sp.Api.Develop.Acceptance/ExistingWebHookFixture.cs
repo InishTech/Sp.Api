@@ -22,7 +22,7 @@ namespace Sp.Api.Develop.Acceptance
             {
                 var apiResult = api.GetWebhook( Location );
                 Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
-            } );
+            }, 12 );
         }
     }
 }
