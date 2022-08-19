@@ -15,13 +15,15 @@ namespace Sp.Api.Develop.Acceptance
 {
     public class SpWebHookApi : SpApi
     {
+        readonly string _url;
+
         public SpWebHookApi( SpApiConfiguration apiConfiguration ) : base( apiConfiguration )
         {
-
+            _url = $"{GetApiPrefix( ApiType.Develop )}/webhook";
         }
         public IRestResponse CreateWebHook( WebHookRegistrationModel webhook )
         {
-            var request = new RestRequest( GetApiPrefix( ApiType.Develop ) + "/webhook", Method.POST );
+            var request = new RestRequest( _url, Method.POST );
             request.RequestFormat = DataFormat.Json;
             request.AddJsonBody( webhook );
             return Execute( request );
@@ -41,9 +43,15 @@ namespace Sp.Api.Develop.Acceptance
             return Execute<WebHookRegistrationModel>( request );
         }
 
+        internal IRestResponse<WebHookRegistrationModel> GetWebhookById( Guid id )
+        {
+            var request = new RestRequest( $"{_url}/{id}" );
+            return Execute<WebHookRegistrationModel>( request );
+        }
+
         internal IRestResponse<List<WebHookRegistrationModel>> ListWebHooks(  )
         {
-            var request = new RestRequest( GetApiPrefix( ApiType.Develop ) + "/webhook" );
+            var request = new RestRequest( _url );
             return Execute<List<WebHookRegistrationModel>>( request );
         }
 
@@ -70,14 +78,16 @@ namespace Sp.Api.Develop.Acceptance
 
     public class SpInvalidWebHookApi : SpApi
     {
+        readonly string _url;
+
         public SpInvalidWebHookApi( SpApiConfiguration apiConfiguration ) : base( apiConfiguration )
         {
-
+            _url = $"{GetApiPrefix( ApiType.Develop )}/webhook";
         }
 
         public IRestResponse CreateWebHook( InvalidWebHookRegistrationModel webhook )
         {
-            var request = new RestRequest( GetApiPrefix( ApiType.Develop ) + "/webhook", Method.POST );
+            var request = new RestRequest( _url, Method.POST );
             request.RequestFormat = DataFormat.Json;
             request.AddJsonBody( webhook );
             return Execute( request );
