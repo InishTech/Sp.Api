@@ -23,4 +23,4 @@ if ( -not $( test-path($destination))) {
 $shellApplication = new-object -com shell.application
 $zipPackage = $shellApplication.NameSpace($zipfilename)
 $destinationFolder = $shellApplication.NameSpace($destination)
-$destinationFolder.CopyHere($zipPackage.Items())
+$destinationFolder.CopyHere($zipPackage.Items(), 0x14)
