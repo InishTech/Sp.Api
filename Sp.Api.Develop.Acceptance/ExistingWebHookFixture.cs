@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Sp.Test.Helpers;
+using System;
 using System.Linq;
+using System.Net;
+using Xunit;
 
 namespace Sp.Api.Develop.Acceptance
 {
@@ -12,7 +15,14 @@ namespace Sp.Api.Develop.Acceptance
             RegisteredWebHook = new SpWebHookApi.WebHookRegistrationModel() { Actions = anonymousEvents.Select( x => x.ToString() ).ToArray(), Secret = anonymousSecret, WebHookUri = anonymousUri };
 
             var response = api.CreateWebHook( RegisteredWebHook );
+
             Location = response.Headers.Single( x => x.Name == "Location" ).Value.ToString();
+            // Verify it has successfully created before proceeding to update
+            Verify.EventuallyWithBackOff( () =>
+            {
+                var apiResult = api.GetWebhook( Location );
+                Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
+            }, 12 );
         }
     }
 }

@@ -55,7 +55,6 @@ namespace Sp.Api.Shared.Wrappers
 		readonly Dictionary<ApiType, string> _azureApiPrefixes = new Dictionary<ApiType, string>
 		{
 			{ ApiType.WebApiRoot, "Home" },
-			{ ApiType.Define, "DefineApi" },
 			{ ApiType.Issue, "IssueApi" },
 			{ ApiType.Consume, "ConsumeApi" },
 			{ ApiType.Develop, "DevelopApi" }
@@ -64,7 +63,6 @@ namespace Sp.Api.Shared.Wrappers
 		readonly Dictionary<ApiType, string> _iisOrKestrelApiPrefixes = new Dictionary<ApiType, string>
 		{
 			{ ApiType.WebApiRoot, "Sp.Api.Web" },
-			{ ApiType.Define, "Sp.Api.Define" },
 			{ ApiType.Issue, "Sp.Api.Issue" },
 			{ ApiType.Consume, "Sp.Api.Consume" },
 			{ ApiType.Develop, "Sp.Api.Develop" },
@@ -74,7 +72,6 @@ namespace Sp.Api.Shared.Wrappers
 		readonly Dictionary<ApiType, string> _azureHtmlPrefixes = new Dictionary<ApiType, string>
 		{
 			{ ApiType.WebApiRoot, "Home" },
-			{ ApiType.Define, "Define" },
 			{ ApiType.Issue, "Issue" },
 			{ ApiType.Consume, "Consume" },
 			{ ApiType.Develop, "Develop" },
@@ -85,7 +82,6 @@ namespace Sp.Api.Shared.Wrappers
 		readonly Dictionary<ApiType, string> _iisOrKestrelHtmlPrefixes = new Dictionary<ApiType, string>
 		{
 			{ ApiType.WebApiRoot, "Sp.Web" },
-			{ ApiType.Define, "Sp.Web.Define" },
 			{ ApiType.Issue, "Sp.Web.Issue" },
 			{ ApiType.Consume, "Sp.Web.Consume" },
 			{ ApiType.Develop, "Sp.Web.Develop" },
@@ -99,7 +95,6 @@ namespace Sp.Api.Shared.Wrappers
     public enum ApiType
     {
         WebApiRoot,
-        Define,
         Issue,
         Consume,
         Auth,

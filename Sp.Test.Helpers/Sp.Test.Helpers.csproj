@@ -40,6 +40,7 @@
     <Compile Include="DateTimeEqualityTolerantComparer.cs" />
     <Compile Include="RelativePathAwareCustomRestClient.cs" />
     <Compile Include="RestRequestAuthExtensions.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="UriHelper.cs" />
     <Compile Include="Verify.cs" />
   </ItemGroup>

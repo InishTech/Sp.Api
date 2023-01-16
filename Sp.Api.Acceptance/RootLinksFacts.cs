@@ -39,8 +39,6 @@ namespace Sp.Api.Acceptance
 			Assert.NotNull( response.Data.results[ 0 ]._links[ "ConsumeApi" ] );
 			Assert.NotNull( response.Data.results[ 0 ]._links[ "Issue" ] );
 			Assert.NotNull( response.Data.results[ 0 ]._links[ "IssueApi" ] );
-			Assert.NotNull( response.Data.results[ 0 ]._links[ "Define" ] );
-			Assert.NotNull( response.Data.results[ 0 ]._links[ "DefineApi" ] );
 			Assert.NotNull( response.Data.results[ 0 ]._links[ "Develop" ] );
 			Assert.NotNull( response.Data.results[ 0 ]._links[ "DevelopApi" ] );
 			Assert.NotNull( response.Data.results[ 0 ]._links[ "Pay" ] );
