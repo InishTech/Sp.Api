@@ -12,44 +12,46 @@
 
   <ItemGroup>
     <WebDriverDriver Include="Chrome">
-      <Url>http://chromedriver.storage.googleapis.com</Url>
-      <Prefix>chromedriver_win32.</Prefix>
-      <InternalName>ChromeDriver.exe</InternalName>
+      <Os>win32</Os>
+      <InternalName>chromedriver</InternalName>
     </WebDriverDriver>
   </ItemGroup>
 
   <PropertyGroup Condition=" 'true' != '$(SlpsSkipDownloadSeleniumDrivers)' ">
     <BuildDependsOn>
       $(BuildDependsOn);
-      AfterBuildDownloadWebDriverDrivers;
-      AfterBuildUnzipWebDriverDrivers
+      AfterBuildDownloadWebDriver;
+      AfterBuildCopyWebDriver
     </BuildDependsOn>
     <_PackageShimsPath>$(SolutionDir)packages\SeleniumDrivers</_PackageShimsPath>
   </PropertyGroup>
 
   <Target
-    Name="AfterBuildDownloadWebDriverDrivers"
+    Name="AfterBuildDownloadWebDriver"
     Outputs="@(WebDriverDriver->'$(_PackageShimsPath)\_%(Identity)Driver.zip')">
     <MakeDir Directories="$(_PackageShimsPath)" Condition="!EXISTS('$(_PackageShimsPath)')" />
-    <Message Importance="normal" Text="Updating $(_PackageShimsPath)\_%(WebDriverDriver.Identity)Driver.zip" />
+    <Message Importance="normal" Text="Updating $(_PackageShimsPath)\_%(WebDriverDriver.Identity)Driver.zip" Condition="!EXISTS( '$(_PackageShimsPath)\_%(Identity)Driver.zip' )" />
     <Exec
       IgnoreStandardErrorWarningFormat="true"
-      Command="powershell -NoProfile ../Sp.Test.Html/Download-GoogleCodeDownload.ps1 $(_PackageShimsPath)\_%(Identity)Driver.zip %(WebDriverDriver.Prefix) %(WebDriverDriver.Url)"/>
+      Command="powershell -NoProfile ../Sp.Test.Html/Download-GoogleCodeDownload.ps1 $(_PackageShimsPath) _%(Identity)Driver.zip %(WebDriverDriver.Os)"
+	  />
     <ItemGroup>
       <FileWrites Include="@(WebDriverDriver->'$(_PackageShimsPath)\_%(Identity)Driver.zip')"/>
     </ItemGroup>
   </Target>
 
   <Target
-    Name="AfterBuildUnzipWebDriverDrivers"
-    Inputs="@(WebDriverDriver->'$(_PackageShimsPath)\_%(Identity)Driver.zip')"
-    Outputs="@(WebDriverDriver->'$(OutDir)\%(InternalName)')">
-    <!--Remove files as Explorer will be popping up if the file is already there otherwise-->
-    <Delete Files="@(WebDriverDriver->'$(OutDir)\%(InternalName)')" />
-    <Exec IgnoreStandardErrorWarningFormat="true" Command="powershell -NoProfile ../Sp.Test.Html/Extract-Zip.ps1 $(_PackageShimsPath)\_%(WebDriverDriver.Identity)Driver.zip &quot;$(OutDir).&quot;" />
-    <Touch Files="@(WebDriverDriver->'$(OutDir)\%(InternalName)')" />
+    Name="AfterBuildCopyWebDriver"
+    Inputs="@(WebDriverDriver->'$(_PackageShimsPath)\%(InternalName)-%(Os)\%(InternalName).exe')"
+    Outputs="@(WebDriverDriver->'$(OutDir)%(InternalName).exe')">
+	<Copy
+            SourceFiles="@(WebDriverDriver->'$(_PackageShimsPath)\%(InternalName)-%(Os)\%(InternalName).exe')"
+            DestinationFolder="$(OutDir)"
+			SkipUnchangedFiles="true"			
+        />
+	
     <ItemGroup>
-      <FileWrites Include="@(WebDriverDriver->'$(OutDir)\%(InternalName)')"/>
+      <FileWrites Include="@(WebDriverDriver->'$(OutDir)%(InternalName).exe')"/>
     </ItemGroup>
   </Target>
 </Project>
