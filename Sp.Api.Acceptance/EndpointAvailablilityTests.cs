@@ -18,14 +18,17 @@ namespace Sp.Api.Acceptance
 	{
 		[HighFrequency]
 		[Theory]
-		[InlineAutoSoftwarePotentialApiData( ApiType.WebApiRoot )]
-		[InlineAutoSoftwarePotentialApiData( ApiType.Issue )]
+        [InlineAutoSoftwarePotentialApiData( ApiType.Auth )]
+        [InlineAutoSoftwarePotentialApiData( ApiType.WebApiRoot )]
+        [InlineAutoSoftwarePotentialApiData( ApiType.Issue )]
 		[InlineAutoSoftwarePotentialApiData( ApiType.Consume )]
 		[InlineAutoSoftwarePotentialApiData( ApiType.Develop )]
 		[InlineAutoSoftwarePotentialApiData( ApiType.Analyze )]
 		public void Subsystems( ApiType apiType, SpApiConfiguration config )
 		{
-			var statusCode = HttpHelper.GetStatusCode( config.BaseUrl, config.GetHtmlPrefix( apiType ) );
+			var getHtmlPrefix = config.GetHtmlPrefix( apiType );
+
+            var statusCode = HttpHelper.GetStatusCode( config.BaseUrl, getHtmlPrefix);
 
 			Assert.Equal( HttpStatusCode.OK, statusCode );
 		}
