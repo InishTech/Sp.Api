@@ -32,7 +32,7 @@ namespace Sp.Api.Shared.Wrappers
 
         public string ClientSecret { get; }
 
-        public string BaseUrl { get; set; }
+        public string BaseUrl { get; }
 
 		public string AuthBaseUrl { get; }
 
@@ -51,16 +51,6 @@ namespace Sp.Api.Shared.Wrappers
         {
 
             var returnValue = BaseUrl.Contains( "softwarepotential.com" ) || BaseUrl.Contains( "cloudapp" );
-
-            if( isHtml && !returnValue && _subsystemPorts.ContainsKey(apiType) )
-			{
-				BaseUrl = $"{BaseUrl}:{ _subsystemPorts[apiType]}";
-			}
-
-            if( isHtml && returnValue && _subdomainUrls.ContainsKey( apiType ) )
-            {
-                BaseUrl = BaseUrl.Replace( "srv", _subdomainUrls[ apiType ] );
-            }
 
             return returnValue;
 
@@ -97,25 +87,13 @@ namespace Sp.Api.Shared.Wrappers
 		readonly Dictionary<ApiType, string> _iisOrKestrelHtmlPrefixes = new Dictionary<ApiType, string>
 		{
 			{ ApiType.Auth, "auth" },
-			{ ApiType.WebApiRoot, "web" },
+			{ ApiType.WebApiRoot, "sp.web" },
 			{ ApiType.Issue, "Sp.Web.Issue" },
 			{ ApiType.Consume, "Sp.Web.Consume" },
 			{ ApiType.Develop, "Sp.Web.Develop" },
 			{ ApiType.Nuget, "Sp.Web.Develop.Nuget" },
 			{ ApiType.Analyze, "Sp.Web.Analyze" }
 		};
-
-        readonly Dictionary<ApiType, string> _subsystemPorts = new Dictionary<ApiType, string>
-        {
-            { ApiType.Auth, "5003" },
-            { ApiType.WebApiRoot, "5011" }
-        };
-
-        readonly Dictionary<ApiType, string> _subdomainUrls = new Dictionary<ApiType, string>
-        {
-            { ApiType.Auth, "auth"},
-            { ApiType.WebApiRoot, "web" }
-        };
 
     }
 

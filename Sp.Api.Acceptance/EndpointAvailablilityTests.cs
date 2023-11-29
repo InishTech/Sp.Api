@@ -18,7 +18,6 @@ namespace Sp.Api.Acceptance
 	{
 		[HighFrequency]
 		[Theory]
-        [InlineAutoSoftwarePotentialApiData( ApiType.Auth )]
         [InlineAutoSoftwarePotentialApiData( ApiType.WebApiRoot )]
         [InlineAutoSoftwarePotentialApiData( ApiType.Issue )]
 		[InlineAutoSoftwarePotentialApiData( ApiType.Consume )]
