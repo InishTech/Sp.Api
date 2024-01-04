@@ -11,8 +11,9 @@ namespace Sp.Api.Consume.Acceptance
 	using System;
 	using System.Linq;
 	using System.Net;
-	using Xunit;
-	using Xunit.Extensions;
+    using System.Reflection;
+    using Xunit;
+    using Xunit.Extensions;
 
 	public static class Invite
 	{
@@ -21,11 +22,13 @@ namespace Sp.Api.Consume.Acceptance
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldYieldAccepted( [Frozen] SpAuthApi api, FreshOrganizationFixture organization )
 			{
-				var customerInviteHref = organization.InviteStatusLink;
+				var methodName = MethodBase.GetCurrentMethod().Name;
+
+                var customerInviteHref = organization.InviteStatusLink;
 				var customerInvite = new SpAuthApi.CustomerInvite
 				{
-					EmailTo = "test@inishtech.com",
-					RequestId = Guid.NewGuid()
+                    EmailTo = $"ejfqf.{methodName}@inbox.testmail.app",
+                    RequestId = Guid.NewGuid()
 				};
 
 				var apiResult = api.InviteCustomer( customerInviteHref, customerInvite );
@@ -35,10 +38,11 @@ namespace Sp.Api.Consume.Acceptance
 			[Theory, AutoSoftwarePotentialApiData]
 			public static void ShouldTurnInviteStatusOpenAndUpdateLastInviteTo( [Frozen] SpAuthApi api, FreshOrganizationFixture organization )
 			{
-				var customerInviteHref = organization.InviteStatusLink;
-				// TOCONSIDER: Extract fixture to represent anonymous email address
-				const string emailToTemplate = "test@inishtech.com";
-				char charToChangeCaseOf = emailToTemplate.ToCharArray().Where( Char.IsLower ).ToArray().ElementAtRandom();
+                var methodName = MethodBase.GetCurrentMethod().Name;
+                var customerInviteHref = organization.InviteStatusLink;
+                // TOCONSIDER: Extract fixture to represent anonymous email address
+                string emailToTemplate = $"ejfqf.{methodName}@inbox.testmail.app";
+                char charToChangeCaseOf = emailToTemplate.ToCharArray().Where( Char.IsLower ).ToArray().ElementAtRandom();
 				string emailToMutated = emailToTemplate.Replace( charToChangeCaseOf, Char.ToUpper( charToChangeCaseOf ) );
 				var customerInvite = new SpAuthApi.CustomerInvite
 				{
@@ -62,11 +66,12 @@ namespace Sp.Api.Consume.Acceptance
 		[Theory, AutoSoftwarePotentialApiData]
 		public static void DuplicatePostCustomerInviteShouldYieldConflict( [Frozen] SpAuthApi api,  FreshOrganizationFixture organization )
 		{
-			var customerInviteHref = organization.InviteStatusLink;
+            var methodName = MethodBase.GetCurrentMethod().Name;
+            var customerInviteHref = organization.InviteStatusLink;
 			var customerInvite = new SpAuthApi.CustomerInvite
 			{
-				EmailTo = "test@inishtech.com",
-				RequestId = Guid.NewGuid()
+                EmailTo = $"ejfqf.{methodName}@inbox.testmail.app",
+                RequestId = Guid.NewGuid()
 			};
 
 			api.InviteCustomer( customerInviteHref, customerInvite );
