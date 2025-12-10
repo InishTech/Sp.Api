@@ -81,8 +81,7 @@ if($useInstalledVersion) {
 	
 	$downloadUrl = "https://storage.googleapis.com/chrome-for-testing-public/$installedChromeVersion/win32/chromedriver-$os.zip"
 
-	$extractedDriverVersion = Get-ExeVersion $extractedDriverPath
-	if($isDriverPresent -and $extractedDriverVersion -eq $installedChromeVersion) {
+	if($isDriverPresent -and (Get-ExeVersion $extractedDriverPath -eq $installedChromeVersion)) {
 		Write-Host "Chromedriver is already matches installed Chrome. Skipping download."
 		return;
 	}
