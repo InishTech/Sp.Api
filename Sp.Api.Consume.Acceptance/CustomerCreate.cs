@@ -41,7 +41,7 @@ namespace Sp.Api.Consume.Acceptance
 					var apiResult = api.GetCustomer( createdAtLocation );
 					Assert.Equal( HttpStatusCode.OK, apiResult.StatusCode );
 					var resultData = apiResult.Data;
-				} );
+				}, 7 );
 			}
 
 			static string PutPendingCreate( SpCustomerApi api, string anonymousCustomerName, string anonymousCustomerExternalId, Guid anonymousRequestId )

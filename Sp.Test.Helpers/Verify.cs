@@ -24,9 +24,11 @@ namespace Sp.Test.Helpers
 				}
 				catch ( Exception ex )
 				{
-					if ( attempt == maxAttempts - 1 )
+                    Debug.WriteLine( String.Format( "Attempt {0} failed with {1} {2} in {3} ", attempt, ex.Message, ex.GetType(), stopwatch.Elapsed ) );
+                    if ( attempt == maxAttempts - 1 )
 						throw new TimeoutException( String.Format( "Assertion failed with {0} attempts in {1}", attempt + 1, stopwatch.Elapsed ), ex );
-					Thread.Sleep( TimeSpan.FromMilliseconds( 500 * Math.Pow( 2, attempt ) ) );
+                    
+                    Thread.Sleep( TimeSpan.FromMilliseconds( 500 * Math.Pow( 2, attempt ) ) );
 				}
 		}
 	}
